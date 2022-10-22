@@ -1,5 +1,5 @@
 const routes = {
-    home: '/tiktok-ui',
+    home: '/',
     following: '/following',
     profile: '/@:username',
     upload: '/upload',
