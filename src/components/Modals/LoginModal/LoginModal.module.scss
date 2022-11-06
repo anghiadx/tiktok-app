@@ -1,0 +1,125 @@
+// Wrapper
+body .modal-wrapper {
+    height: 80%;
+    max-width: var(--wrapper-width);
+    padding-top: 48px;
+    font-size: 1.5rem;
+    display: flex;
+    flex-direction: column;
+
+    --wrapper-width: 484px;
+    --min-width-space: 375px;
+}
+
+.close-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 41px;
+    height: 41px;
+    border-radius: 50%;
+    font-size: 25px;
+    background-color: var(--background-gray-color-03);
+
+    position: absolute;
+    top: 16px;
+    right: 16px;
+}
+
+.back-btn {
+    font-size: 24px;
+    background-color: transparent;
+
+    position: absolute;
+    top: 16px;
+    left: 16px;
+}
+
+// Body
+.body {
+    padding: 0 52px;
+    flex: 1;
+    overflow-x: hidden;
+    overflow-y: overlay;
+
+    & > * {
+        min-width: var(--min-width-space);
+    }
+
+    .login-item {
+        justify-content: flex-start;
+        height: 44px;
+        width: 100%;
+        margin-left: 0;
+        margin-bottom: 16px;
+        padding: 0 12px;
+        font-size: inherit;
+    }
+    .login-item.disable {
+        background-color: rgb(245, 245, 245);
+    }
+    .icon {
+        font-size: 20px;
+    }
+    .text {
+        flex: 1;
+        margin: 0;
+    }
+}
+
+.login-title {
+    margin: 16px 0;
+    text-align: center;
+    font-size: 3.2rem;
+}
+
+// Btn show full list register
+.show-full-register-list {
+    line-height: 0;
+    font-size: 24px;
+    text-align: center;
+}
+
+// term-registration
+.term-registration {
+    line-height: 15px;
+    padding: 16px 52px;
+    text-align: justify;
+    font-size: 1.2rem;
+    color: var(--text-gray-color2);
+
+    p {
+        min-width: var(--min-width-space);
+    }
+
+    a {
+        margin: 0 4px;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+}
+
+// Footer
+.footer {
+    flex: 0 0 64px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: var(--wrapper-width);
+    border-top: 1px solid var(--background-gray-color-12);
+    white-space: nowrap;
+}
+
+.register-btn {
+    margin-left: 4px;
+    color: var(--primary-color);
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}

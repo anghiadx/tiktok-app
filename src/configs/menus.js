@@ -128,8 +128,9 @@ export const PUBLIC_MENU = [
         to: '/feedback',
     },
     {
+        type: 'keyboard-modal',
         icon: <SvgIcon icon={iconKeyboard} />,
-        title: 'Phím tắt',
+        title: 'Phím tắt trên bàn phím',
     },
 ];
 

@@ -9,7 +9,7 @@
     transition: background-color 200ms ease-in-out 0s;
 
     &:hover {
-        background-color: var(--background-gray-color);
+        background-color: var(--background-gray-color-03);
     }
 }
 
@@ -97,7 +97,7 @@
     .bio {
         padding-top: 16px;
         margin-top: 16px;
-        border-top: 1px solid var(--background-gray-color4);
+        border-top: 1px solid var(--background-gray-color-12);
         font-size: 1.4rem;
     }
 }

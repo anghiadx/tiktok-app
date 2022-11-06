@@ -9,7 +9,7 @@
         inset: 0;
         top: initial;
         height: 1px;
-        background-color: rgba(22, 24, 35, 0.2);
+        background-color: var(--background-gray-color-02);
         transform: scaleY(0.5);
     }
 }
@@ -130,10 +130,10 @@
     margin-bottom: 6px;
     border-radius: 50%;
     font-size: 24px;
-    background-color: var(--background-gray-color3);
+    background-color: var(--background-gray-color-06);
 
     &:active {
-        background-color: var(--background-gray-color5);
+        background-color: var(--background-gray-color-14);
     }
 }
 .item-count {

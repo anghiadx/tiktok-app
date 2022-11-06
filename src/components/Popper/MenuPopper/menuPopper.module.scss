@@ -43,14 +43,14 @@
         font-size: 20px;
     }
     &:hover {
-        background-color: var(--background-gray-color);
+        background-color: var(--background-gray-color-03);
     }
 }
 
 .sub-menu-item {
     &:first-child,
     &:hover {
-        background-color: var(--background-gray-color3);
+        background-color: var(--background-gray-color-06);
     }
 }
 

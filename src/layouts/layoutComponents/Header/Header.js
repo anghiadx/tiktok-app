@@ -13,17 +13,29 @@ import { MenuPopper } from '~/components/Popper';
 import Img from '~/components/Img';
 import Search from './Search';
 import configs from '~/configs';
+import useModal from '~/hooks/useModal';
+import { LoginModal, KeyboardModal } from '~/components/Modals';
 
 const cx = classNames.bind(styles);
 
 function Header() {
+    const [LoginModalComponent, LoginModalComponentToggle] = useModal(LoginModal);
+    const [KeyboardModalComponent, KeyboardModalComponentToggle] = useModal(KeyboardModal);
+
     let currentUser = false;
 
     const menuInfo = currentUser ? configs.menus.PRIVATE_MENU : configs.menus.PUBLIC_MENU;
 
     // Handle Menu
     const handleDefaultClickMenu = (itemInfo) => {
-        console.log(itemInfo);
+        switch (itemInfo.type) {
+            case 'keyboard-modal':
+                KeyboardModalComponentToggle();
+                break;
+            default:
+                console.log(itemInfo);
+                break;
+        }
     };
 
     return (
@@ -42,9 +54,10 @@ function Header() {
                 {/* Action Container */}
                 <div className={cx('action-container')}>
                     <Button
-                        to={currentUser ? '/upload' : null}
+                        to={currentUser ? configs.routes.upload : null}
                         primary
                         leftIcon={<SvgIcon icon={iconPlus} size={20} />}
+                        onClick={!currentUser ? LoginModalComponentToggle : null}
                     >
                         Tải lên
                     </Button>
@@ -65,7 +78,9 @@ function Header() {
                         </>
                     ) : (
                         <>
-                            <Button color>Đăng nhập</Button>
+                            <Button color onClick={LoginModalComponentToggle}>
+                                Đăng nhập
+                            </Button>
                         </>
                     )}
 
@@ -83,6 +98,8 @@ function Header() {
                         )}
                     </MenuPopper>
                 </div>
+                <LoginModalComponent />
+                <KeyboardModalComponent />
             </div>
         </header>
     );

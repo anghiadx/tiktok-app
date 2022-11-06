@@ -8,6 +8,8 @@ import { videoService } from '~/services';
 import TiktokLoading from '~/components/TiktokLoading';
 import SvgIcon from '~/components/SvgIcon';
 import VideoContext from '~/Context/VideoContext';
+import useModal from '~/hooks/useModal';
+import { LoginModal } from '~/components/Modals';
 
 const cx = classNames.bind(styles);
 
@@ -17,6 +19,9 @@ function Home() {
     const [page, setPage] = useState(0);
     const [volume, setVolume] = useState(0.5);
     const [muted, setMuted] = useState(true);
+
+    // Modal
+    const [LoginModalComponent, LoginModalComponentToggle] = useModal(LoginModal);
 
     // Ref
     const pageRandom = useRef([]);
@@ -74,7 +79,13 @@ function Home() {
                     return (
                         <InView key={index} threshold={0.8}>
                             {({ inView, ref: observeRef }) => (
-                                <SuggestVideo ref={observeRef} isInView={inView} videoInfo={video} videoId={index} />
+                                <SuggestVideo
+                                    ref={observeRef}
+                                    isInView={inView}
+                                    videoInfo={video}
+                                    videoId={index}
+                                    loginModalToggle={LoginModalComponentToggle}
+                                />
                             )}
                         </InView>
                     );
@@ -83,6 +94,9 @@ function Home() {
                     <SvgIcon className={cx('auto-load-more')} icon={<TiktokLoading />} />
                 </InView>
             </div>
+
+            {/* Modal */}
+            <LoginModalComponent />
         </VideoContext>
     );
 }

@@ -39,7 +39,7 @@
     border-radius: 2px;
 
     &:hover {
-        background-color: var(--background-gray-color);
+        background-color: var(--background-gray-color-03);
     }
 }
 
@@ -84,7 +84,7 @@
         font-size: 1.4rem;
         font-weight: 400;
         color: var(--text-gray-color);
-        border-color: rgba(22, 24, 35, 0.2);
+        border-color: var(--background-gray-color-02);
     }
 
     .icon {
@@ -113,7 +113,7 @@
         color: var(--text-gray-color);
 
         &:hover {
-            border-color: rgba(22, 24, 35, 0.2);
+            border-color: var(--background-gray-color-02);
             background-color: var(--white-color);
         }
     }
@@ -128,6 +128,11 @@
         padding: 6px 8px;
         font-weight: 600;
         font-size: 1.8rem;
+    }
+
+    &.color {
+        width: 100%;
+        min-height: 46px;
     }
 }
 

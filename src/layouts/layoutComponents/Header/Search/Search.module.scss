@@ -6,7 +6,7 @@
     background-color: rgba(22, 24, 35, 0.06);
     border-radius: 92px;
     display: flex;
-    color: rgba(22, 24, 35, 0.34);
+    color: var(--background-gray-color-34);
     overflow: hidden;
     border: 1px solid transparent;
 
@@ -40,7 +40,7 @@
 
 .loading {
     position: absolute;
-    color: rgba(22, 24, 35, 0.34);
+    color: var(--background-gray-color-34);
     animation: spinner 0.9s linear infinite;
 }
 @keyframes spinner {
@@ -110,7 +110,7 @@
     cursor: pointer;
 
     &:hover {
-        background-color: var(--background-gray-color);
+        background-color: var(--background-gray-color-03);
     }
 }
 

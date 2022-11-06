@@ -1,0 +1,152 @@
+.form-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+
+    .title {
+        font-weight: 600;
+    }
+}
+
+.form-input {
+    display: flex;
+    align-items: center;
+    height: 44px;
+    margin-bottom: 9px;
+    background-color: var(--background-gray-color-06);
+    border: 1px solid var(--background-gray-color-12);
+
+    &.warning {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+
+    input {
+        flex-grow: 1;
+        height: 100%;
+        padding-left: 12px;
+        font-size: 1.6rem;
+        caret-color: var(--primary-color);
+        background-color: transparent;
+        color: inherit;
+
+        &::placeholder,
+        &::-webkit-input-placeholder {
+            color: var(--text-gray-color2);
+            font-weight: 300;
+        }
+    }
+}
+
+.message {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
+.warning-icon {
+    line-height: 0;
+}
+
+.show-password-btn {
+    margin: 0 16px;
+    line-height: 0;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.forgot-password {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-gray-color);
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.submit-btn {
+    margin-top: 21px;
+
+    &.disable {
+        background-color: var(--background-gray-color-06);
+        color: var(--background-gray-color-34);
+        opacity: 1;
+    }
+}
+
+// Register
+
+.email-consent {
+    display: flex;
+
+    label {
+        display: inline-block;
+        width: 22px;
+        height: 22px;
+        line-height: 0;
+        padding: 3px 0;
+        text-align: center;
+        font-size: 14px;
+        border: 1px solid var(--background-gray-color-02);
+        background-color: var(--white-color);
+        transition: all 0.1s ease 0s;
+    }
+
+    input:checked + label {
+        border-color: transparent;
+        background-color: var(--primary-color);
+    }
+
+    p {
+        line-height: 16px;
+        margin-left: 8px;
+        font-size: 1.2rem;
+        text-align: justify;
+    }
+}
+
+// Login with QR
+
+.LoginQR-container {
+    display: flex;
+    margin-top: 48px;
+}
+
+.left-space {
+    flex-shrink: 0;
+    width: 180px;
+}
+
+.QR {
+    width: 180px;
+    height: 180px;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid rgb(242, 242, 242);
+
+    img {
+        width: 100%;
+    }
+}
+
+.step-list {
+    margin-top: 24px;
+}
+
+.step-item {
+    font-size: 1.4rem;
+    margin-bottom: 4px;
+
+    .icon {
+        vertical-align: middle;
+    }
+}
+
+.right-space {
+    margin-left: 20px;
+
+    img {
+        height: 270px;
+    }
+}

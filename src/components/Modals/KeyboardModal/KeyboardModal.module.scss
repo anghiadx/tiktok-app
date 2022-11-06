@@ -1,0 +1,42 @@
+.modal-wrapper {
+    width: 400px;
+    height: 280px;
+    padding: 32px;
+    padding-top: 40px;
+    position: relative;
+}
+
+.close-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: var(--background-gray-color-03);
+
+    position: absolute;
+    right: 16px;
+    top: 16px;
+}
+
+.title {
+    margin: 0;
+    line-height: 22px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.shortcut-list {
+    margin-top: 16px;
+    font-size: 1.4rem;
+    border-bottom: 1px solid var(--background-gray-color-12);
+}
+
+.shortcut-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+    border-top: 1px solid var(--background-gray-color-12);
+}

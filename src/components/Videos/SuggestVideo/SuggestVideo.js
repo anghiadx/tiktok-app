@@ -16,7 +16,10 @@ import VideoShare from '~/components/Shares/VideoShare';
 
 const cx = classNames.bind(styles);
 
-const SuggestVideo = forwardRef(({ videoId, videoInfo, isInView }, REF) => {
+const SuggestVideo = forwardRef(({ videoId, videoInfo, isInView, loginModalToggle }, REF) => {
+    const currentUser = false;
+
+    // Get data from video info
     const {
         user: {
             avatar: avatarUrl,
@@ -89,13 +92,13 @@ const SuggestVideo = forwardRef(({ videoId, videoInfo, isInView }, REF) => {
                     {/* Interactive space */}
                     <div className={cx('interactive-space')}>
                         <label className={cx('interactive-item')}>
-                            <button className={cx('item-icon')}>
+                            <button className={cx('item-icon')} onClick={!currentUser ? loginModalToggle : null}>
                                 <SvgIcon icon={iconHeart} />
                             </button>
                             <strong className={cx('item-count')}>{likesCount}</strong>
                         </label>
                         <label className={cx('interactive-item')}>
-                            <button className={cx('item-icon')}>
+                            <button className={cx('item-icon')} onClick={!currentUser ? loginModalToggle : null}>
                                 <SvgIcon icon={iconComment} />
                             </button>
                             <strong className={cx('item-count')}>{commentsCount}</strong>
@@ -120,6 +123,7 @@ SuggestVideo.propTypes = {
     videoId: PropTypes.number,
     videoInfo: PropTypes.object.isRequired,
     isInView: PropTypes.bool,
+    loginModalToggle: PropTypes.func,
 };
 
 export default memo(SuggestVideo);

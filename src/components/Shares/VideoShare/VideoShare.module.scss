@@ -9,7 +9,7 @@
         margin-left: 0;
 
         &:hover {
-            background-color: var(--background-gray-color);
+            background-color: var(--background-gray-color-03);
         }
     }
 }
@@ -63,6 +63,6 @@
     cursor: pointer;
 
     &:hover {
-        background-color: var(--background-gray-color);
+        background-color: var(--background-gray-color-03);
     }
 }

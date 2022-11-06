@@ -21,6 +21,7 @@ function Button({
     disable = false,
     className,
     iconClassName,
+    textClassName,
     ...props
 }) {
     let Component = 'button';
@@ -67,10 +68,14 @@ function Button({
         [iconClassName]: iconClassName,
     });
 
+    const textClassNames = cx('text', {
+        [textClassName]: textClassName,
+    });
+
     return (
         <Component className={classNames} {...btnProps}>
             {leftIcon && <span className={iconClassNames}>{leftIcon}</span>}
-            <span className={cx('text')}>{children}</span>
+            <span className={textClassNames}>{children}</span>
             {rightIcon && <span className={iconClassNames}>{rightIcon}</span>}
         </Component>
     );
