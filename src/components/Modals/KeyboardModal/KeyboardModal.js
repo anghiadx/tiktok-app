@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import classNames from 'classnames/bind';
-import ModalWrapper from '~/components/Modals';
+import { ModalWrapper } from '~/components/Modals';
 import styles from './KeyboardModal.module.scss';
 import SvgIcon from '~/components/SvgIcon';
 import {
@@ -13,11 +14,18 @@ import {
 
 const cx = classNames.bind(styles);
 
-function KeyboardModal({ onClose }) {
+function KeyboardModal({ handleClose }) {
+    const [isClose, setIsClose] = useState(false);
+
+    // Handle when click close btn
+    const handleCloseModal = () => {
+        setIsClose(true);
+    };
+
     return (
-        <ModalWrapper className={cx('modal-wrapper')}>
+        <ModalWrapper className={cx('modal-wrapper')} isClose={isClose} onClose={handleClose}>
             {/* Close btn */}
-            <button className={cx('close-btn')} onClick={onClose}>
+            <button className={cx('close-btn')} onClick={handleCloseModal}>
                 <SvgIcon icon={iconCloseX} size={20} />
             </button>
             <h2 className={cx('title')}>Phím tắt trên bàn phím</h2>
@@ -40,7 +48,7 @@ function KeyboardModal({ onClose }) {
 }
 
 KeyboardModal.propTypes = {
-    onClose: PropTypes.func,
+    handleClose: PropTypes.func,
 };
 
 export default KeyboardModal;

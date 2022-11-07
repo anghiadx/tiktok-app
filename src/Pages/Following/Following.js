@@ -1,5 +1,3 @@
-import LoginModal from '~/components/Modals/LoginModal';
-
 function Following() {
     return (
         <div>

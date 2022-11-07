@@ -4,16 +4,22 @@ import { createPortal } from 'react-dom';
 function useModal(modal) {
     const [isShow, setIsShow] = useState(false);
 
-    const toggleShow = () => {
-        setIsShow(!isShow);
+    const modalShow = () => {
+        setIsShow(true);
+        document.body.classList.add('hidden');
     };
 
-    return [Modal(modal, isShow, toggleShow), toggleShow];
+    const modalHide = () => {
+        setIsShow(false);
+        document.body.classList.remove('hidden');
+    };
+
+    return [Modal(modal, isShow, modalHide), modalShow];
 }
 
-function Modal(modal, isShow, toggleShow) {
+function Modal(modal, isShow, modalHide) {
     const ModalComp = modal;
-    return () => isShow && createPortal(<ModalComp onClose={toggleShow} />, document.body);
+    return () => isShow && createPortal(<ModalComp handleClose={modalHide} />, document.body);
 }
 
 export default useModal;

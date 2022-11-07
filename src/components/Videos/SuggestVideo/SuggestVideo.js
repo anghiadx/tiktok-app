@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import PropTypes from 'prop-types';
-import { forwardRef, memo } from 'react';
+import { forwardRef, memo, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 
@@ -14,9 +14,14 @@ import AccountPreview from '~/components/Items/AccountItem/AccountPreview';
 import SuggestVideoControl from './SuggestVideoControl';
 import VideoShare from '~/components/Shares/VideoShare';
 
+import { ModalContextKey } from '~/contexts/ModalContext';
+
 const cx = classNames.bind(styles);
 
-const SuggestVideo = forwardRef(({ videoId, videoInfo, isInView, loginModalToggle }, REF) => {
+const SuggestVideo = forwardRef(({ videoId, videoInfo, isInView }, REF) => {
+    // Get Modal context value
+    const { LoginModalShow } = useContext(ModalContextKey);
+
     const currentUser = false;
 
     // Get data from video info
@@ -66,7 +71,7 @@ const SuggestVideo = forwardRef(({ videoId, videoInfo, isInView, loginModalToggl
                             <span className={cx('full-name')}>{`${firstName} ${lastName}`}</span>
                         </p>
                     </Link>
-                    <Button outline className={cx('follow-btn')}>
+                    <Button outline className={cx('follow-btn')} onClick={!currentUser ? LoginModalShow : null}>
                         Follow
                     </Button>
 
@@ -92,13 +97,13 @@ const SuggestVideo = forwardRef(({ videoId, videoInfo, isInView, loginModalToggl
                     {/* Interactive space */}
                     <div className={cx('interactive-space')}>
                         <label className={cx('interactive-item')}>
-                            <button className={cx('item-icon')} onClick={!currentUser ? loginModalToggle : null}>
+                            <button className={cx('item-icon')} onClick={!currentUser ? LoginModalShow : null}>
                                 <SvgIcon icon={iconHeart} />
                             </button>
                             <strong className={cx('item-count')}>{likesCount}</strong>
                         </label>
                         <label className={cx('interactive-item')}>
-                            <button className={cx('item-icon')} onClick={!currentUser ? loginModalToggle : null}>
+                            <button className={cx('item-icon')} onClick={!currentUser ? LoginModalShow : null}>
                                 <SvgIcon icon={iconComment} />
                             </button>
                             <strong className={cx('item-count')}>{commentsCount}</strong>
@@ -123,7 +128,6 @@ SuggestVideo.propTypes = {
     videoId: PropTypes.number,
     videoInfo: PropTypes.object.isRequired,
     isInView: PropTypes.bool,
-    loginModalToggle: PropTypes.func,
 };
 
 export default memo(SuggestVideo);

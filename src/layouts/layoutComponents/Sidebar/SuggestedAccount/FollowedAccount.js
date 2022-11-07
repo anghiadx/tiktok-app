@@ -5,7 +5,7 @@ import { accountService } from '~/services';
 
 function FollowedAccount() {
     const [accountList, setAccountList] = useState([]);
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(5);
     const [loading, setLoading] = useState(false);
     const [fulled, setFulled] = useState(false);
     const [seeMore, setSeeMore] = useState(true);

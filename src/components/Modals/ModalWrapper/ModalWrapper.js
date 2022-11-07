@@ -5,10 +5,14 @@ import PopperWrapper from '~/components/Popper';
 
 const cx = classNames.bind(styles);
 
-function ModalWrapper({ children, className }) {
+function ModalWrapper({ children, className, isClose, onClose }) {
+    const handleAnimationEnd = () => {
+        isClose && onClose();
+    };
+
     return (
-        <div className={cx('wrapper')}>
-            <div className={cx('overlay')}></div>
+        <div className={cx('wrapper', { hide: isClose })}>
+            <div className={cx('overlay')} onAnimationEnd={handleAnimationEnd}></div>
             <PopperWrapper className={cx('content', className)}>{children}</PopperWrapper>
         </div>
     );

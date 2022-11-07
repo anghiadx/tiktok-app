@@ -6,7 +6,7 @@ import SvgIcon from '~/components/SvgIcon';
 import { iconFlag, iconMute, iconPauseVideo, iconPlayVideo, iconVolume } from '~/components/SvgIcon/iconsRepo';
 import TiktokLoading from '~/components/TiktokLoading';
 import styles from './SuggestVideoControl.module.scss';
-import { VideoContextKey } from '~/Context/VideoContext';
+import { VideoContextKey } from '~/contexts/VideoContext';
 
 const cx = classNames.bind(styles);
 
@@ -111,7 +111,6 @@ const SuggestVideoControl = forwardRef(({ videoId, videoInfo, isInView }, REF) =
         volumeBarRef.current.onmousemove = (e) => {
             const layerMove = e.layerY;
             if (layerMove === layerOrigin) return;
-            console.log('move');
 
             activeHeight = fullHeight - e.layerY;
 

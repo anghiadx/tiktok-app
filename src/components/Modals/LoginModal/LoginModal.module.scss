@@ -1,7 +1,8 @@
 // Wrapper
 body .modal-wrapper {
-    height: 80%;
     max-width: var(--wrapper-width);
+    height: 80%;
+    max-height: 694px;
     padding-top: 48px;
     font-size: 1.5rem;
     display: flex;

@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import Tippy from '@tippyjs/react';
@@ -13,14 +13,12 @@ import { MenuPopper } from '~/components/Popper';
 import Img from '~/components/Img';
 import Search from './Search';
 import configs from '~/configs';
-import useModal from '~/hooks/useModal';
-import { LoginModal, KeyboardModal } from '~/components/Modals';
+import { ModalContextKey } from '~/contexts/ModalContext';
 
 const cx = classNames.bind(styles);
 
 function Header() {
-    const [LoginModalComponent, LoginModalComponentToggle] = useModal(LoginModal);
-    const [KeyboardModalComponent, KeyboardModalComponentToggle] = useModal(KeyboardModal);
+    const { LoginModalShow, KeyboardModalShow } = useContext(ModalContextKey);
 
     let currentUser = false;
 
@@ -30,7 +28,7 @@ function Header() {
     const handleDefaultClickMenu = (itemInfo) => {
         switch (itemInfo.type) {
             case 'keyboard-modal':
-                KeyboardModalComponentToggle();
+                KeyboardModalShow();
                 break;
             default:
                 console.log(itemInfo);
@@ -57,7 +55,7 @@ function Header() {
                         to={currentUser ? configs.routes.upload : null}
                         primary
                         leftIcon={<SvgIcon icon={iconPlus} size={20} />}
-                        onClick={!currentUser ? LoginModalComponentToggle : null}
+                        onClick={!currentUser ? LoginModalShow : null}
                     >
                         Tải lên
                     </Button>
@@ -78,7 +76,7 @@ function Header() {
                         </>
                     ) : (
                         <>
-                            <Button color onClick={LoginModalComponentToggle}>
+                            <Button color onClick={LoginModalShow}>
                                 Đăng nhập
                             </Button>
                         </>
@@ -98,8 +96,6 @@ function Header() {
                         )}
                     </MenuPopper>
                 </div>
-                <LoginModalComponent />
-                <KeyboardModalComponent />
             </div>
         </header>
     );

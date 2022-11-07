@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './LoginModal.module.scss';
-import ModalWrapper from '../ModalWrapper';
+import { ModalWrapper } from '~/components/Modals';
 import SvgIcon from '~/components/SvgIcon';
 import { iconArrowLeft, iconArrowToBot2, iconCloseX } from '~/components/SvgIcon/iconsRepo';
 import Button from '~/components/Button';
@@ -11,12 +11,18 @@ import { loginModalData, registerModalData } from '~/configs/modals';
 
 const cx = classNames.bind(styles);
 
-function LoginModal({ onClose }) {
+function LoginModal({ handleClose }) {
+    const [isClose, setIsClose] = useState(false);
     const [tabList, setTabList] = useState([loginModalData]);
     const [registering, setRegistering] = useState(false);
     const [fullRegisterList, setFullRegisterList] = useState(false);
 
     let currentTab = tabList[tabList.length - 1];
+
+    // Handle when click close btn
+    const handleCloseModal = () => {
+        setIsClose(true);
+    };
 
     // Handle data of currentTab while in registration status
     if (registering && !fullRegisterList) {
@@ -53,9 +59,9 @@ function LoginModal({ onClose }) {
     };
 
     return (
-        <ModalWrapper className={cx('modal-wrapper')}>
+        <ModalWrapper className={cx('modal-wrapper')} isClose={isClose} onClose={handleClose}>
             {/* Close btn */}
-            <button className={cx('close-btn')} onClick={onClose}>
+            <button className={cx('close-btn')} onClick={handleCloseModal}>
                 <SvgIcon icon={iconCloseX} />
             </button>
 
@@ -124,7 +130,7 @@ function LoginModal({ onClose }) {
 }
 
 LoginModal.propTypes = {
-    onClose: PropTypes.func,
+    handleClose: PropTypes.func,
 };
 
 export default LoginModal;
