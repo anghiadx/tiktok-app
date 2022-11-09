@@ -27,6 +27,10 @@
     transform: scale(0);
 }
 
+.main-download-btn {
+    background-color: var(--white-color-3);
+}
+
 .download-for {
     width: 384px;
     position: absolute;
@@ -55,8 +59,9 @@
         position: absolute;
         right: 8px;
         top: 8px;
-        background-color: transparent;
         padding: 8px;
+        background-color: transparent;
+        color: var(--text-primary-color);
         cursor: pointer;
     }
 
@@ -84,7 +89,7 @@
     height: 32px;
     border-radius: 50%;
     background-color: var(--primary-color);
-    color: var(--white-color);
+    color: white;
     cursor: pointer;
 
     &:hover {

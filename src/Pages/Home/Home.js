@@ -8,25 +8,30 @@ import { videoService } from '~/services';
 import TiktokLoading from '~/components/TiktokLoading';
 import SvgIcon from '~/components/SvgIcon';
 import VideoContext from '~/contexts/VideoContext';
+import useLocalStorage from '~/hooks/useLocalStorage';
+import configs from '~/configs';
 
 const cx = classNames.bind(styles);
 
 function Home() {
+    const videoStorageKey = configs.localStorage.videoControl;
+    const [dataStorage, setDataStorage] = useLocalStorage(videoStorageKey);
+
     // State
     const [videoList, setVideoList] = useState([]);
     const [page, setPage] = useState(0);
-    const [volume, setVolume] = useState(0.5);
+    const [volume, setVolume] = useState(dataStorage.volume || 0.5);
     const [muted, setMuted] = useState(true);
+    const [inViewArrs, setInViewArrs] = useState([[]]);
 
     // Ref
     const pageRandom = useRef([]);
-    const inViewArr = useRef([]);
 
     // Set value for context
     const contextValue = {
         volumeState: [volume, setVolume],
         mutedState: [muted, setMuted],
-        inViewArr: inViewArr.current,
+        inViewArrState: [inViewArrs, setInViewArrs],
     };
 
     // Call API to load video list
@@ -45,6 +50,15 @@ function Home() {
         fetchVideoList();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page]);
+
+    // Set volume value to localstorage when it changed
+    useEffect(() => {
+        const data = {
+            volume,
+        };
+        setDataStorage(data);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [volume]);
 
     const handleRandomPage = (min, max) => {
         const countPage = max + 1 - min;

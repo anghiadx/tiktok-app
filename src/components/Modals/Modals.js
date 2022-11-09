@@ -1,15 +1,17 @@
 import { useRef } from 'react';
 import useModal from '~/hooks/useModal';
-import { LoginModal, KeyboardModal } from '~/components/Modals';
+import { LoginModal, KeyboardModal, DownloadMobileModal } from '~/components/Modals';
 import ModalContext from '~/contexts/ModalContext';
 
 function Modals({ children }) {
-    const [LoginModalComponent, LoginModalShow] = useModal(LoginModal);
-    const [KeyboardModalComponent, KeyboardModalShow] = useModal(KeyboardModal);
+    const [LoginModalComponent, loginModalShow] = useModal(LoginModal);
+    const [KeyboardModalComponent, keyboardModalShow] = useModal(KeyboardModal);
+    const [DownloadMobileModalComponent, downloadMobileModalShow] = useModal(DownloadMobileModal);
 
     const contextValue = useRef({
-        LoginModalShow,
-        KeyboardModalShow,
+        loginModalShow,
+        keyboardModalShow,
+        downloadMobileModalShow,
     });
 
     return (
@@ -18,6 +20,7 @@ function Modals({ children }) {
 
             <LoginModalComponent />
             <KeyboardModalComponent />
+            <DownloadMobileModalComponent />
         </ModalContext>
     );
 }

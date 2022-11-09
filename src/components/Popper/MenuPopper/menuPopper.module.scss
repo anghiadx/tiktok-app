@@ -42,6 +42,10 @@
     .icon-menu-item {
         font-size: 20px;
     }
+    .text-menu-item {
+        flex-grow: 1;
+        text-align: left;
+    }
     &:hover {
         background-color: var(--background-gray-color-03);
     }
@@ -66,7 +70,7 @@
         width: 15px;
         height: 15px;
         transform: translateX(-50%) translateY(17%) rotate(45deg);
-        background-color: var(--white-color);
+        background-color: var(--white-color-3);
         box-shadow: var(--box-shadow-popper);
     }
 }

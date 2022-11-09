@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 
-function useModal(modal) {
+function useModal(ModalComponent) {
     const [isShow, setIsShow] = useState(false);
 
     const modalShow = () => {
@@ -14,12 +14,11 @@ function useModal(modal) {
         document.body.classList.remove('hidden');
     };
 
-    return [Modal(modal, isShow, modalHide), modalShow];
-}
+    const ModalExport = () => {
+        return isShow && createPortal(<ModalComponent handleClose={modalHide} />, document.body);
+    };
 
-function Modal(modal, isShow, modalHide) {
-    const ModalComp = modal;
-    return () => isShow && createPortal(<ModalComp handleClose={modalHide} />, document.body);
+    return [ModalExport, modalShow];
 }
 
 export default useModal;

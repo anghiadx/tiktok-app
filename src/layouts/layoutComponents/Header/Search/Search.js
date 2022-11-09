@@ -60,7 +60,7 @@ function Search() {
 
     const renderSearchResult = (attrs) => (
         <div className={cx('search-result')} tabIndex="-1" {...attrs}>
-            <PopperWrapper>
+            <PopperWrapper className={cx('search-result__popper')}>
                 <div className={cx('search-result__title')}>Tài khoản</div>
                 {searchResult.map((accountItem, index) => (
                     <SeachAccountItem key={index} accountInfo={accountItem} onClick={handleClearInput} />
@@ -104,9 +104,11 @@ function Search() {
                                 <SvgIcon icon={iconLoading} />
                             </button>
                         )}
-                        <button className={cx('clear-btn', 'lh0')} onClick={() => handleClearInput(true)}>
-                            <SvgIcon icon={iconClose} />
-                        </button>
+                        {loading || (
+                            <button className={cx('clear-btn', 'lh0')} onClick={() => handleClearInput(true)}>
+                                <SvgIcon icon={iconClose} />
+                            </button>
+                        )}
                     </div>
                     {/* Search btn */}
                     <button className={cx('search-btn', 'lh0')} onMouseDown={(e) => e.preventDefault()}>

@@ -1,13 +1,11 @@
 import routes from './routes';
 import accounts from './accounts';
-import * as menus from './menus';
-import shares from './shares';
+import localStorage from './localStorage';
 
 const configs = {
     routes,
     accounts,
-    menus,
-    shares,
+    localStorage,
 };
 
 export default configs;

@@ -6,16 +6,16 @@ import classNames from 'classnames/bind';
 import styles from './VideoShare.module.scss';
 import PopperWrapper from '~/components/Popper';
 import Button from '~/components/Button';
-import configs from '~/configs';
 import SvgIcon from '~/components/SvgIcon';
 import { iconArrowToBot } from '~/components/SvgIcon/iconsRepo';
+import dataTemp from '~/temp/data';
 
 const cx = classNames.bind(styles);
 
 function VideoShare({ children }) {
     const [showFullList, setShowFullList] = useState(false);
 
-    const shareList = configs.shares;
+    const shareList = dataTemp.shares;
 
     const currentList = showFullList ? shareList : shareList.slice(0, 5);
 

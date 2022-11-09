@@ -5,33 +5,33 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 
 import styles from './header.module.scss';
-import assetImages from '~/assets/images';
 import SvgIcon from '~/components/SvgIcon';
-import { iconMessage, iconPlane, iconPlus, iconSeeMore } from '~/components/SvgIcon/iconsRepo';
+import { iconLogo, iconMessage, iconPlane, iconPlus, iconSeeMore } from '~/components/SvgIcon/iconsRepo';
 import Button from '~/components/Button';
 import { MenuPopper } from '~/components/Popper';
 import Img from '~/components/Img';
 import Search from './Search';
 import configs from '~/configs';
+import dataTemp from '~/temp/data';
 import { ModalContextKey } from '~/contexts/ModalContext';
 
 const cx = classNames.bind(styles);
 
 function Header() {
-    const { LoginModalShow, KeyboardModalShow } = useContext(ModalContextKey);
+    const { loginModalShow, keyboardModalShow } = useContext(ModalContextKey);
 
     let currentUser = false;
 
-    const menuInfo = currentUser ? configs.menus.PRIVATE_MENU : configs.menus.PUBLIC_MENU;
+    const menuInfo = currentUser ? dataTemp.menus.PRIVATE_MENU : dataTemp.menus.PUBLIC_MENU;
 
     // Handle Menu
     const handleDefaultClickMenu = (itemInfo) => {
         switch (itemInfo.type) {
             case 'keyboard-modal':
-                KeyboardModalShow();
+                keyboardModalShow();
                 break;
             default:
-                console.log(itemInfo);
+                // console.log(itemInfo);
                 break;
         }
     };
@@ -42,7 +42,7 @@ function Header() {
                 {/* Logo container */}
                 <div className={cx('logo')}>
                     <Link to={configs.routes.home}>
-                        <img src={assetImages.logo} alt="Tiktok" />
+                        <SvgIcon icon={iconLogo} />
                     </Link>
                 </div>
 
@@ -55,7 +55,7 @@ function Header() {
                         to={currentUser ? configs.routes.upload : null}
                         primary
                         leftIcon={<SvgIcon icon={iconPlus} size={20} />}
-                        onClick={!currentUser ? LoginModalShow : null}
+                        onClick={!currentUser ? loginModalShow : null}
                     >
                         Tải lên
                     </Button>
@@ -76,7 +76,7 @@ function Header() {
                         </>
                     ) : (
                         <>
-                            <Button color onClick={LoginModalShow}>
+                            <Button color onClick={loginModalShow}>
                                 Đăng nhập
                             </Button>
                         </>

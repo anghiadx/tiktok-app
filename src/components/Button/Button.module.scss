@@ -6,7 +6,7 @@
     padding: 0 8px;
     font-size: 1.6rem;
     font-weight: 600;
-    color: var(--text-color);
+    color: var(--text-primary-color);
     background-color: transparent;
     border: 1px solid transparent;
     border-radius: 4px;
@@ -29,7 +29,7 @@
 // button type
 .primary,
 .outline {
-    background-color: var(--white-color);
+    background-color: var(--white-color-2);
 }
 
 .primary {
@@ -48,7 +48,7 @@
     line-height: 22px;
 
     background-color: var(--primary-color);
-    color: var(--white-color);
+    color: white;
 
     &:hover {
         background: var(--background-primary-color2);
@@ -114,8 +114,15 @@
 
         &:hover {
             border-color: var(--background-gray-color-02);
-            background-color: var(--white-color);
+            background-color: var(--white-color-4);
         }
+    }
+}
+
+.medium {
+    &.outline {
+        min-width: 106px;
+        min-height: 36px;
     }
 }
 

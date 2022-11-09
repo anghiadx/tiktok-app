@@ -21,6 +21,7 @@ body .modal-wrapper {
     border-radius: 50%;
     font-size: 25px;
     background-color: var(--background-gray-color-03);
+    color: var(--text-primary-color);
 
     position: absolute;
     top: 16px;
@@ -30,6 +31,7 @@ body .modal-wrapper {
 .back-btn {
     font-size: 24px;
     background-color: transparent;
+    color: var(--text-primary-color);
 
     position: absolute;
     top: 16px;
@@ -57,7 +59,8 @@ body .modal-wrapper {
         font-size: inherit;
     }
     .login-item.disable {
-        background-color: rgb(245, 245, 245);
+        background-color: var(--background-disable-color);
+        color: rgb(50, 50, 50);
     }
     .icon {
         font-size: 20px;

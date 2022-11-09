@@ -20,7 +20,7 @@ const cx = classNames.bind(styles);
 
 const SuggestVideo = forwardRef(({ videoId, videoInfo, isInView }, REF) => {
     // Get Modal context value
-    const { LoginModalShow } = useContext(ModalContextKey);
+    const { loginModalShow } = useContext(ModalContextKey);
 
     const currentUser = false;
 
@@ -71,7 +71,7 @@ const SuggestVideo = forwardRef(({ videoId, videoInfo, isInView }, REF) => {
                             <span className={cx('full-name')}>{`${firstName} ${lastName}`}</span>
                         </p>
                     </Link>
-                    <Button outline className={cx('follow-btn')} onClick={!currentUser ? LoginModalShow : null}>
+                    <Button outline className={cx('follow-btn')} onClick={!currentUser ? loginModalShow : null}>
                         Follow
                     </Button>
 
@@ -97,13 +97,13 @@ const SuggestVideo = forwardRef(({ videoId, videoInfo, isInView }, REF) => {
                     {/* Interactive space */}
                     <div className={cx('interactive-space')}>
                         <label className={cx('interactive-item')}>
-                            <button className={cx('item-icon')} onClick={!currentUser ? LoginModalShow : null}>
+                            <button className={cx('item-icon')} onClick={!currentUser ? loginModalShow : null}>
                                 <SvgIcon icon={iconHeart} />
                             </button>
                             <strong className={cx('item-count')}>{likesCount}</strong>
                         </label>
                         <label className={cx('interactive-item')}>
-                            <button className={cx('item-icon')} onClick={!currentUser ? LoginModalShow : null}>
+                            <button className={cx('item-icon')} onClick={!currentUser ? loginModalShow : null}>
                                 <SvgIcon icon={iconComment} />
                             </button>
                             <strong className={cx('item-count')}>{commentsCount}</strong>

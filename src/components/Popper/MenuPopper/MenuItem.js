@@ -6,7 +6,7 @@ import Button from '~/components/Button';
 const cx = classNames.bind(styles);
 
 function MenuItem({ menuInfo, onClick, isSubMenu }) {
-    const { href, to, separate } = menuInfo;
+    const { icon, title, rightIcon, href, to, separate } = menuInfo;
 
     if (href || to) onClick = null;
 
@@ -19,12 +19,14 @@ function MenuItem({ menuInfo, onClick, isSubMenu }) {
         <Button
             className={classNames}
             iconClassName={cx('icon-menu-item')}
-            leftIcon={menuInfo.icon}
-            to={menuInfo.to}
-            href={menuInfo.href}
+            textClassName={cx('text-menu-item')}
+            leftIcon={icon}
+            rightIcon={rightIcon}
+            to={to}
+            href={href}
             onClick={onClick}
         >
-            {menuInfo.title}
+            {title}
         </Button>
     );
 }

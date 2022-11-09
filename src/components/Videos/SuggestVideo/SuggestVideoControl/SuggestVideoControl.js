@@ -23,7 +23,7 @@ const SuggestVideoControl = forwardRef(({ videoId, videoInfo, isInView }, REF) =
     const directionVideoClass = videoWidth - videoHeight < 0 ? 'vertical' : 'horizontal';
 
     // Get data from the context
-    const { volumeState, mutedState, inViewArr } = useContext(VideoContextKey);
+    const { volumeState, mutedState, inViewArrState } = useContext(VideoContextKey);
 
     // STATE
     const [playing, setPlaying] = useState(false);
@@ -33,6 +33,7 @@ const SuggestVideoControl = forwardRef(({ videoId, videoInfo, isInView }, REF) =
 
     const [volume, setVolume] = volumeState;
     const [muted, setMuted] = mutedState;
+    const [inViewArr, setInViewArr] = inViewArrState;
 
     // REF
     const videoRef = useRef(null);
@@ -68,17 +69,14 @@ const SuggestVideoControl = forwardRef(({ videoId, videoInfo, isInView }, REF) =
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (isInView && !userInteracting) {
-            const active = inViewArr.findIndex((inView) => inView === true);
+            const active = inViewArr[0].findIndex((inView) => inView === true);
             videoId === active ? setPlaying(true) : handleResetVideo();
         }
     });
 
     const updateInViewArr = () => {
-        inViewArr[videoId] = isInView;
-
-        // Used setVolume to trigger a re-render of the home component, which will help other video elements update the new value of the inViewArr array.
-        // The value passed to setVolume is a small decimal number, so it will not affect the user's audio experience.
-        setVolume(volume + 0.000001);
+        inViewArr[0][videoId] = isInView;
+        setInViewArr([...inViewArr]);
     };
 
     const handleTogglePlayBtn = () => {

@@ -3,12 +3,14 @@ import {
     iconKeyboard,
     iconLanguge,
     iconLogout,
+    iconMoon,
     iconProfile,
     iconQuestion,
     iconSetting,
     iconTiktokCoin,
     iconTiktokLive,
 } from '~/components/SvgIcon/iconsRepo';
+import ThemeMode from '~/components/ThemeMode';
 
 export const PUBLIC_MENU = [
     {
@@ -125,12 +127,17 @@ export const PUBLIC_MENU = [
     {
         icon: <SvgIcon icon={iconQuestion} />,
         title: 'Phản hồi và trợ giúp',
-        to: '/feedback',
+        href: 'https://www.tiktok.com/feedback',
     },
     {
         type: 'keyboard-modal',
         icon: <SvgIcon icon={iconKeyboard} />,
         title: 'Phím tắt trên bàn phím',
+    },
+    {
+        icon: <SvgIcon icon={iconMoon} />,
+        title: 'Chế độ tối',
+        rightIcon: <ThemeMode />,
     },
 ];
 

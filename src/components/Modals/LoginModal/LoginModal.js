@@ -7,7 +7,7 @@ import { ModalWrapper } from '~/components/Modals';
 import SvgIcon from '~/components/SvgIcon';
 import { iconArrowLeft, iconArrowToBot2, iconCloseX } from '~/components/SvgIcon/iconsRepo';
 import Button from '~/components/Button';
-import { loginModalData, registerModalData } from '~/configs/modals';
+import { loginModalData, registerModalData } from '~/temp/data/modals';
 
 const cx = classNames.bind(styles);
 

@@ -1,16 +1,19 @@
-import { useState, useEffect, useRef, memo } from 'react';
+import { useState, useEffect, useContext, useRef, memo } from 'react';
 import classNames from 'classnames/bind';
 import styles from './DownloadApp.module.scss';
 import Button from '~/components/Button';
 import SvgIcon from '~/components/SvgIcon';
 import { iconArrowToTop, iconCloseX, iconMobile, iconPc } from '~/components/SvgIcon/iconsRepo';
 import PopperWrapper from '~/components/Popper';
+import { ModalContextKey } from '~/contexts/ModalContext';
 
 const cx = classNames.bind(styles);
 
 function DownloadApp() {
     const [showIconScroll, setShowIconScroll] = useState(false);
     const [active, setActive] = useState(true);
+
+    const { downloadMobileModalShow } = useContext(ModalContextKey);
 
     const wrapperRef = useRef(null);
 
@@ -40,6 +43,11 @@ function DownloadApp() {
         setActive(!active);
     };
 
+    const handleClickMobileBtn = () => {
+        downloadMobileModalShow();
+        handleToggleActive();
+    };
+
     return (
         <div
             className={cx('wrapper', {
@@ -58,7 +66,6 @@ function DownloadApp() {
                     onClick={handleToggleActive}
                 >
                     Tải ứng dụng
-                    {/* Linh an cut */}
                 </Button>
                 <div
                     className={cx('download-for', {
@@ -70,7 +77,11 @@ function DownloadApp() {
                             Tải TikTok dành cho máy tính để bàn
                         </Button>
                         <div className={cx('hr')}></div>
-                        <Button className={cx('download-btn')} leftIcon={<SvgIcon icon={iconMobile} size={21} />}>
+                        <Button
+                            className={cx('download-btn')}
+                            leftIcon={<SvgIcon icon={iconMobile} size={21} />}
+                            onClick={handleClickMobileBtn}
+                        >
                             Tải ứng dụng TikTok
                         </Button>
                         <button className={cx('close-btn')} onClick={handleToggleActive}>

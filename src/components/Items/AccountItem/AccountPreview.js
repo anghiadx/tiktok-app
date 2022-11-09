@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useContext } from 'react';
 import TippyHeadless from '@tippyjs/react/headless';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
@@ -8,6 +9,7 @@ import PopperWrapper from '~/components/Popper';
 import Button from '~/components/Button';
 import Img from '~/components/Img';
 import ShowTick from '~/components/ShowTick';
+import { ModalContextKey } from '~/contexts/ModalContext';
 
 const cx = classNames.bind(styles);
 
@@ -23,6 +25,10 @@ function AccountPreview({
     bio,
     customTippy,
 }) {
+    const currentUse = false;
+
+    const { loginModalShow } = useContext(ModalContextKey);
+
     const renderPreview = (attrs) => (
         <div tabIndex="-1" {...attrs}>
             <PopperWrapper
@@ -35,7 +41,9 @@ function AccountPreview({
                     <Link to={`/@${userName}`} className={cx('')}>
                         <Img className={cx('avatar')} src={avatarUrl} alt={fullName} />
                     </Link>
-                    <Button color>Follow</Button>
+                    <Button color={!bio} outline={!!bio} medium={!!bio} onClick={!currentUse ? loginModalShow : null}>
+                        Follow
+                    </Button>
                 </div>
 
                 {/* Body */}

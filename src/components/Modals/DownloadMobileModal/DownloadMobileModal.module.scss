@@ -1,0 +1,57 @@
+.modal-wrapper {
+    width: 400px;
+    height: 543px;
+}
+
+.close-btn {
+    position: absolute;
+    padding: 4px;
+    top: 20px;
+    right: 20px;
+    background-color: transparent;
+    color: var(--text-primary-color);
+}
+
+.big-title {
+    line-height: 32px;
+    padding: 24px 48px 16px 24px;
+    border-bottom: 1px solid var(--background-gray-color-02);
+}
+
+.title {
+    padding: 0 24px;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.download-with-qr {
+    padding-top: 32px;
+    text-align: center;
+}
+
+.qr-space {
+    padding: 24px;
+
+    img {
+        width: 174px;
+        height: 174px;
+    }
+}
+.download-with-store {
+    text-align: center;
+}
+.store-list {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 288px;
+    margin-top: 16px;
+}
+.store-item {
+    margin-bottom: 8px;
+
+    img {
+        width: 138px;
+        border-radius: 4px;
+    }
+}

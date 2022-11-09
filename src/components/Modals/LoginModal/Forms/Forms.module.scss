@@ -90,12 +90,14 @@
         font-size: 14px;
         border: 1px solid var(--background-gray-color-02);
         background-color: var(--white-color);
+        color: var(--white-color);
         transition: all 0.1s ease 0s;
     }
 
     input:checked + label {
         border-color: transparent;
         background-color: var(--primary-color);
+        color: white;
     }
 
     p {

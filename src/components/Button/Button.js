@@ -13,6 +13,7 @@ function Button({
     rounded = false,
     xsmall = false,
     small = false,
+    medium = false,
     large = false,
     href,
     to,
@@ -55,6 +56,7 @@ function Button({
         // btn size
         xsmall,
         small,
+        medium,
         large,
 
         // disable style
@@ -88,6 +90,7 @@ Button.propTypes = {
     outline: PropTypes.bool,
     rounded: PropTypes.bool,
     small: PropTypes.bool,
+    medium: PropTypes.bool,
     large: PropTypes.bool,
     href: PropTypes.string,
     to: PropTypes.string,

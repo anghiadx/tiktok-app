@@ -1,0 +1,42 @@
+import { useState, useEffect } from 'react';
+import classNames from 'classnames/bind';
+import useLocalStorage from '~/hooks/useLocalStorage';
+import styles from './ThemeMode.module.scss';
+import configs from '~/configs';
+
+const cx = classNames.bind(styles);
+
+function ThemeMode() {
+    const appStorageKey = configs.localStorage.app;
+
+    const [dataStorage, setDataStorage] = useLocalStorage(appStorageKey);
+    const [isDarkMode, setIsDarkMode] = useState(dataStorage.theme === 'dark');
+
+    const themeToggle = () => {
+        setIsDarkMode(!isDarkMode);
+    };
+
+    useEffect(() => {
+        const themeData = {
+            theme: 'light',
+        };
+
+        if (isDarkMode) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeData.theme = 'dark';
+        } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
+
+        setDataStorage(themeData);
+    }, [isDarkMode, setDataStorage]);
+
+    return (
+        <div>
+            <input type="checkbox" id={cx('theme-input')} hidden checked={isDarkMode} onChange={themeToggle} />
+            <label className={cx('switch')} htmlFor={cx('theme-input')}></label>
+        </div>
+    );
+}
+
+export default ThemeMode;
