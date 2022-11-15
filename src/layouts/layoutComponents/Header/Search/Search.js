@@ -97,6 +97,9 @@ function Search() {
                         onBlur={() => {
                             searchResult.length > 0 || handleBlurSearch();
                         }}
+                        onKeyDown={(e) => {
+                            e.stopPropagation();
+                        }}
                     />
                     <div className={cx('search-icon-wrapper')}>
                         {loading && (

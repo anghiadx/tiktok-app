@@ -1,133 +1,106 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import PropTypes from 'prop-types';
-import { forwardRef, memo, useContext } from 'react';
-import { Link } from 'react-router-dom';
-import classNames from 'classnames/bind';
+import { useEffect, useState } from 'react';
+import VideoItem from './VideoItem';
+import VideoContext from '~/contexts/VideoContext';
+import useLocalStorage from '~/hooks/useLocalStorage';
+import configs from '~/configs';
 
-import styles from './SuggestVideo.module.scss';
-import Button from '~/components/Button';
-import Img from '~/components/Img';
-import SvgIcon from '~/components/SvgIcon';
-import { iconComment, iconHeart, iconMusic, iconShare } from '~/components/SvgIcon/iconsRepo';
-import ShowTick from '~/components/ShowTick';
-import AccountPreview from '~/components/Items/AccountItem/AccountPreview';
-import SuggestVideoControl from './SuggestVideoControl';
-import VideoShare from '~/components/Shares/VideoShare';
+function SuggestVideo({ data }) {
+    const videoStorageKey = configs.localStorage.videoControl;
+    const [dataStorage, setDataStorage] = useLocalStorage(videoStorageKey);
 
-import { ModalContextKey } from '~/contexts/ModalContext';
+    // State
+    const [volume, setVolume] = useState(dataStorage.volume || 0.6);
+    const [muted, setMuted] = useState(true);
+    const [inViewArr, setInViewArr] = useState([[], -1]);
 
-const cx = classNames.bind(styles);
+    // Set value for context
+    const contextValue = {
+        volumeState: [volume, setVolume],
+        mutedState: [muted, setMuted],
+        inViewArrState: [inViewArr, setInViewArr],
+    };
 
-const SuggestVideo = forwardRef(({ videoId, videoInfo, isInView }, REF) => {
-    // Get Modal context value
-    const { loginModalShow } = useContext(ModalContextKey);
+    // Set volume value to localstorage when it changed
+    useEffect(() => {
+        const data = {
+            volume: volume,
+        };
+        setDataStorage(data);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [volume]);
 
-    const currentUser = false;
+    // Handle key down event
+    useEffect(() => {
+        const handleScroll = (type) => {
+            const fisrtInViewId = inViewArr[0].findIndex((inViewObj) => inViewObj.inView === true);
 
-    // Get data from video info
-    const {
-        user: {
-            avatar: avatarUrl,
-            nickname: userName,
-            first_name: firstName,
-            last_name: lastName,
-            tick,
-            bio,
-            followers_count: followerCount,
-            likes_count: likeCount,
-        },
-        description,
-        music: musicInfo,
-        likes_count: likesCount,
-        comments_count: commentsCount,
-        shares_count: sharesCount,
-    } = videoInfo;
+            const currentVideoId = inViewArr[1] !== -1 ? inViewArr[1] : fisrtInViewId;
+
+            if (currentVideoId === -1) {
+                return;
+            }
+
+            const prevVideo = inViewArr[0][currentVideoId - 1];
+            const nextVideo = inViewArr[0][currentVideoId + 1];
+
+            const optionsValue = {
+                block: 'start',
+                behavior: 'smooth',
+            };
+
+            if (type === 'down') {
+                nextVideo && nextVideo.wrapperIntoView(optionsValue);
+            } else if (type === 'up') {
+                prevVideo && prevVideo.wrapperIntoView(optionsValue);
+            }
+        };
+
+        const handleKeyDown = (e) => {
+            const keyCode = e.keyCode;
+
+            switch (keyCode) {
+                // key M
+                case 77:
+                    setMuted(!muted);
+                    break;
+
+                // Space & down arrow
+                case 32:
+                case 40:
+                    e.preventDefault();
+                    handleScroll('down');
+                    break;
+
+                // up arrow
+                case 38:
+                    e.preventDefault();
+                    handleScroll('up');
+                    break;
+
+                default:
+                    break;
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [muted, inViewArr]);
 
     return (
-        <div className={cx('wrapper')}>
-            <Link className={cx('big-avatar')} to="">
-                <AccountPreview
-                    avatarUrl={avatarUrl}
-                    userName={userName}
-                    fullName={`${firstName} ${lastName}`}
-                    tick={tick}
-                    bio={bio}
-                    followerCount={followerCount}
-                    likeCount={likeCount}
-                    customTippy={{ delay: [1000, 500] }}
-                >
-                    <Img className={cx('avatar')} src={avatarUrl} />
-                </AccountPreview>
-            </Link>
-            <div className={cx('body')}>
-                <div className={cx('video-info')}>
-                    {/* User info */}
-                    <Link className={cx('user-info')} to="">
-                        <Img className={cx('avatar', 'small-avatar')} src={avatarUrl} />
-                        <p className={cx('name')}>
-                            <span className={cx('user-name')}>
-                                {userName} <ShowTick tick={tick} />
-                            </span>
-                            <span className={cx('full-name')}>{`${firstName} ${lastName}`}</span>
-                        </p>
-                    </Link>
-                    <Button outline className={cx('follow-btn')} onClick={!currentUser ? loginModalShow : null}>
-                        Follow
-                    </Button>
-
-                    {/* Description  */}
-                    <p className={cx('description')}>
-                        <span>{description}</span>
-                        <a href="#" className={cx('hashtag')}>
-                            #tiktok_clone
-                        </a>
-                    </p>
-
-                    {/* Music info */}
-                    <a href="#" className={cx('music-info')}>
-                        <SvgIcon className={cx('icon-music')} icon={iconMusic} />
-                        {musicInfo || `Nhạc nền - ${firstName} ${lastName}`}
-                    </a>
-                </div>
-
-                <div className={cx('video-player')}>
-                    {/* Video control */}
-                    <SuggestVideoControl videoInfo={videoInfo} isInView={isInView} ref={REF} videoId={videoId} />
-
-                    {/* Interactive space */}
-                    <div className={cx('interactive-space')}>
-                        <label className={cx('interactive-item')}>
-                            <button className={cx('item-icon')} onClick={!currentUser ? loginModalShow : null}>
-                                <SvgIcon icon={iconHeart} />
-                            </button>
-                            <strong className={cx('item-count')}>{likesCount}</strong>
-                        </label>
-                        <label className={cx('interactive-item')}>
-                            <button className={cx('item-icon')} onClick={!currentUser ? loginModalShow : null}>
-                                <SvgIcon icon={iconComment} />
-                            </button>
-                            <strong className={cx('item-count')}>{commentsCount}</strong>
-                        </label>
-
-                        <VideoShare>
-                            <label className={cx('interactive-item')}>
-                                <button className={cx('item-icon')}>
-                                    <SvgIcon icon={iconShare} />
-                                </button>
-                                <strong className={cx('item-count')}>{sharesCount || 'Chia sẻ'}</strong>
-                            </label>
-                        </VideoShare>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <VideoContext value={contextValue}>
+            {data.map((video, index) => {
+                return <VideoItem key={index} inViewArr={inViewArr[0]} videoInfo={video} videoId={index} />;
+            })}
+        </VideoContext>
     );
-});
+}
 
 SuggestVideo.propTypes = {
-    videoId: PropTypes.number,
-    videoInfo: PropTypes.object.isRequired,
-    isInView: PropTypes.bool,
+    data: PropTypes.array,
 };
 
-export default memo(SuggestVideo);
+export default SuggestVideo;

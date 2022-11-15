@@ -12,12 +12,12 @@ import MenuHeader from './MenuHeader';
 const cx = classNames.bind(styles);
 
 function MenuPopper({ children, items = [], handleClickMenu, customsTippy = {} }) {
-    const [menuItems, setMenuItems] = useState([{ data: items }]);
+    const [menuList, setMenuList] = useState([{ data: items }]);
 
     useEffect(() => {
         if (items.length === 0) return;
 
-        setMenuItems([{ data: items }]);
+        setMenuList([{ data: items }]);
     }, [items]);
 
     const getLastItem = (items) => {
@@ -27,13 +27,13 @@ function MenuPopper({ children, items = [], handleClickMenu, customsTippy = {} }
 
     // Handle when click item had sub menu
     const handleGoMenuChildren = (childrenItem) => {
-        return setMenuItems([...menuItems, childrenItem]);
+        return setMenuList([...menuList, childrenItem]);
     };
 
     const handleBackMenuChildren = () => {
-        const newMenuItems = [...menuItems];
+        const newMenuItems = [...menuList];
         newMenuItems.pop();
-        return setMenuItems(newMenuItems);
+        return setMenuList(newMenuItems);
     };
 
     const renderMenu = (attrs) => (
@@ -41,10 +41,10 @@ function MenuPopper({ children, items = [], handleClickMenu, customsTippy = {} }
             <div className={cx('arrow-popper')} data-popper-arrow />
             <PopperWrapper
                 className={cx('menu-list', {
-                    'sub-menu-list': menuItems.length > 1,
+                    'sub-menu-list': menuList.length > 1,
                 })}
             >
-                {menuItems.length > 1 && <MenuHeader title={menuTitle} onBack={handleBackMenuChildren} />}
+                {menuList.length > 1 && <MenuHeader title={menuTitle} onBack={handleBackMenuChildren} />}
                 <div className={cx('menu-item-wrapper')}>{renderMenuItems()}</div>
             </PopperWrapper>
         </nav>
@@ -52,26 +52,28 @@ function MenuPopper({ children, items = [], handleClickMenu, customsTippy = {} }
 
     // Render menu item
     const renderMenuItems = () => {
-        if (currentItems.data.length >= 15) {
-            document.body.classList.add('hidden');
+        const bodyClassList = document.body.classList;
+        if (currentMenu.data.length >= 15) {
+            bodyClassList.add('hidden');
         } else {
-            document.body.classList.remove('hidden');
+            const isModalActive = bodyClassList.contains('modal');
+            isModalActive || bodyClassList.remove('hidden');
         }
 
-        return currentItems.data.map((item, index) => {
-            const haveChildren = !!item.children;
+        return currentMenu.data.map((menuItem, index) => {
+            const haveChildren = !!menuItem.children;
 
             const handleClick = () => {
-                haveChildren ? handleGoMenuChildren(item.children) : handleClickMenu(item);
+                haveChildren ? handleGoMenuChildren(menuItem.children) : handleClickMenu(menuItem);
             };
 
-            return <MenuItem key={index} menuInfo={item} onClick={handleClick} isSubMenu={menuItems.length > 1} />;
+            return <MenuItem key={index} menuInfo={menuItem} onClick={handleClick} isSubMenu={menuList.length > 1} />;
         });
     };
 
     // Get data of last element in items array
-    const currentItems = getLastItem(menuItems);
-    const menuTitle = currentItems.title;
+    const currentMenu = getLastItem(menuList);
+    const menuTitle = currentMenu.title;
 
     return (
         <TippyHeadless
@@ -83,7 +85,7 @@ function MenuPopper({ children, items = [], handleClickMenu, customsTippy = {} }
             delay={[0, 700]}
             hideOnClick={false}
             onHidden={() => {
-                setMenuItems([menuItems[0]]);
+                setMenuList([menuList[0]]);
             }}
             {...customsTippy}
         >

@@ -6,12 +6,12 @@ function useModal(ModalComponent) {
 
     const modalShow = () => {
         setIsShow(true);
-        document.body.classList.add('hidden');
+        document.body.classList.add('hidden', 'modal');
     };
 
     const modalHide = () => {
         setIsShow(false);
-        document.body.classList.remove('hidden');
+        document.body.classList.remove('hidden', 'modal');
     };
 
     const ModalExport = () => {

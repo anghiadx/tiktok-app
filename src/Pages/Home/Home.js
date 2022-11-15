@@ -7,32 +7,16 @@ import SuggestVideo from '~/components/Videos/SuggestVideo';
 import { videoService } from '~/services';
 import TiktokLoading from '~/components/TiktokLoading';
 import SvgIcon from '~/components/SvgIcon';
-import VideoContext from '~/contexts/VideoContext';
-import useLocalStorage from '~/hooks/useLocalStorage';
-import configs from '~/configs';
 
 const cx = classNames.bind(styles);
 
 function Home() {
-    const videoStorageKey = configs.localStorage.videoControl;
-    const [dataStorage, setDataStorage] = useLocalStorage(videoStorageKey);
-
     // State
     const [videoList, setVideoList] = useState([]);
     const [page, setPage] = useState(0);
-    const [volume, setVolume] = useState(dataStorage.volume || 0.5);
-    const [muted, setMuted] = useState(true);
-    const [inViewArrs, setInViewArrs] = useState([[]]);
 
     // Ref
     const pageRandom = useRef([]);
-
-    // Set value for context
-    const contextValue = {
-        volumeState: [volume, setVolume],
-        mutedState: [muted, setMuted],
-        inViewArrState: [inViewArrs, setInViewArrs],
-    };
 
     // Call API to load video list
     useEffect(() => {
@@ -50,15 +34,6 @@ function Home() {
         fetchVideoList();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page]);
-
-    // Set volume value to localstorage when it changed
-    useEffect(() => {
-        const data = {
-            volume,
-        };
-        setDataStorage(data);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [volume]);
 
     const handleRandomPage = (min, max) => {
         const countPage = max + 1 - min;
@@ -82,22 +57,13 @@ function Home() {
     };
 
     return (
-        <VideoContext value={contextValue}>
-            <div className={cx('wrapper')}>
-                {videoList.map((video, index) => {
-                    return (
-                        <InView key={index} threshold={0.8}>
-                            {({ inView, ref: observeRef }) => (
-                                <SuggestVideo ref={observeRef} isInView={inView} videoInfo={video} videoId={index} />
-                            )}
-                        </InView>
-                    );
-                })}
-                <InView onChange={(inView) => inView && setPage(handleRandomPage(1, 10))}>
-                    <SvgIcon className={cx('auto-load-more')} icon={<TiktokLoading />} />
-                </InView>
-            </div>
-        </VideoContext>
+        <div className={cx('wrapper')}>
+            <SuggestVideo data={videoList} />
+
+            <InView onChange={(inView) => inView && setPage(handleRandomPage(1, 10))}>
+                <SvgIcon className={cx('auto-load-more')} icon={<TiktokLoading />} />
+            </InView>
+        </div>
     );
 }
 

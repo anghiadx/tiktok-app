@@ -1,16 +1,17 @@
 import PropTypes from 'prop-types';
-import { useEffect, useRef, useState, useContext, forwardRef } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
+import { useInView } from 'react-intersection-observer';
 import classNames from 'classnames/bind';
 
+import styles from './VideoControl.module.scss';
 import SvgIcon from '~/components/SvgIcon';
 import { iconFlag, iconMute, iconPauseVideo, iconPlayVideo, iconVolume } from '~/components/SvgIcon/iconsRepo';
 import TiktokLoading from '~/components/TiktokLoading';
-import styles from './SuggestVideoControl.module.scss';
 import { VideoContextKey } from '~/contexts/VideoContext';
 
 const cx = classNames.bind(styles);
 
-const SuggestVideoControl = forwardRef(({ videoId, videoInfo, isInView }, REF) => {
+function VideoControl({ videoId, videoInfo }) {
     // Get data from video info
     const {
         thumb_url: thumbUrl,
@@ -34,6 +35,9 @@ const SuggestVideoControl = forwardRef(({ videoId, videoInfo, isInView }, REF) =
     const [volume, setVolume] = volumeState;
     const [muted, setMuted] = mutedState;
     const [inViewArr, setInViewArr] = inViewArrState;
+
+    // INVIEW STATE
+    const [inViewRef, isInView] = useInView({ threshold: 0.5 });
 
     // REF
     const videoRef = useRef(null);
@@ -66,22 +70,56 @@ const SuggestVideoControl = forwardRef(({ videoId, videoInfo, isInView }, REF) =
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isInView]);
 
+    useEffect(() => {
+        if (userInteracting) {
+            window.addEventListener('scroll', handleRemoveInteractive);
+        }
+
+        return () => {
+            if (userInteracting) {
+                window.removeEventListener('scroll', handleRemoveInteractive);
+            }
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [userInteracting]);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
+        const idActive = inViewArr[1];
+        if (idActive !== -1 && videoId !== idActive) {
+            playing && handleResetVideo();
+            return;
+        }
+
         if (isInView && !userInteracting) {
-            const active = inViewArr[0].findIndex((inView) => inView === true);
-            videoId === active ? setPlaying(true) : handleResetVideo();
+            const activeId = inViewArr[0].findIndex((obj) => obj.inView === true);
+            videoId === activeId ? setPlaying(true) : handleResetVideo();
         }
     });
 
+    // FUNCTION
     const updateInViewArr = () => {
-        inViewArr[0][videoId] = isInView;
+        inViewArr[0][videoId].inView = isInView;
         setInViewArr([...inViewArr]);
     };
 
     const handleTogglePlayBtn = () => {
         setPlaying(!playing);
         setUserInteracting(true);
+
+        if (!playing) {
+            inViewArr[1] = videoId;
+            setInViewArr([...inViewArr]);
+        }
+    };
+
+    const handleRemoveInteractive = () => {
+        const activeId = inViewArr[0].findIndex((obj) => obj.inView === true);
+        if (videoId !== activeId) {
+            handleResetVideo();
+        }
+        inViewArr[1] = -1;
+        setInViewArr([...inViewArr]);
     };
 
     const handleVolumeBtn = () => {
@@ -149,7 +187,7 @@ const SuggestVideoControl = forwardRef(({ videoId, videoInfo, isInView }, REF) =
         <div className={cx('player-space', directionVideoClass)}>
             <p className={cx('default-space')}></p>
             {loading && playing && <SvgIcon className={cx('video-loading')} icon={<TiktokLoading small />} />}
-            <img className={cx('thumb')} src={thumbUrl} alt="" ref={REF} />
+            <img className={cx('thumb')} src={thumbUrl} alt="" ref={inViewRef} />
             <video
                 className={cx('video', {
                     hidden: defaultStatus,
@@ -189,12 +227,11 @@ const SuggestVideoControl = forwardRef(({ videoId, videoInfo, isInView }, REF) =
             </div>
         </div>
     );
-});
+}
 
-SuggestVideoControl.propTypes = {
+VideoControl.propTypes = {
     videoId: PropTypes.number,
     videoInfo: PropTypes.object.isRequired,
-    isInView: PropTypes.bool,
 };
 
-export default SuggestVideoControl;
+export default VideoControl;
