@@ -9,5 +9,8 @@ export const getSuggestVideo = async (page, type = 'for-you') => {
             page,
         },
     });
+    if (dataResponse.status === 0) {
+        return [];
+    }
     return dataResponse.data;
 };

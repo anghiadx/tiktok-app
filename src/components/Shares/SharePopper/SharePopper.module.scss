@@ -16,7 +16,10 @@
 
 .share-popper {
     padding-top: 0px;
-    padding-right: 3px;
+
+    &.seeFull {
+        padding-right: 3px;
+    }
 }
 
 .arrow-popper {
@@ -33,6 +36,15 @@
         transform: translateX(-50%) translateY(-67%) rotate(45deg);
         background-color: var(--white-color-3);
         box-shadow: var(--box-shadow-popper);
+    }
+}
+
+.arrow-popper.arrowTop {
+    bottom: initial;
+    top: -9px;
+
+    &::before {
+        transform: translateX(-50%) translateY(25%) rotate(45deg);
     }
 }
 

@@ -1,0 +1,148 @@
+.wrapper {
+    padding: 32px 24px;
+    scroll-margin-top: var(--g-header-height);
+}
+
+.user-container {
+    max-width: 624px;
+    padding-right: 92px;
+
+    position: relative;
+}
+
+.action {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+
+    .icon {
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    .icon + .icon {
+        margin-left: 16px;
+    }
+}
+
+.more-popper {
+    padding: 8px 0;
+}
+.arrow-popper {
+    top: -9px;
+    height: 9px;
+    overflow-y: clip;
+    z-index: 1;
+
+    &::before {
+        content: '';
+        position: absolute;
+        width: 15px;
+        height: 15px;
+        transform: translateX(-50%) translateY(25%) rotate(45deg);
+        background-color: var(--white-color-3);
+        box-shadow: var(--box-shadow-popper);
+    }
+}
+.more-item {
+    justify-content: flex-start;
+    min-width: 180px;
+    min-height: 49px;
+    border: 0;
+    background-color: transparent;
+
+    &:last-child {
+        position: relative;
+
+        &::after {
+            content: '';
+            position: absolute;
+            left: 16px;
+            right: 16px;
+            top: 0;
+            height: 1px;
+            background-color: var(--background-gray-color-12);
+            transform: scaleY(0.99);
+        }
+    }
+
+    + .more-item {
+        margin-left: 0;
+    }
+
+    .item__text {
+        margin-left: 15px;
+    }
+}
+
+.account-info {
+    display: flex;
+    cursor: pointer;
+
+    img {
+        flex-shrink: 0;
+        width: 116px;
+        height: 116px;
+        margin-right: 20px;
+        border-radius: 50%;
+        object-fit: cover;
+        background-color: var(--background-gray-color-06);
+    }
+}
+
+.account__username {
+    margin: 0;
+    padding-bottom: 4px;
+    line-height: 38px;
+    font-size: 3.2rem;
+}
+
+.account__fullname {
+    margin: 0;
+    line-height: 25px;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.follow-btn {
+    margin-top: 16px;
+}
+
+.count-info {
+    margin-top: 22px;
+}
+
+.num__count {
+    font-size: 1.8rem;
+}
+
+.title__count {
+    margin-left: 6px;
+    font-weight: 400;
+    color: var(--text-gray-color);
+}
+.num__count + .title__count {
+    margin-right: 20px;
+}
+
+.bio-info {
+    line-height: 22px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.website-info {
+    display: inline-flex;
+    align-items: center;
+    line-height: 22px;
+    font-weight: 600;
+
+    .icon {
+        flex-shrink: 0;
+        margin-right: 2px;
+    }
+
+    &:hover {
+        text-decoration: underline;
+    }
+}

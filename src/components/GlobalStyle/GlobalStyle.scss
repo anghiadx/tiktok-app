@@ -30,6 +30,8 @@
     --background-gray-color-02: rgba(22, 24, 35, 0.2);
     --background-gray-color-75: rgba(22, 24, 35, 0.75);
 
+    --background-gray-color-241: rgb(241, 241, 241);
+
     --box-shadow-popper: rgb(0 0 0 / 12%) 0px 2px 12px;
     --box-shadow-popper-2: rgb(0 0 0 / 12%) 0px 4px 16px;
     --box-shadow-header: 0px 1px 1px rgb(0 0 0 / 12%);
@@ -37,7 +39,7 @@
     --border-color-style: #c5c6c9;
 
     // Size of layout component
-    --header-height: 60px;
+    --g-header-height: 60px;
 
     // DOM breakpoint
     --large-screen: 1071px;
@@ -64,6 +66,8 @@
     --background-gray-color-34: rgba(255, 255, 255, 0.34);
     --background-gray-color-12: rgba(255, 255, 255, 0.12);
     --background-gray-color-75: rgba(255, 255, 255, 0.75);
+
+    --background-gray-color-241: rgb(37 37 37);
 
     --box-shadow-header: rgb(255 255 255 / 12%) 0px 1px 1px;
     --box-shadow-popper: rgb(255 255 255 / 12%) 0px 2px 12px;

@@ -3,7 +3,7 @@ import ShowAccount from '~/components/ShowAccount';
 import configs from '~/configs';
 import { accountService } from '~/services';
 
-function FollowedAccount() {
+function FollowingAccount() {
     const [accountList, setAccountList] = useState([]);
     const [page, setPage] = useState(5);
     const [loading, setLoading] = useState(false);
@@ -52,4 +52,4 @@ function FollowedAccount() {
     );
 }
 
-export default memo(FollowedAccount);
+export default memo(FollowingAccount);

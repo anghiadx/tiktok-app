@@ -1,2 +1,2 @@
 export { default } from './SuggestedAccount';
-export { default as FollowedAccount } from './FollowedAccount';
+export { default as FollowingAccount } from './FollowingAccount';

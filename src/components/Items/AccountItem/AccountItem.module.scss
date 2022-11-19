@@ -111,6 +111,8 @@
         display: none;
     }
     .preview-container {
-        display: none;
+        position: absolute;
+        top: -48px;
+        left: 53px;
     }
 }

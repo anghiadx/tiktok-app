@@ -12,13 +12,15 @@ function SuggestVideo({ data }) {
     // State
     const [volume, setVolume] = useState(dataStorage.volume || 0.6);
     const [muted, setMuted] = useState(true);
-    const [inViewArr, setInViewArr] = useState([[], -1]);
+    const [inViewArr, setInViewArr] = useState([[]]);
+    const [priorityVideo, setPriorityVideo] = useState(-1);
 
     // Set value for context
     const contextValue = {
         volumeState: [volume, setVolume],
         mutedState: [muted, setMuted],
         inViewArrState: [inViewArr, setInViewArr],
+        priorityVideoState: [priorityVideo, setPriorityVideo],
     };
 
     // Set volume value to localstorage when it changed
@@ -32,10 +34,10 @@ function SuggestVideo({ data }) {
 
     // Handle key down event
     useEffect(() => {
-        const handleScroll = (type) => {
+        const handleScrollTo = (type) => {
             const fisrtInViewId = inViewArr[0].findIndex((inViewObj) => inViewObj.inView === true);
 
-            const currentVideoId = inViewArr[1] !== -1 ? inViewArr[1] : fisrtInViewId;
+            const currentVideoId = priorityVideo !== -1 ? priorityVideo : fisrtInViewId;
 
             if (currentVideoId === -1) {
                 return;
@@ -69,13 +71,13 @@ function SuggestVideo({ data }) {
                 case 32:
                 case 40:
                     e.preventDefault();
-                    handleScroll('down');
+                    handleScrollTo('down');
                     break;
 
                 // up arrow
                 case 38:
                     e.preventDefault();
-                    handleScroll('up');
+                    handleScrollTo('up');
                     break;
 
                 default:
@@ -88,7 +90,7 @@ function SuggestVideo({ data }) {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [muted, inViewArr]);
+    }, [muted, inViewArr, priorityVideo]);
 
     return (
         <VideoContext value={contextValue}>

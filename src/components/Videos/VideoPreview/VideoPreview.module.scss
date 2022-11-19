@@ -1,0 +1,38 @@
+.video-wrapper {
+    position: relative;
+    padding-top: 132.653%;
+    overflow: hidden;
+    background-color: var(--background-gray-color-06);
+}
+
+.inner-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    inset: 0;
+
+    &.vertical {
+        video,
+        img {
+            width: 100%;
+        }
+    }
+
+    &.horizontal {
+        video,
+        img {
+            height: 100%;
+        }
+    }
+
+    img {
+        position: absolute;
+        z-index: 1;
+    }
+
+    .active {
+        z-index: 2;
+    }
+}

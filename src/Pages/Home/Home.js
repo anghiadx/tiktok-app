@@ -4,9 +4,10 @@ import classNames from 'classnames/bind';
 
 import styles from './Home.module.scss';
 import SuggestVideo from '~/components/Videos/SuggestVideo';
-import { videoService } from '~/services';
 import TiktokLoading from '~/components/TiktokLoading';
+import HomeAccountLoading from '~/components/Loadings/HomeAccountLoading';
 import SvgIcon from '~/components/SvgIcon';
+import { videoService } from '~/services';
 
 const cx = classNames.bind(styles);
 
@@ -61,7 +62,11 @@ function Home() {
             <SuggestVideo data={videoList} />
 
             <InView onChange={(inView) => inView && setPage(handleRandomPage(1, 10))}>
-                <SvgIcon className={cx('auto-load-more')} icon={<TiktokLoading />} />
+                {videoList.length === 0 ? (
+                    <HomeAccountLoading />
+                ) : (
+                    <SvgIcon className={cx('auto-load-more')} icon={<TiktokLoading />} />
+                )}
             </InView>
         </div>
     );

@@ -1,0 +1,18 @@
+.profile-404 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 444px;
+
+    .profile-404__title {
+        margin-top: 24px;
+    }
+
+    .profile-404__content {
+        color: var(--text-gray-color);
+    }
+
+    .profile-404__icon {
+        opacity: 0.34;
+    }
+}

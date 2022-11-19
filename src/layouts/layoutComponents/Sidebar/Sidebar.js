@@ -1,10 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import PropTypes from 'prop-types';
 import React, { memo, useState } from 'react';
 import classNames from 'classnames/bind';
 
 import styles from './Sidebar.module.scss';
 import Navigation from './Navigation';
-import SuggestedAccount, { FollowedAccount } from './SuggestedAccount';
+import SuggestedAccount, { FollowingAccount } from './SuggestedAccount';
 
 import { Scrollbars as CustomScrollbar } from 'react-custom-scrollbars';
 import LoginNotify from './LoginNotify';
@@ -13,7 +14,7 @@ import BorderTopContainer from '~/components/BorderTopContainer';
 
 const cx = classNames.bind(styles);
 
-function Sidebar() {
+function Sidebar({ suggestedAcc = true, followingAcc = true }) {
     const [hideScrollbar, setHideScrollbar] = useState(true);
 
     const customScrollbar = (className) => {
@@ -38,10 +39,10 @@ function Sidebar() {
                         <LoginNotify />
 
                         {/* Sugges Account */}
-                        <SuggestedAccount />
+                        {suggestedAcc && <SuggestedAccount />}
 
                         {/* Followed */}
-                        <FollowedAccount />
+                        {followingAcc && <FollowingAccount />}
 
                         {/* Discover */}
                         <Discover />
@@ -117,5 +118,10 @@ function Sidebar() {
         </div>
     );
 }
+
+Sidebar.propTypes = {
+    suggestedAcc: PropTypes.bool,
+    followingAcc: PropTypes.bool,
+};
 
 export default memo(Sidebar);

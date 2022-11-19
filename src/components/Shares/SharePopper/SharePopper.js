@@ -3,21 +3,18 @@ import { useState } from 'react';
 import TippyHeadless from '@tippyjs/react/headless';
 import classNames from 'classnames/bind';
 
-import styles from './VideoShare.module.scss';
+import styles from './SharePopper.module.scss';
 import PopperWrapper from '~/components/Popper';
 import Button from '~/components/Button';
 import SvgIcon from '~/components/SvgIcon';
 import { iconArrowToBot } from '~/components/SvgIcon/iconsRepo';
-import dataTemp from '~/temp/data';
 
 const cx = classNames.bind(styles);
 
-function VideoShare({ children }) {
+function SharePopper({ children, data, customTippy = {}, arrowTop = false }) {
     const [showFullList, setShowFullList] = useState(false);
 
-    const shareList = dataTemp.shares;
-
-    const currentList = showFullList ? shareList : shareList.slice(0, 5);
+    const currentList = showFullList ? data : data.slice(0, 5);
 
     const handleShowFull = () => {
         return setShowFullList(true);
@@ -29,8 +26,8 @@ function VideoShare({ children }) {
 
     const handleRenderItem = (attrs) => (
         <div className={cx('share-wrapper')} tabIndex="-1" {...attrs}>
-            <PopperWrapper className={cx('share-popper')}>
-                <div className={cx('arrow-popper')} data-popper-arrow />
+            <PopperWrapper className={cx('share-popper', { seeFull: showFullList })}>
+                <div className={cx('arrow-popper', { arrowTop: arrowTop })} data-popper-arrow />
                 <div className={cx('share-list')}>
                     {currentList.map((share, index) => (
                         <Button
@@ -45,7 +42,7 @@ function VideoShare({ children }) {
                             {share.title}
                         </Button>
                     ))}
-                    {shareList.length > 5 && !showFullList && (
+                    {data.length > 5 && !showFullList && (
                         <div className={cx('see-more-btn')} onClick={handleShowFull}>
                             <SvgIcon icon={iconArrowToBot} size={24} />
                         </div>
@@ -64,14 +61,18 @@ function VideoShare({ children }) {
             popperOptions={{ modifiers: [{ name: 'flip', enabled: false }] }}
             onHidden={handleShowLess}
             render={handleRenderItem}
+            {...customTippy}
         >
             {children}
         </TippyHeadless>
     );
 }
 
-VideoShare.propTypes = {
+SharePopper.propTypes = {
     children: PropTypes.node.isRequired,
+    data: PropTypes.array,
+    customTippy: PropTypes.object,
+    arrowTop: PropTypes.bool,
 };
 
-export default VideoShare;
+export default SharePopper;

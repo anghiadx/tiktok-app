@@ -6,12 +6,12 @@ import { iconTick } from '~/components/SvgIcon/iconsRepo';
 
 const cx = classNames.bind(styles);
 
-function CheckTick({ tick }) {
-    return tick && <SvgIcon className={cx('tick')} icon={iconTick} />;
+function CheckTick({ tick = false, size }) {
+    return tick && <SvgIcon className={cx('tick')} icon={iconTick} size={size} />;
 }
 
 CheckTick.propTypes = {
-    tick: PropTypes.bool.isRequired,
+    tick: PropTypes.bool,
 };
 
 export default CheckTick;

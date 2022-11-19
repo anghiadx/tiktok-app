@@ -1,6 +1,6 @@
 import * as menus from './menus';
 import * as modals from './modals';
-import shares from './shares';
+import * as shares from './shares';
 
 const dataTemp = {
     menus,

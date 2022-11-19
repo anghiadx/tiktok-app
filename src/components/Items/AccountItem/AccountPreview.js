@@ -30,12 +30,15 @@ function AccountPreview({
     const { loginModalShow } = useContext(ModalContextKey);
 
     const renderPreview = (attrs) => (
-        <div tabIndex="-1" {...attrs}>
-            <PopperWrapper
-                className={cx('preview-account', {
-                    [className]: className,
-                })}
-            >
+        <div
+            className={cx({
+                [className]: className,
+            })}
+            tabIndex="-1"
+            onClick={(e) => e.preventDefault()}
+            {...attrs}
+        >
+            <PopperWrapper className={cx('preview-account')}>
                 {/* Header */}
                 <div className={cx('preview-header')}>
                     <Link to={`/@${userName}`} className={cx('')}>
@@ -68,22 +71,16 @@ function AccountPreview({
     );
 
     return (
-        // Interactive tippy element may not be accessible via keyboard navigation because it is not directly
-        // after the reference element in the DOM source order.
-
-        // Using a wrapper <span> tag around the reference element solves this by creating
-        <span>
-            <TippyHeadless
-                // visible
-                placement="bottom-start"
-                interactive
-                delay={[1000, 0]}
-                {...customTippy}
-                render={renderPreview}
-            >
-                {children}
-            </TippyHeadless>
-        </span>
+        <TippyHeadless
+            placement="bottom-start"
+            interactive
+            delay={[1000, 0]}
+            appendTo={document.body}
+            {...customTippy}
+            render={renderPreview}
+        >
+            {children}
+        </TippyHeadless>
     );
 }
 

@@ -24,7 +24,7 @@ function VideoControl({ videoId, videoInfo }) {
     const directionVideoClass = videoWidth - videoHeight < 0 ? 'vertical' : 'horizontal';
 
     // Get data from the context
-    const { volumeState, mutedState, inViewArrState } = useContext(VideoContextKey);
+    const { volumeState, mutedState, inViewArrState, priorityVideoState } = useContext(VideoContextKey);
 
     // STATE
     const [playing, setPlaying] = useState(false);
@@ -35,6 +35,7 @@ function VideoControl({ videoId, videoInfo }) {
     const [volume, setVolume] = volumeState;
     const [muted, setMuted] = mutedState;
     const [inViewArr, setInViewArr] = inViewArrState;
+    const [priorityVideo, setPriorityVideo] = priorityVideoState;
 
     // INVIEW STATE
     const [inViewRef, isInView] = useInView({ threshold: 0.5 });
@@ -71,28 +72,23 @@ function VideoControl({ videoId, videoInfo }) {
     }, [isInView]);
 
     useEffect(() => {
-        if (userInteracting) {
-            window.addEventListener('scroll', handleRemoveInteractive);
-        }
+        userInteracting && window.addEventListener('scroll', handleRemoveInteractive);
 
         return () => {
-            if (userInteracting) {
-                window.removeEventListener('scroll', handleRemoveInteractive);
-            }
+            userInteracting && window.removeEventListener('scroll', handleRemoveInteractive);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userInteracting]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
-        const idActive = inViewArr[1];
-        if (idActive !== -1 && videoId !== idActive) {
+        if (priorityVideo !== -1 && videoId !== priorityVideo) {
             playing && handleResetVideo();
             return;
         }
 
         if (isInView && !userInteracting) {
-            const activeId = inViewArr[0].findIndex((obj) => obj.inView === true);
+            const activeId = findFirstInViewId();
             videoId === activeId ? setPlaying(true) : handleResetVideo();
         }
     });
@@ -103,23 +99,32 @@ function VideoControl({ videoId, videoInfo }) {
         setInViewArr([...inViewArr]);
     };
 
+    const findFirstInViewId = () => {
+        const firstInViewId = inViewArr[0].findIndex((obj) => obj.inView === true);
+        return firstInViewId;
+    };
+
     const handleTogglePlayBtn = () => {
         setPlaying(!playing);
         setUserInteracting(true);
 
+        // Click play btn when video is stoping
         if (!playing) {
-            inViewArr[1] = videoId;
-            setInViewArr([...inViewArr]);
+            setPriorityVideo(videoId);
         }
     };
 
     const handleRemoveInteractive = () => {
-        const activeId = inViewArr[0].findIndex((obj) => obj.inView === true);
-        if (videoId !== activeId) {
-            handleResetVideo();
-        }
-        inViewArr[1] = -1;
-        setInViewArr([...inViewArr]);
+        setTimeout(() => {
+            const activeId = findFirstInViewId();
+
+            videoId !== activeId ? handleResetVideo() : setUserInteracting(false);
+
+            setPriorityVideo(-1);
+        }, 250);
+
+        // remove this event right after first run
+        window.removeEventListener('scroll', handleRemoveInteractive);
     };
 
     const handleVolumeBtn = () => {

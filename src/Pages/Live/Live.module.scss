@@ -1,0 +1,5 @@
+.wrapper {
+    height: calc(100vh - var(--g-header-height));
+    padding: 24px;
+    scroll-margin-top: var(--g-header-height);
+}

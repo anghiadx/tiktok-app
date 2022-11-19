@@ -5,7 +5,7 @@ import BorderTopContainer from '~/components/BorderTopContainer';
 import Button from '~/components/Button';
 import SvgIcon from '~/components/SvgIcon';
 import { iconTag, iconMusic } from '~/components/SvgIcon/iconsRepo';
-import LineLoading from '~/components/Loading/LineLoading';
+import LineLoading from '~/components/Loadings/LineLoading';
 
 const cx = classNames.bind(styles);
 

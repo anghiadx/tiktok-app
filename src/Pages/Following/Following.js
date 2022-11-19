@@ -1,10 +1,13 @@
+import classNames from 'classnames/bind';
+import styles from './Following.module.scss';
+import SuggestFollow from './SuggestFollow';
+
+const cx = classNames.bind(styles);
+
 function Following() {
-    return (
-        <div>
-            <h1>Coming soon...</h1>
-            {/* <LoginModal>123</LoginModal> */}
-        </div>
-    );
+    const currentUser = false;
+
+    return <div className={cx('wrapper')}>{!currentUser ? <SuggestFollow /> : <h1>User Logined...</h1>}</div>;
 }
 
 export default Following;

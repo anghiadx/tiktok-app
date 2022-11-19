@@ -10,6 +10,7 @@ export const get = async (path, options = {}) => {
 
         return response.data;
     } catch (err) {
-        console.log('Failed to get: ', err);
+        // console.log('Failed to get: ', err);
+        return err.response;
     }
 };

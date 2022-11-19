@@ -5,9 +5,14 @@
     max-width: var(--layout-width);
     // min-height: 1000px;
     margin: 0 auto;
-    margin-top: var(--header-height);
+    margin-top: var(--g-header-height);
     display: flex;
     justify-content: space-between;
+
+    .sidebar {
+        flex-shrink: 0;
+        width: 356px;
+    }
 
     .content {
         flex: 1 1;
@@ -15,5 +20,13 @@
         padding: 24px 0;
         margin: 0 16px;
         // border: 1px solid;
+    }
+}
+
+@media (max-width: 1071px) {
+    .container {
+        .sidebar {
+            width: 72px;
+        }
     }
 }

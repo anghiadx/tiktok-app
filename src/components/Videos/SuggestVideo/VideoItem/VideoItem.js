@@ -12,7 +12,8 @@ import { iconComment, iconHeart, iconMusic, iconShare } from '~/components/SvgIc
 import ShowTick from '~/components/ShowTick';
 import AccountPreview from '~/components/Items/AccountItem/AccountPreview';
 import VideoControl from '../VideoControl';
-import VideoShare from '~/components/Shares/VideoShare';
+import SharePopper from '~/components/Shares/SharePopper';
+import dataTemp from '~/temp/data';
 
 import { ModalContextKey } from '~/contexts/ModalContext';
 
@@ -21,8 +22,12 @@ const cx = classNames.bind(styles);
 function VideoItem({ videoId, videoInfo, inViewArr }) {
     // Get Modal context value
     const { loginModalShow } = useContext(ModalContextKey);
+
     // ref
     const wrapperRef = useRef();
+
+    // get data from temp data
+    const { videoShares } = dataTemp.shares;
 
     const currentUser = false;
 
@@ -55,7 +60,7 @@ function VideoItem({ videoId, videoInfo, inViewArr }) {
 
     return (
         <div ref={wrapperRef} className={cx('wrapper')}>
-            <Link className={cx('big-avatar')} to="">
+            <Link className={cx('big-avatar')} to={'/@' + userName}>
                 <AccountPreview
                     avatarUrl={avatarUrl}
                     userName={userName}
@@ -64,7 +69,7 @@ function VideoItem({ videoId, videoInfo, inViewArr }) {
                     bio={bio}
                     followerCount={followerCount}
                     likeCount={likeCount}
-                    customTippy={{ delay: [1000, 500] }}
+                    customTippy={{ delay: [1000, 500], offset: [0, 6] }}
                 >
                     <Img className={cx('avatar')} src={avatarUrl} />
                 </AccountPreview>
@@ -72,7 +77,7 @@ function VideoItem({ videoId, videoInfo, inViewArr }) {
             <div className={cx('body')}>
                 <div className={cx('video-info')}>
                     {/* User info */}
-                    <Link className={cx('user-info')} to="">
+                    <Link className={cx('user-info')} to={'/@' + userName}>
                         <Img className={cx('avatar', 'small-avatar')} src={avatarUrl} />
                         <p className={cx('name')}>
                             <span className={cx('user-name')}>
@@ -119,14 +124,14 @@ function VideoItem({ videoId, videoInfo, inViewArr }) {
                             <strong className={cx('item-count')}>{commentsCount}</strong>
                         </label>
 
-                        <VideoShare>
+                        <SharePopper data={videoShares}>
                             <label className={cx('interactive-item')}>
                                 <button className={cx('item-icon')}>
                                     <SvgIcon icon={iconShare} />
                                 </button>
                                 <strong className={cx('item-count')}>{sharesCount || 'Chia sẻ'}</strong>
                             </label>
-                        </VideoShare>
+                        </SharePopper>
                     </div>
                 </div>
             </div>

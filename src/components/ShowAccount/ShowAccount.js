@@ -4,12 +4,12 @@ import classNames from 'classnames/bind';
 import styles from './ShowAccount.module.scss';
 import AccountItem from '~/components/Items/AccountItem';
 import BorderTopContainer from '~/components/BorderTopContainer';
-import AccountLoading from '~/components/Loading/AccountLoading';
+import AccountLoading from '~/components/Loadings/AccountLoading';
 const cx = classNames.bind(styles);
 
 function ShowAccount({ title, accountItems, hoverActivate, btnTitle, loading = false, onClick }) {
     const isLoad = loading || accountItems.length === 0;
-    const customTippy = useRef({ placement: 'bottom', offset: [-32, 0] });
+    const customTippy = useRef({ placement: 'bottom', offset: [-16, 0], delay: [1000, 250] });
 
     return (
         <BorderTopContainer className={cx('wrapper')}>

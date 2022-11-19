@@ -34,7 +34,8 @@
         background-color: rgb(11, 224, 155);
 
         &::after {
-            left: 22px;
+            left: calc(100% - 2px);
+            transform: translateX(-100%);
         }
     }
 }

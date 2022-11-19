@@ -2,7 +2,7 @@
     display: flex;
     position: relative;
     padding: 20px 0;
-    scroll-margin-top: var(--header-height);
+    scroll-margin-top: var(--g-header-height);
 
     &::after {
         content: '';
