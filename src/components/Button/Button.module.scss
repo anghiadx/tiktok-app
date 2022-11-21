@@ -45,7 +45,7 @@
 
 .color {
     min-width: 100px;
-    line-height: 22px;
+    line-height: var(--primary-line-height);
 
     background-color: var(--primary-color);
     color: white;

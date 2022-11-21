@@ -17,8 +17,12 @@
     --circle-diameter: 17.5px;
     --circle-scale-percent: 0.2;
 
-    &.small {
+    &.medium {
         --circle-diameter: 16.5px;
+    }
+
+    &.small {
+        --circle-diameter: 11.5px;
     }
 }
 

@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect, memo, useCallback } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect, memo, useCallback } from 'react';
+import { Link, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import TippyHeadless from '@tippyjs/react/headless';
 import classNames from 'classnames/bind';
 
@@ -7,6 +8,7 @@ import SvgIcon from '~/components/SvgIcon';
 import { iconClose, iconLoading, iconSearch } from '~/components/SvgIcon/iconsRepo';
 import PopperWrapper from '~/components/Popper';
 import SeachAccountItem from '~/components/Items/SearchAccountItem';
+import configs from '~/configs';
 import { useDebounce } from '~/hooks';
 import { searchService } from '~/services';
 
@@ -18,11 +20,29 @@ function Search() {
     const [searchResult, setSearchResult] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    // react router state
+    const navigate = useNavigate();
+    const { pathname } = useLocation();
+    const [searchParams] = useSearchParams();
+
     // Ref
     const searchInputRef = useRef();
+    const formRef = useRef();
 
     const debouncedValue = useDebounce(searchInput, 800);
 
+    // Change search value follow the URL
+    useLayoutEffect(() => {
+        const searchPath = configs.routes.search;
+        if (pathname.startsWith(searchPath)) {
+            const searchKey = searchParams.get('q');
+            const keyValidate = searchKey?.trim();
+            !!keyValidate && setSearchInput(keyValidate);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    // Call API search
     useEffect(() => {
         if (!debouncedValue) {
             setSearchResult([]);
@@ -55,7 +75,17 @@ function Search() {
     }, []);
 
     const handleBlurSearch = () => {
+        searchInputRef.current.blur();
         return setShowSearch(false);
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        if (!!searchInput) {
+            navigate(`${configs.routes.search}?q=${searchInput}`);
+            handleBlurSearch();
+        }
     };
 
     const renderSearchResult = (attrs) => (
@@ -65,7 +95,15 @@ function Search() {
                 {searchResult.map((accountItem, index) => (
                     <SeachAccountItem key={index} accountInfo={accountItem} onClick={handleClearInput} />
                 ))}
-                <div className={cx('search-result__see-full')}>Xem tất cả kết quả dành cho "{searchInput}"</div>
+
+                {/* Go to search details page */}
+                <Link
+                    className={cx('search-result__see-full')}
+                    to={`${configs.routes.search}?q=${searchInput}`}
+                    onClick={handleBlurSearch}
+                >
+                    Xem tất cả kết quả dành cho "{searchInput}"
+                </Link>
             </PopperWrapper>
         </div>
     );
@@ -83,9 +121,9 @@ function Search() {
                 interactive
                 onClickOutside={handleBlurSearch}
             >
-                <div className={cx('search-container')}>
+                <form ref={formRef} className={cx('search-container')} onSubmit={handleSubmit}>
                     <input
-                        type="text"
+                        type="search"
                         placeholder="Tìm kiếm tài khoản và video"
                         spellCheck="false"
                         value={searchInput}
@@ -103,21 +141,27 @@ function Search() {
                     />
                     <div className={cx('search-icon-wrapper')}>
                         {loading && (
-                            <button className={cx('loading', 'lh0')}>
+                            <span className={cx('loading', 'lh0')}>
                                 <SvgIcon icon={iconLoading} />
-                            </button>
+                            </span>
                         )}
                         {loading || (
-                            <button className={cx('clear-btn', 'lh0')} onClick={() => handleClearInput(true)}>
+                            <span className={cx('clear-btn', 'lh0')} onClick={() => handleClearInput(true)}>
                                 <SvgIcon icon={iconClose} />
-                            </button>
+                            </span>
                         )}
                     </div>
                     {/* Search btn */}
-                    <button className={cx('search-btn', 'lh0')} onMouseDown={(e) => e.preventDefault()}>
+                    <button
+                        type="submit"
+                        className={cx('search-btn', 'lh0')}
+                        onMouseDown={(e) => {
+                            e.preventDefault();
+                        }}
+                    >
                         <SvgIcon icon={iconSearch} size={24} />
                     </button>
-                </div>
+                </form>
             </TippyHeadless>
         </span>
     );

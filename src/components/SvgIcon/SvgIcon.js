@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-function SvgIcon({ icon, size, className, onClick }) {
+function SvgIcon({ icon, size, style = {}, className, onClick }) {
     return (
-        <i className={className} style={{ lineHeight: 0, fontSize: size }} onClick={onClick}>
+        <i className={className} style={{ lineHeight: 0, fontSize: size, ...style }} onClick={onClick}>
             {icon}
         </i>
     );
@@ -10,6 +10,9 @@ function SvgIcon({ icon, size, className, onClick }) {
 SvgIcon.propTypes = {
     icon: PropTypes.element,
     size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    style: PropTypes.object,
+    className: PropTypes.string,
+    onClick: PropTypes.func,
 };
 
 export default SvgIcon;

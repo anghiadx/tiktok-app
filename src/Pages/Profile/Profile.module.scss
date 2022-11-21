@@ -86,7 +86,6 @@
         margin-right: 20px;
         border-radius: 50%;
         object-fit: cover;
-        background-color: var(--background-gray-color-06);
     }
 }
 
@@ -126,7 +125,7 @@
 }
 
 .bio-info {
-    line-height: 22px;
+    line-height: var(--primary-line-height);
     margin-top: 10px;
     margin-bottom: 5px;
 }
@@ -134,7 +133,7 @@
 .website-info {
     display: inline-flex;
     align-items: center;
-    line-height: 22px;
+    line-height: var(--primary-line-height);
     font-weight: 600;
 
     .icon {

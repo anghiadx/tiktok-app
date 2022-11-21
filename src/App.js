@@ -2,11 +2,13 @@ import { Fragment } from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import { publicRoutes } from './routes';
 import { DefaultLayout } from './layouts';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
     return (
         <HashRouter>
             <div className="App">
+                <ScrollToTop />
                 <Routes>
                     {publicRoutes.map((route, index) => {
                         // component

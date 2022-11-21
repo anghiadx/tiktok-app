@@ -6,6 +6,7 @@
     box-sizing: border-box;
 }
 :root {
+    --primary-line-height: 22px;
     --primary-color: rgba(254, 44, 85, 1); // FE2C55
     --text-primary-color: rgb(22, 24, 35);
     --text-gray-color: rgba(22, 24, 35, 0.75);
@@ -31,6 +32,7 @@
     --background-gray-color-75: rgba(22, 24, 35, 0.75);
 
     --background-gray-color-241: rgb(241, 241, 241);
+    --background-gray-color-248: rgb(248, 248, 248);
 
     --box-shadow-popper: rgb(0 0 0 / 12%) 0px 2px 12px;
     --box-shadow-popper-2: rgb(0 0 0 / 12%) 0px 4px 16px;
@@ -68,6 +70,7 @@
     --background-gray-color-75: rgba(255, 255, 255, 0.75);
 
     --background-gray-color-241: rgb(37 37 37);
+    --background-gray-color-248: rgb(18, 18, 18);
 
     --box-shadow-header: rgb(255 255 255 / 12%) 0px 1px 1px;
     --box-shadow-popper: rgb(255 255 255 / 12%) 0px 2px 12px;
@@ -134,7 +137,7 @@ body {
 
     .tippy-content {
         padding: 8px;
-        line-height: 22px;
+        line-height: var(--primary-line-height);
         font-weight: 600;
         font-size: 1.6rem;
     }

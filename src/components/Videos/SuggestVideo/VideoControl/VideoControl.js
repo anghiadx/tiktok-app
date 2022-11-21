@@ -6,7 +6,7 @@ import classNames from 'classnames/bind';
 import styles from './VideoControl.module.scss';
 import SvgIcon from '~/components/SvgIcon';
 import { iconFlag, iconMute, iconPauseVideo, iconPlayVideo, iconVolume } from '~/components/SvgIcon/iconsRepo';
-import TiktokLoading from '~/components/TiktokLoading';
+import TiktokLoading from '~/components/Loadings/TiktokLoading';
 import { VideoContextKey } from '~/contexts/VideoContext';
 
 const cx = classNames.bind(styles);
@@ -191,7 +191,7 @@ function VideoControl({ videoId, videoInfo }) {
     return (
         <div className={cx('player-space', directionVideoClass)}>
             <p className={cx('default-space')}></p>
-            {loading && playing && <SvgIcon className={cx('video-loading')} icon={<TiktokLoading small />} />}
+            {loading && playing && <SvgIcon className={cx('video-loading')} icon={<TiktokLoading medium />} />}
             <img className={cx('thumb')} src={thumbUrl} alt="" ref={inViewRef} />
             <video
                 className={cx('video', {

@@ -2,7 +2,7 @@
     padding: 20px 8px 24px;
 }
 .text {
-    line-height: 22px;
+    line-height: var(--primary-line-height);
     margin-bottom: 20px;
     color: var(--text-gray-color2);
 }

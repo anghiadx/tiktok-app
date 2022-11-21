@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 
 import styles from './Home.module.scss';
 import SuggestVideo from '~/components/Videos/SuggestVideo';
-import TiktokLoading from '~/components/TiktokLoading';
+import TiktokLoading from '~/components/Loadings/TiktokLoading';
 import HomeAccountLoading from '~/components/Loadings/HomeAccountLoading';
 import SvgIcon from '~/components/SvgIcon';
 import { videoService } from '~/services';

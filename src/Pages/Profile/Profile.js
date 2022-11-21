@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import TippyHeadless from '@tippyjs/react/headless';
@@ -19,7 +19,7 @@ import VideoProfile from './VideoProfile';
 import AvatarLoading from '~/components/Loadings/AvatarLoading';
 import LineLoadingMedium from '~/components/Loadings/LineLoadingMedium';
 import ShowTick from '~/components/ShowTick';
-import Profile404 from '~/components/NotFound/Profile404';
+import NotFoundNotify from '~/components/NotFound/NotFoundNotify';
 import { ModalContextKey } from '~/contexts/ModalContext';
 import { accountService } from '~/services';
 import SharePopper from '~/components/Shares/SharePopper';
@@ -42,8 +42,6 @@ function Profile() {
         delay: [150, 400],
         appendTo: document.body,
     };
-
-    const wrapperRef = useRef();
 
     const {
         nickname: username,
@@ -74,12 +72,10 @@ function Profile() {
 
         setInfoUser(null);
         setVideoData(null);
-
-        wrapperRef.current.scrollIntoView({ block: 'start' });
     }, [usernameParams]);
 
     return (
-        <div className={cx('wrapper')} ref={wrapperRef}>
+        <div className={cx('wrapper')}>
             {/* Info is loading */}
             {infoUser === null && (
                 <header style={{ marginBottom: 40 }} className={cx('user-container')}>
@@ -95,7 +91,7 @@ function Profile() {
 
             {/* Not found */}
             {infoUser === undefined && (
-                <Profile404
+                <NotFoundNotify
                     title="Không thể tìm thấy tài khoản này"
                     content="Bạn đang tìm kiếm video? Hãy thử duyệt tìm các tác giả, hashtag và âm thanh thịnh hành của chúng
                     tôi."

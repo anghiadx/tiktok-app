@@ -23,7 +23,7 @@
 
 .title {
     margin: 0;
-    line-height: 22px;
+    line-height: var(--primary-line-height);
     text-align: center;
     white-space: nowrap;
 }

@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react';
 import classNames from 'classnames/bind';
 import styles from './FollowingLayout.module.scss';
 import { Header, Sidebar } from '../layoutComponents';
@@ -9,15 +8,8 @@ const cx = classNames.bind(styles);
 function FollowingLayout({ children }) {
     const currentUser = false;
 
-    const wrapperRef = useRef();
-
-    useEffect(() => {
-        // scroll container to top page
-        wrapperRef.current.scrollIntoView({ block: 'start' });
-    }, []);
-
     return (
-        <div className={cx('wrapper')} ref={wrapperRef}>
+        <div className={cx('wrapper')}>
             <Header />
             <div className={cx('container')}>
                 <div className={cx('sidebar')}>

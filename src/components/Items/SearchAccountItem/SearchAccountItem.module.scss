@@ -29,7 +29,7 @@
 }
 .username {
     font-weight: 600;
-    line-height: 22px;
+    line-height: var(--primary-line-height);
 }
 .tick {
     color: #20d5ec;

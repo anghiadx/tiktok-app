@@ -1,11 +1,11 @@
 // Search container
 
 .search-container {
+    display: flex;
     width: var(--search-container-width);
     height: 46px;
     background-color: var(--background-gray-color-06);
     border-radius: 92px;
-    display: flex;
     color: var(--background-gray-color-34);
     overflow: hidden;
     border: 1px solid transparent;
@@ -18,7 +18,7 @@
         flex-grow: 1;
         background-color: transparent;
         font-weight: 400;
-        padding-left: 12px;
+        padding-left: 15px;
         caret-color: rgba(254, 44, 85, 1);
         color: var(--text-primary-color);
 
@@ -29,10 +29,12 @@
         &:not(:placeholder-shown) ~ .search-btn {
             color: var(--text-gray-color);
         }
-    }
 
-    button {
-        background-color: transparent;
+        &::-webkit-search-cancel-button,
+        &::-webkit-search-decoration {
+            -webkit-appearance: none;
+            appearance: none;
+        }
     }
 }
 
@@ -43,8 +45,13 @@
 }
 
 .loading,
-.clear-btn {
+.clear-btn,
+.search-btn {
     color: var(--background-gray-color-34);
+}
+
+.clear-btn {
+    cursor: pointer;
 }
 
 .loading {
@@ -64,8 +71,7 @@
     height: 100%;
     font-size: 1.8rem;
     padding: 11px 16px 11px 12px;
-    color: var(--background-gray-color-34);
-    cursor: pointer;
+    background-color: transparent;
     position: relative;
 
     &:hover {
@@ -100,7 +106,7 @@
 
 .search-result__title {
     height: 30px;
-    line-height: 22px;
+    line-height: var(--primary-line-height);
     padding: 5px 12px;
     color: var(--text-gray-color2);
     font-size: 1.4rem;
@@ -108,7 +114,8 @@
 }
 
 .search-result__see-full {
-    line-height: 22px;
+    display: block;
+    line-height: var(--primary-line-height);
     padding: 15px 16px;
     overflow: hidden;
     text-overflow: ellipsis;

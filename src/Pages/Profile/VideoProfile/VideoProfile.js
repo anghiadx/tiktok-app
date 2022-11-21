@@ -6,7 +6,7 @@ import SvgIcon from '~/components/SvgIcon';
 import { iconLock, iconLockRegular, iconPlayRegular } from '~/components/SvgIcon/iconsRepo';
 import VideoLoading from '~/components/Loadings/VideoLoading';
 import VideoPreview from '~/components/Videos/VideoPreview';
-import Profile404 from '~/components/NotFound/Profile404';
+import NotFoundNotify from '~/components/NotFound/NotFoundNotify';
 
 const cx = classNames.bind(styles);
 
@@ -114,13 +114,16 @@ function VideoProfile({ user, data }) {
             {currentList?.length === 0 ? (
                 <>
                     {listType === 'videos' && (
-                        <Profile404 title="Không có nội dung" content="Người dùng này chưa đăng bất kỳ video nào." />
+                        <NotFoundNotify
+                            title="Không có nội dung"
+                            content="Người dùng này chưa đăng bất kỳ video nào."
+                        />
                     )}
                     {listType === 'liked-videos' && (
-                        <Profile404
+                        <NotFoundNotify
                             title="Video đã thích của người dùng này ở trạng thái riêng tư"
                             content={`Các video được thích bởi ${user} hiện đang ẩn`}
-                            icon={<SvgIcon icon={iconLockRegular} size={90} />}
+                            icon={<SvgIcon style={{ opacity: 0.34 }} icon={iconLockRegular} size={90} />}
                         />
                     )}
                 </>

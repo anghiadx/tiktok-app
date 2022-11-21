@@ -1,0 +1,49 @@
+.result-item {
+    display: flex;
+    padding: 16px;
+    padding-right: 0;
+
+    position: relative;
+
+    &:hover {
+        background-color: var(--background-gray-color-248);
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        top: initial;
+        height: 1px;
+        transform: scaleY(0.5);
+        transform-origin: center bottom;
+        background-color: var(--background-gray-color-02);
+    }
+}
+.avatar {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.body {
+    line-height: 20px;
+    margin-left: 16px;
+}
+.username {
+    line-height: 25px;
+    font-size: 1.8rem;
+}
+.info {
+    margin-top: 1px;
+    font-size: 1.4rem;
+    color: var(--text-gray-color);
+}
+.count-follower {
+    font-weight: 600;
+}
+.bio {
+    margin-top: 4px;
+    font-size: 1.4rem;
+}

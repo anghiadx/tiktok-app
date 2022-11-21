@@ -74,6 +74,7 @@
 // Description & music info
 .description {
     margin: 2px 0;
+    line-height: var(--primary-line-height);
 
     span {
         margin-right: 4px;
@@ -87,6 +88,7 @@
 .music-info {
     display: inline-flex;
     font-weight: 600;
+    line-height: var(--primary-line-height);
 
     &:hover {
         text-decoration: underline;
