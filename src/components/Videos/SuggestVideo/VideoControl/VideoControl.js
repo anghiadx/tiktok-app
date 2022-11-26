@@ -8,6 +8,7 @@ import SvgIcon from '~/components/SvgIcon';
 import { iconFlag, iconMute, iconPauseVideo, iconPlayVideo, iconVolume } from '~/components/SvgIcon/iconsRepo';
 import TiktokLoading from '~/components/Loadings/TiktokLoading';
 import { VideoContextKey } from '~/contexts/VideoContext';
+import { VideoModalContextKey } from '~/contexts/VideoModalContext';
 
 const cx = classNames.bind(styles);
 
@@ -24,9 +25,12 @@ function VideoControl({ videoId, videoInfo }) {
     const directionVideoClass = videoWidth - videoHeight < 0 ? 'vertical' : 'horizontal';
 
     // Get data from the context
-    const { volumeState, mutedState, inViewArrState, priorityVideoState } = useContext(VideoContextKey);
+    const { volumeState, mutedState, videoArray, priorityVideoState } = useContext(VideoContextKey);
+    const { videoModalState, setPropsVideoModal } = useContext(VideoModalContextKey);
+    const [isVideoModalShow, videoModalShow] = videoModalState;
 
     // STATE
+    const [, setRender] = useState(false);
     const [playing, setPlaying] = useState(false);
     const [defaultStatus, setDefaultStatus] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -34,7 +38,6 @@ function VideoControl({ videoId, videoInfo }) {
 
     const [volume, setVolume] = volumeState;
     const [muted, setMuted] = mutedState;
-    const [inViewArr, setInViewArr] = inViewArrState;
     const [priorityVideo, setPriorityVideo] = priorityVideoState;
 
     // INVIEW STATE
@@ -46,22 +49,41 @@ function VideoControl({ videoId, videoInfo }) {
     const volumeDotRef = useRef(null);
 
     useEffect(() => {
+        videoArray[videoId].update = setRender;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
         playing && setDefaultStatus(false);
         playing ? videoRef.current.play() : videoRef.current.pause();
     }, [playing]);
 
     useEffect(() => {
-        videoRef.current.volume = volume;
+        const volumeValid = valueValidate(volume, 0, 1);
+        videoRef.current.volume = volumeValid;
     }, [volume]);
 
     useEffect(() => {
         videoRef.current.muted = muted;
     }, [muted]);
 
+    // Update volume UI
     useEffect(() => {
-        volumeDotRef.current.style.height = muted ? '0%' : `${volume * 100}%`;
+        const volumeValid = valueValidate(volume, 0, 1);
+
+        if (muted) {
+            volumeBarRef.current.style.width = '0%';
+            volumeDotRef.current.style.transform = 'translate(100%, -50%)';
+        } else {
+            // update UI
+            let percent = volumeValid * 100;
+
+            volumeBarRef.current.style.width = percent + '%';
+            volumeDotRef.current.style.transform = `translate(${100 - percent}%, -50%)`;
+        }
     }, [volume, muted]);
 
+    // Update inviewArr when inView is changed
     useEffect(() => {
         updateInViewArr();
 
@@ -80,9 +102,10 @@ function VideoControl({ videoId, videoInfo }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userInteracting]);
 
+    // Handle Video Play Or Not
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
-        if (priorityVideo !== -1 && videoId !== priorityVideo) {
+        if ((priorityVideo !== -1 && videoId !== priorityVideo) || isVideoModalShow) {
             playing && handleResetVideo();
             return;
         }
@@ -94,13 +117,25 @@ function VideoControl({ videoId, videoInfo }) {
     });
 
     // FUNCTION
+    const valueValidate = (value, min, max) => {
+        let valueValid = value;
+
+        if (valueValid > max) {
+            valueValid = max;
+        } else if (valueValid < min) {
+            valueValid = min;
+        }
+
+        return valueValid;
+    };
+
     const updateInViewArr = () => {
-        inViewArr[0][videoId].inView = isInView;
-        setInViewArr([...inViewArr]);
+        videoArray[videoId].inView = isInView;
+        videoArray[videoId + 1]?.update?.call(this, (prev) => !prev);
     };
 
     const findFirstInViewId = () => {
-        const firstInViewId = inViewArr[0].findIndex((obj) => obj.inView === true);
+        const firstInViewId = videoArray.findIndex((obj) => obj.inView === true);
         return firstInViewId;
     };
 
@@ -139,54 +174,36 @@ function VideoControl({ videoId, videoInfo }) {
         setUserInteracting(false);
     };
 
-    const handleChangeVolume = (e) => {
-        const layerOrigin = e.nativeEvent.layerY;
-        const fullHeight = volumeBarRef.current.offsetHeight;
-        let activeHeight = fullHeight - layerOrigin;
-        let percent = (100 / fullHeight) * activeHeight;
+    const handleVolumeChange = (e) => {
+        const value = +e.target.value;
+        const valueValid = valueValidate(value, 0, 100);
 
-        // Set height for dot
-        volumeDotRef.current.style.height = `${percent}%`;
+        // Update UI volume bar
+        volumeBarRef.current.style.width = valueValid + '%';
+        volumeDotRef.current.style.transform = `translate(${100 - valueValid}%, -50%)`;
 
-        // Set height when mousemove activate
-        volumeBarRef.current.onmousemove = (e) => {
-            const layerMove = e.layerY;
-            if (layerMove === layerOrigin) return;
+        // Set volume of video
+        videoRef.current.volume = valueValid / 100;
 
-            activeHeight = fullHeight - e.layerY;
+        valueValid === 0 && !muted && setMuted(true);
+        valueValid > 0 && muted && setMuted(false);
+    };
 
-            if (activeHeight < 0) {
-                setMuted(true);
-                return;
-            } else if (activeHeight >= fullHeight) {
-                activeHeight = fullHeight;
-            } else {
-                muted && setMuted(false);
-            }
+    const handleSetVolume = (e) => {
+        const value = +e.target.value;
+        const valueValid = valueValidate(value, 0, 100);
+        setVolume(valueValid / 100);
+    };
 
-            percent = (100 / fullHeight) * activeHeight;
-
-            volumeDotRef.current.style.height = `${percent}%`;
-            videoRef.current.volume = percent / 100;
+    const handleOpenVideoModal = () => {
+        const propsVideoModal = {
+            index: videoId,
+            data: videoInfo,
+            setVolumeOrigin: setVolume,
+            setMutedOrigin: setMuted,
         };
-
-        // Remove mousemove when mouse up or mouse leave outside
-        volumeBarRef.current.onmouseup = volumeBarRef.current.onmouseleave = () => {
-            volumeBarRef.current.onmousemove = null;
-
-            let volumeRatio = percent / 100;
-            let isMute = false;
-
-            if (volumeRatio <= 0) {
-                volumeRatio = 0;
-                isMute = true;
-            } else if (volumeRatio > 1) {
-                volumeRatio = 1;
-            }
-
-            setVolume(volumeRatio);
-            setMuted(isMute);
-        };
+        setPropsVideoModal(propsVideoModal);
+        videoModalShow();
     };
     return (
         <div className={cx('player-space', directionVideoClass)}>
@@ -194,13 +211,14 @@ function VideoControl({ videoId, videoInfo }) {
             {loading && playing && <SvgIcon className={cx('video-loading')} icon={<TiktokLoading medium />} />}
             <img className={cx('thumb')} src={thumbUrl} alt="" ref={inViewRef} />
             <video
+                ref={videoRef}
                 className={cx('video', {
                     hidden: defaultStatus,
                 })}
                 loop
                 onWaiting={() => setLoading(true)}
                 onPlaying={() => setLoading(false)}
-                ref={videoRef}
+                onClick={handleOpenVideoModal}
             >
                 <source src={videoUrl} />
             </video>
@@ -215,20 +233,28 @@ function VideoControl({ videoId, videoInfo }) {
                 {playing ? <SvgIcon icon={iconPlayVideo} size={20} /> : <SvgIcon icon={iconPauseVideo} size={20} />}
             </button>
 
-            {muted ? (
-                <button className={cx('control', 'volume-btn', 'mute')} onClick={handleVolumeBtn}>
-                    <SvgIcon icon={iconMute} size={24} />
-                </button>
-            ) : (
-                <button className={cx('control', 'volume-btn')} onClick={handleVolumeBtn}>
-                    <SvgIcon icon={iconVolume} size={24} />
-                </button>
-            )}
+            <div className={cx('volume-container')}>
+                <div className={cx('volume-control')}>
+                    <div className={cx('volume-background')}>
+                        <div className={cx('volume-bar')} ref={volumeBarRef}>
+                            <div className={cx('volume-dot')} ref={volumeDotRef}></div>
+                        </div>
+                    </div>
 
-            <div className={cx('volume-control')}>
-                <div className={cx('volume-bar')} ref={volumeBarRef} onMouseDown={handleChangeVolume}>
-                    <div className={cx('volume-dot')} ref={volumeDotRef}></div>
+                    <input
+                        className={cx('volume-range')}
+                        type="range"
+                        min="0"
+                        max="100"
+                        step="1"
+                        onChange={handleVolumeChange}
+                        onMouseUp={handleSetVolume}
+                    />
                 </div>
+
+                <button className={cx('control', 'volume-btn', { mute: muted })} onClick={handleVolumeBtn}>
+                    {muted ? <SvgIcon icon={iconMute} size={24} /> : <SvgIcon icon={iconVolume} size={24} />}
+                </button>
             </div>
         </div>
     );

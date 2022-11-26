@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
-import useLocalStorage from '~/hooks/useLocalStorage';
+import { useLocalStorage } from '~/hooks';
 import styles from './ThemeMode.module.scss';
 import configs from '~/configs';
 

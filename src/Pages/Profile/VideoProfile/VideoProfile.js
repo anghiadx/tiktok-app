@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useContext } from 'react';
 import classNames from 'classnames/bind';
 import styles from './VideoProfile.module.scss';
 import SvgIcon from '~/components/SvgIcon';
@@ -7,12 +7,22 @@ import { iconLock, iconLockRegular, iconPlayRegular } from '~/components/SvgIcon
 import VideoLoading from '~/components/Loadings/VideoLoading';
 import VideoPreview from '~/components/Videos/VideoPreview';
 import NotFoundNotify from '~/components/NotFound/NotFoundNotify';
+import { useLocalStorage } from '~/hooks';
+import configs from '~/configs';
+import { VideoModalContextKey } from '~/contexts/VideoModalContext';
 
 const cx = classNames.bind(styles);
 
 function VideoProfile({ user, data }) {
     const [playId, setPlayId] = useState(0);
-    const [listType, setListtype] = useState('videos');
+    const [listType, setListType] = useState('videos');
+
+    // Modal video data
+    const videoStorageKey = configs.localStorage.videoControl;
+    const [dataStorage, setDataStorage] = useLocalStorage(videoStorageKey);
+    const [volumeModal, setVolumeModal] = useState(dataStorage.volume || 0.6);
+    const { propsVideoModal, setPropsVideoModal, videoModalState } = useContext(VideoModalContextKey);
+    const [isVideoModalShow] = videoModalState;
 
     const [videos, likedVideos] = data || [];
 
@@ -29,13 +39,65 @@ function VideoProfile({ user, data }) {
 
     const defaultVideoLoading = Array(12).fill();
 
+    // Set volume value to localstorage when it changed
+    useEffect(() => {
+        const data = {
+            volume: volumeModal,
+        };
+        setDataStorage(data);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [volumeModal]);
+
     useEffect(() => {
         setPlayId(0);
-        setListtype('videos');
+        setListType('videos');
     }, [data]);
 
+    // Set handler function for the video modal
+    useEffect(() => {
+        if (isVideoModalShow) {
+            propsVideoModal.handleNextVideo = handleNextVideo;
+            propsVideoModal.handlePrevVideo = handlePrevVideo;
+            propsVideoModal.setVolumeOrigin = setVolumeModal;
+
+            setPropsVideoModal({ ...propsVideoModal });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isVideoModalShow]);
+
+    // Function handler
     const handleSelectTab = (type) => {
-        setListtype(type);
+        setListType(type);
+    };
+
+    // Modal video function handler
+    const handleNextVideo = () => {
+        setPlayId((currentId) => {
+            const nextId = currentId + 1;
+            if (nextId >= currentList.length) {
+                return currentId;
+            }
+            const newProps = {
+                index: nextId,
+                data: currentList[nextId],
+            };
+            setPropsVideoModal({ ...propsVideoModal, ...newProps });
+            return nextId;
+        });
+    };
+    const handlePrevVideo = () => {
+        setPlayId((currentId) => {
+            const prevId = currentId - 1;
+            if (prevId < 0) {
+                return currentId;
+            }
+            const newProps = {
+                index: prevId,
+                data: currentList[prevId],
+            };
+            setPropsVideoModal({ ...propsVideoModal, ...newProps });
+            return prevId;
+        });
     };
 
     const renderVideos = () => {
@@ -55,27 +117,11 @@ function VideoProfile({ user, data }) {
         // Render video list
         else {
             dataRender = currentList.map((video, index) => {
-                const {
-                    thumb_url: thumbUrl,
-                    file_url: videoUrl,
-                    description,
-                    views_count: viewsCount,
-                    meta: {
-                        video: { resolution_x: videoWidth, resolution_y: videoHeight },
-                    },
-                } = video;
-
-                const verticalVideo = videoHeight / videoWidth > 1.32;
+                const { description, views_count: viewsCount } = video;
                 return (
                     <div key={index} className={cx('video-item')}>
                         <div className={cx('item__content')}>
-                            <VideoPreview
-                                videoId={index}
-                                thumbUrl={thumbUrl}
-                                videoUrl={videoUrl}
-                                vertical={verticalVideo}
-                                playIdState={[playId, setPlayId]}
-                            />
+                            <VideoPreview videoId={index} playIdState={[playId, setPlayId]} data={video} modalActive />
 
                             <p className={cx('content__view-count')}>
                                 <SvgIcon icon={iconPlayRegular} size={18} />

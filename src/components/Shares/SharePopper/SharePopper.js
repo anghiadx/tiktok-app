@@ -25,7 +25,7 @@ function SharePopper({ children, data, customTippy = {}, arrowTop = false }) {
     };
 
     const handleRenderItem = (attrs) => (
-        <div className={cx('share-wrapper')} tabIndex="-1" {...attrs}>
+        <div className={cx('share-wrapper')} tabIndex="-1" {...attrs} onClick={(e) => e.stopPropagation()}>
             <PopperWrapper className={cx('share-popper', { seeFull: showFullList })}>
                 <div className={cx('arrow-popper', { arrowTop: arrowTop })} data-popper-arrow />
                 <div className={cx('share-list')}>

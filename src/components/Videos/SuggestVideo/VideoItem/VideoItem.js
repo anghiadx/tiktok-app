@@ -19,7 +19,7 @@ import { ModalContextKey } from '~/contexts/ModalContext';
 
 const cx = classNames.bind(styles);
 
-function VideoItem({ videoId, videoInfo, inViewArr }) {
+function VideoItem({ videoId, videoInfo, videoArray }) {
     // Get Modal context value
     const { loginModalShow } = useContext(ModalContextKey);
 
@@ -51,7 +51,9 @@ function VideoItem({ videoId, videoInfo, inViewArr }) {
     } = videoInfo;
 
     useLayoutEffect(() => {
-        inViewArr[videoId] = {
+        videoArray[videoId] = {
+            id: videoId,
+            data: videoInfo,
             wrapperIntoView: wrapperRef.current.scrollIntoView.bind(wrapperRef.current),
             inView: null,
         };
@@ -77,15 +79,26 @@ function VideoItem({ videoId, videoInfo, inViewArr }) {
             <div className={cx('body')}>
                 <div className={cx('video-info')}>
                     {/* User info */}
-                    <Link className={cx('user-info')} to={'/@' + userName}>
-                        <Img className={cx('avatar', 'small-avatar')} src={avatarUrl} />
-                        <p className={cx('name')}>
-                            <span className={cx('user-name')}>
-                                {userName} <ShowTick tick={tick} />
-                            </span>
-                            <span className={cx('full-name')}>{`${firstName} ${lastName}`}</span>
-                        </p>
-                    </Link>
+                    <AccountPreview
+                        avatarUrl={avatarUrl}
+                        userName={userName}
+                        fullName={`${firstName} ${lastName}`}
+                        tick={tick}
+                        bio={bio}
+                        followerCount={followerCount}
+                        likeCount={likeCount}
+                        customTippy={{ delay: [1000, 250], offset: [0, 16] }}
+                    >
+                        <Link className={cx('user-info')} to={'/@' + userName}>
+                            <Img className={cx('avatar', 'small-avatar')} src={avatarUrl} />
+                            <p className={cx('name')}>
+                                <span className={cx('user-name')}>
+                                    {userName} <ShowTick tick={tick} />
+                                </span>
+                                <span className={cx('full-name')}>{`${firstName} ${lastName}`}</span>
+                            </p>
+                        </Link>
+                    </AccountPreview>
                     <Button outline className={cx('follow-btn')} onClick={!currentUser ? loginModalShow : null}>
                         Follow
                     </Button>
@@ -142,7 +155,7 @@ function VideoItem({ videoId, videoInfo, inViewArr }) {
 VideoItem.propTypes = {
     videoId: PropTypes.number,
     videoInfo: PropTypes.object.isRequired,
-    inViewArr: PropTypes.array,
+    videoArray: PropTypes.array,
 };
 
 export default memo(VideoItem);

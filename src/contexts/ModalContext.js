@@ -1,5 +1,5 @@
 import { createContext, useRef } from 'react';
-import useModal from '~/hooks/useModal';
+import { useModal } from '~/hooks';
 import { LoginModal, KeyboardModal, DownloadMobileModal } from '~/components/Modals';
 
 export const ModalContextKey = createContext();
@@ -14,7 +14,6 @@ function ModalContext({ children }) {
         keyboardModalShow,
         downloadMobileModalShow,
     });
-
     return (
         <ModalContextKey.Provider value={contextValue.current}>
             {children}

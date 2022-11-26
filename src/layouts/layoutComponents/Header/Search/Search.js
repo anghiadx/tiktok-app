@@ -135,6 +135,9 @@ function Search() {
                         onBlur={() => {
                             searchResult.length > 0 || handleBlurSearch();
                         }}
+                        onKeyUp={(e) => {
+                            e.stopPropagation();
+                        }}
                         onKeyDown={(e) => {
                             e.stopPropagation();
                         }}

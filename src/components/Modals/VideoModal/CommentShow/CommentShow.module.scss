@@ -1,0 +1,66 @@
+.comment-list {
+    padding: 24px 32px;
+}
+.comment-item {
+    display: flex;
+    margin-bottom: 16px;
+}
+.avatar {
+    width: 40px;
+    height: 40px;
+    margin-right: 12px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.avatar-wrapper:hover + .body .fullname {
+    text-decoration: underline;
+}
+.body {
+    flex-grow: 1;
+    padding-right: 18px;
+}
+.fullname {
+    line-height: 25px;
+    font-size: 1.8rem;
+    font-weight: bold;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+.content {
+    line-height: var(--primary-line-height);
+    margin-bottom: 6px;
+    font-size: 16px;
+    white-space: pre-line;
+    word-break: break-word;
+}
+.other {
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--text-gray-color2);
+
+    .reply {
+        margin-left: 24px;
+        cursor: pointer;
+    }
+}
+.like-comment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 17px;
+    padding-top: 24px;
+    color: var(--text-gray-color2);
+    cursor: pointer;
+}
+.like-count {
+    margin-top: 4px;
+    font-size: 1.2rem;
+}
+
+.no-login {
+    text-align: center;
+    font-weight: 600;
+    color: var(--text-gray-color2);
+}

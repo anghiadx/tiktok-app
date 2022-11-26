@@ -3,9 +3,9 @@
     border-radius: 8px;
     overflow: hidden;
     position: relative;
-    cursor: pointer;
 
-    &:hover > .control {
+    &:hover > .control,
+    &:hover > .volume-container .volume-btn {
         opacity: 1;
     }
 
@@ -51,6 +51,7 @@
     left: 0;
     top: 0;
     z-index: 2;
+    cursor: pointer;
 }
 .hidden {
     z-index: 1 !important;
@@ -91,78 +92,88 @@
     left: 12px;
 }
 
-.volume-btn {
-    right: 14px;
-
-    &:hover ~ .volume-control {
-        visibility: visible;
-    }
-}
 .mute {
-    opacity: 1;
+    opacity: 1 !important;
 }
 
-.volume-control {
+// Volume container
+.volume-container {
     display: flex;
-    justify-content: center;
     align-items: center;
-
-    width: 24px;
-    height: 64px;
-    margin: 0 8px;
-    border-radius: 32px;
-    background-color: var(--background-gray-color-34);
-    transform: rotate(180deg);
-    user-select: none;
-    -ms-user-select: none;
-    -moz-user-select: none;
-
     position: absolute;
-    bottom: 64px;
-    right: 14px;
     z-index: 2;
-    visibility: hidden;
+    right: 12px;
+    bottom: 24px;
+    transform-origin: calc(100% - 20px);
+    transform: rotate(90deg);
+    transition: opacity 0.3s;
 
     &:hover {
-        visibility: visible;
+        .volume-control {
+            display: flex;
+        }
+    }
+
+    .volume-btn {
+        position: relative;
+        bottom: 0;
+        transform: rotate(-90deg);
+        opacity: 0;
     }
 }
-
-.volume-bar {
-    width: 2px;
-    height: 42px;
-    border-radius: 4px;
-    background-color: rgba(255, 255, 255, 0.5);
+.volume-control {
+    display: none;
+    align-items: center;
+    transform: rotate(180deg);
+    width: 64px;
+    height: 24px;
+    padding: 0 8px;
+    border-radius: 32px;
+    background-color: var(--background-gray-color-34);
 
     position: relative;
+    animation: play-icon-effect 0.3s;
+    cursor: pointer;
 
-    &:before {
-        content: '';
-        position: absolute;
-        inset: -11px -19px;
+    * {
+        cursor: pointer;
     }
-}
 
-.volume-dot {
-    position: absolute;
-    inset: 0;
-    bottom: initial;
-    border-radius: inherit;
-    color: white;
-    background-color: currentColor;
-    height: 50%;
-    max-height: 100%;
+    .volume-background {
+        position: relative;
+        width: 100%;
+        height: 2px;
+        border-radius: 100px;
+        background-color: rgba(255, 255, 255, 0.34);
+    }
 
-    &::after {
-        content: '';
+    .volume-bar {
         position: absolute;
-        left: 50%;
-        bottom: 0;
-        width: 12px;
-        height: 12px;
-        transform: translate(-50%, 50%);
-        border-radius: 50%;
-        background-color: currentColor;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 50%;
+        border-radius: inherit;
+        background-color: white;
+
+        .volume-dot {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: inherit;
+            transform: translate(100%, -50%);
+        }
+    }
+
+    input {
+        position: absolute;
+        left: 8px;
+        right: 8px;
+        height: 2px;
+        opacity: 0;
     }
 }
 

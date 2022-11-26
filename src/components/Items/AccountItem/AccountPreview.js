@@ -24,6 +24,7 @@ function AccountPreview({
     likeCount,
     bio,
     customTippy,
+    onCloseModal,
 }) {
     const currentUse = false;
 
@@ -41,7 +42,7 @@ function AccountPreview({
             <PopperWrapper className={cx('preview-account')}>
                 {/* Header */}
                 <div className={cx('preview-header')}>
-                    <Link to={`/@${userName}`} className={cx('')}>
+                    <Link to={`/@${userName}`} onClick={onCloseModal}>
                         <Img className={cx('avatar')} src={avatarUrl} alt={fullName} />
                     </Link>
                     <Button color={!bio} outline={!!bio} medium={!!bio} onClick={!currentUse ? loginModalShow : null}>
@@ -50,7 +51,7 @@ function AccountPreview({
                 </div>
 
                 {/* Body */}
-                <Link to={`/@${userName}`} className={cx('preview-body')}>
+                <Link to={`/@${userName}`} className={cx('preview-body')} onClick={onCloseModal}>
                     <span className={cx('username')}>{userName}</span>
                     {<ShowTick tick={tick} />}
                     <br />
@@ -76,6 +77,7 @@ function AccountPreview({
             interactive
             delay={[1000, 0]}
             appendTo={document.body}
+            popperOptions={{ modifiers: [{ name: 'flip', enabled: false }] }}
             {...customTippy}
             render={renderPreview}
         >
@@ -93,6 +95,7 @@ AccountPreview.propTypes = {
     tick: PropTypes.bool,
     bio: PropTypes.string,
     customTippy: PropTypes.object,
+    onCloseModal: PropTypes.func,
 };
 
 export default AccountPreview;

@@ -3,7 +3,7 @@ import styles from './Forms.module.scss';
 import assetImages from '~/assets/images';
 import SvgIcon from '~/components/SvgIcon';
 import { iconFollow, iconScanQR } from '~/components/SvgIcon/iconsRepo';
-import useLocalStorage from '~/hooks/useLocalStorage';
+import { useLocalStorage } from '~/hooks';
 import configs from '~/configs';
 
 const cx = classNames.bind(styles);

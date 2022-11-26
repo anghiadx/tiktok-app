@@ -41,27 +41,13 @@ function SuggestFollow() {
                 first_name: firstName,
                 last_name: lastName,
                 tick,
-                popular_video: {
-                    thumb_url: thumbUrl,
-                    file_url: videoUrl,
-                    meta: {
-                        video: { resolution_x: videoWidth, resolution_y: videoHeight },
-                    },
-                },
+                popular_video: popularVideo,
             } = userInfo;
-
-            const vertical = videoHeight / videoWidth > 1.32;
 
             return (
                 <div key={index} className={cx('suggest-item')}>
                     <Link className={cx('content-wrapper')} to={`/@${username}`} target="_blank">
-                        <VideoPreview
-                            videoId={index}
-                            thumbUrl={thumbUrl}
-                            videoUrl={videoUrl}
-                            playIdState={[playId, setPlayId]}
-                            vertical={vertical}
-                        >
+                        <VideoPreview videoId={index} data={popularVideo} playIdState={[playId, setPlayId]}>
                             <div className={cx('short-info')}>
                                 <Img className={cx('info__avatar')} src={avatarUrl} />
                                 <h2 className={cx('info__fullname')}>{`${firstName} ${lastName}`}</h2>

@@ -68,6 +68,34 @@ export const videoShares = [
     },
 ];
 
+export const videoModalShare = [
+    {
+        title: 'Chia sẻ với LinkedIn',
+        icon: <SvgIcon icon={iconLinkedIn} />,
+        href: 'https://www.linkedin.com',
+    },
+    {
+        title: 'Chia sẻ với Telegram',
+        icon: <SvgIcon icon={iconTelegram} />,
+        href: 'https://t.me',
+    },
+    {
+        title: 'Chia sẻ với Email',
+        icon: <SvgIcon icon={iconEmail} />,
+        href: 'mailto:',
+    },
+    {
+        title: 'Chia sẻ với Line',
+        icon: <SvgIcon icon={iconLine} />,
+        href: 'https://lineit.line.me',
+    },
+    {
+        title: 'Chia sẻ với Pinterest',
+        icon: <SvgIcon icon={iconPinterest} />,
+        href: 'https://pinterest.com',
+    },
+];
+
 export const profileShares = [
     {
         title: 'Nhúng',
