@@ -26,7 +26,11 @@ function VideoPreview({ videoId, playIdState, data, modalActive = undefined, chi
     const isPlaying = videoId === idPlay;
 
     useEffect(() => {
-        isPlaying ? videoRef.current.play() : handleResetVideo();
+        isPlaying
+            ? videoRef.current.play().catch((err) => {
+                  err.code !== 20 && console.error(err);
+              })
+            : handleResetVideo();
     });
 
     const handleHover = () => {

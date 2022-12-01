@@ -13,6 +13,7 @@ import ShowTick from '~/components/ShowTick';
 import AccountPreview from '~/components/Items/AccountItem/AccountPreview';
 import VideoControl from '../VideoControl';
 import SharePopper from '~/components/Shares/SharePopper';
+import HashtagFilter from '~/components/Filters/HashtagFilter';
 import dataTemp from '~/temp/data';
 
 import { ModalContextKey } from '~/contexts/ModalContext';
@@ -105,10 +106,7 @@ function VideoItem({ videoId, videoInfo, videoArray }) {
 
                     {/* Description  */}
                     <p className={cx('description')}>
-                        <span>{description}</span>
-                        <a href="#" className={cx('hashtag')}>
-                            #tiktok_clone
-                        </a>
+                        <HashtagFilter>{description}</HashtagFilter>
                     </p>
 
                     {/* Music info */}

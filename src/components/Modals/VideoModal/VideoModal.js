@@ -25,6 +25,7 @@ import CommentShow from './CommentShow/';
 import AccountPreview from '~/components/Items/AccountItem/AccountPreview';
 import VideoPlayer from './VideoPlayer';
 import { ModalContextKey } from '~/contexts/ModalContext';
+import HashtagFilter from '~/components/Filters/HashtagFilter';
 
 const cx = classNames.bind(styles);
 
@@ -105,9 +106,11 @@ function VideoModal(props) {
                         </Button>
                     </div>
 
-                    <p className={cx('description')}>{description}</p>
+                    <p className={cx('description')}>
+                        <HashtagFilter onCloseModal={handleClose}>{description}</HashtagFilter>
+                    </p>
                     <p className={cx('music')}>
-                        <SvgIcon style={{ marginRight: 8 }} icon={iconMusic} />
+                        <SvgIcon style={{ marginRight: 6 }} icon={iconMusic} />
                         {musicInfo || `Nhạc nền - ${firstName} ${lastName}`}
                     </p>
 

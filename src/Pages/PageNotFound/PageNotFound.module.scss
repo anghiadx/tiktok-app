@@ -1,0 +1,58 @@
+.wrapper {
+    min-height: calc(100vh - var(--g-header-height));
+    padding: 0 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.content {
+    text-align: center;
+
+    &.show {
+        .title {
+            animation: element-in 0.8s forwards;
+        }
+        .suggest-notify {
+            animation: element-in 0.8s 0.8s forwards;
+        }
+    }
+}
+.not-found-icon {
+    margin: -28px 0 -20px 0;
+}
+.title {
+    font-size: 1.8rem;
+    color: var(--text-gray-color2);
+    line-height: 25px;
+    font-weight: 400;
+    opacity: 0;
+}
+
+.suggest-notify {
+    margin-top: 24px;
+    opacity: 0;
+
+    h2 {
+        margin-bottom: 20px;
+    }
+    .play-now-btn {
+        width: 360px;
+        height: 48px;
+    }
+}
+
+@keyframes element-in {
+    from {
+        opacity: 0;
+        transform: translateY(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}

@@ -21,9 +21,14 @@
     background-color: var(--white-color);
 }
 
+// HEADER
 .video-info {
     padding: 32px;
     padding-bottom: 0;
+    background-color: inherit;
+    border-bottom: 1px solid rgba(22, 24, 35, 0.2);
+    position: relative;
+    z-index: 10;
 }
 
 .info__account {
@@ -84,6 +89,11 @@
     margin-top: 10px;
     margin-bottom: 16px;
     font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
 .info__interactive {
@@ -177,9 +187,7 @@
 
 .comment-container {
     flex-grow: 1;
-    border: 1px solid rgba(22, 24, 35, 0.2);
-    border-left: 0;
-    border-right: 0;
+    border-bottom: 1px solid rgba(22, 24, 35, 0.2);
     background-color: var(--background-gray-color-248);
     overflow: hidden overlay;
 }

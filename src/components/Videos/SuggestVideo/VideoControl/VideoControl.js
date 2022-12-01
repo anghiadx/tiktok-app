@@ -55,7 +55,11 @@ function VideoControl({ videoId, videoInfo }) {
 
     useEffect(() => {
         playing && setDefaultStatus(false);
-        playing ? videoRef.current.play() : videoRef.current.pause();
+        playing
+            ? videoRef.current.play().catch((err) => {
+                  err.code !== 20 && console.error(err);
+              })
+            : videoRef.current.pause();
     }, [playing]);
 
     useEffect(() => {
@@ -135,7 +139,7 @@ function VideoControl({ videoId, videoInfo }) {
     };
 
     const findFirstInViewId = () => {
-        const firstInViewId = videoArray.findIndex((obj) => obj.inView === true);
+        const firstInViewId = videoArray.findIndex((obj) => obj?.inView === true);
         return firstInViewId;
     };
 

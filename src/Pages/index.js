@@ -4,3 +4,6 @@ export { default as Profile } from './Profile';
 export { default as Upload } from './Upload';
 export { default as Live } from './Live';
 export { default as SearchDetails } from './SearchDetails';
+export { default as Video } from './Video';
+export { default as Hashtag } from './Hashtag';
+export { default as PageNotFound } from './PageNotFound';

@@ -5,6 +5,8 @@ const routes = {
     upload: '/upload',
     live: '/live',
     search: '/search',
+    video: '/video/:id',
+    hashtag: '/hashtag/:tag',
     notFound: '*',
 };
 

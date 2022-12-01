@@ -6,13 +6,14 @@ import DownloadApp from '~/components/DownloadApp';
 
 const cx = classNames.bind(styles);
 
-function FullSpace({ children }) {
+function FullSpace({ children, ...options }) {
+    const { suggestedAccount = true } = options;
     return (
         <div className={cx('wrapper')}>
             <Header />
             <div className={cx('container')}>
                 <div className={cx('sidebar')}>
-                    <Sidebar />
+                    <Sidebar suggestedAcc={suggestedAccount} followingAcc={suggestedAccount} />
                 </div>
                 <div className={cx('content-wrapper')}>
                     <section className={cx('content')}>{children}</section>

@@ -75,16 +75,8 @@
 .description {
     margin: 2px 0;
     line-height: var(--primary-line-height);
-
-    span {
-        margin-right: 4px;
-    }
-    .hashtag + .hashtag {
-        margin-left: 4px;
-    }
 }
 
-.hashtag,
 .music-info {
     display: inline-flex;
     font-weight: 600;

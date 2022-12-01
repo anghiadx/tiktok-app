@@ -23,7 +23,7 @@ function Home() {
     useEffect(() => {
         if (page < 1) return;
 
-        const fetchVideoList = async () => {
+        const getVideoList = async () => {
             const result = await videoService.getSuggestVideo(page);
 
             // random video in list result
@@ -32,7 +32,7 @@ function Home() {
             setVideoList([...videoList, ...result]);
         };
 
-        fetchVideoList();
+        getVideoList();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page]);
 

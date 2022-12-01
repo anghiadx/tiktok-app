@@ -72,17 +72,25 @@ function AccountPreview({
     );
 
     return (
-        <TippyHeadless
-            placement="bottom-start"
-            interactive
-            delay={[1000, 0]}
-            appendTo={document.body}
-            popperOptions={{ modifiers: [{ name: 'flip', enabled: false }] }}
-            {...customTippy}
-            render={renderPreview}
-        >
-            {children}
-        </TippyHeadless>
+        // Interactive tippy element may not be accessible via keyboard navigation because it is not directly
+        // after the reference element in the DOM source order.
+
+        // Using a wrapper <span> tag around the reference element solves this by creating
+        // a new parentNode context.
+
+        <span>
+            <TippyHeadless
+                placement="bottom-start"
+                interactive
+                delay={[1000, 0]}
+                appendTo={document.body}
+                popperOptions={{ modifiers: [{ name: 'flip', enabled: false }] }}
+                {...customTippy}
+                render={renderPreview}
+            >
+                {children}
+            </TippyHeadless>
+        </span>
     );
 }
 

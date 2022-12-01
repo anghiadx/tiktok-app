@@ -13,7 +13,8 @@ function CommentShow({ videoId, onCloseModal }) {
 
     const loadingComment = Array(9).fill();
 
-    const currentUser = false;
+    // Fake current user to get comment
+    const currentUser = true;
 
     useEffect(() => {
         if (!currentUser) {
@@ -29,6 +30,7 @@ function CommentShow({ videoId, onCloseModal }) {
             setLoading(false);
         };
         fetchAPI();
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [videoId]);
 
@@ -37,8 +39,8 @@ function CommentShow({ videoId, onCloseModal }) {
             ? loadingComment.map((val, index) => {
                   return <CommentLoading key={index} />;
               })
-            : comments.map((cmt, index) => {
-                  return <CommentItem key={index} data={cmt} onCloseModal={onCloseModal} />;
+            : comments.map((comment, index) => {
+                  return <CommentItem key={index} data={comment} onCloseModal={onCloseModal} />;
               });
     };
 

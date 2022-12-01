@@ -7,6 +7,7 @@ const assetImages = {
     downloadWithAppstore: require('./download-app/download-with-appstore.png'),
     downloadWithAmazon: require('./download-app/download-with-amazon.png'),
     downloadWithGooglePlay: require('./download-app/download-with-googleplay.png'),
+    pageNotFoundBackground: require('./backgrounds/page-not-found.png'),
 };
 
 export default assetImages;

@@ -1,3 +1,4 @@
+import { memo, useRef } from 'react';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import Img from '~/components/Img';
@@ -26,31 +27,46 @@ function CommentShow({ data, onCloseModal }) {
         },
     } = data;
 
+    const wrapperRef = useRef();
+
     const createdAt = created_at.slice(0, 10);
+
+    const AccPreview = ({ children, customs = {} }) => {
+        return (
+            <AccountPreview
+                avatarUrl={avatarUrl}
+                userName={userName}
+                fullName={`${firstName} ${lastName}`}
+                tick={tick}
+                followerCount={followersCount}
+                likeCount={userLikesCount}
+                bio={bio}
+                customTippy={{
+                    zIndex: 9,
+                    offset: [-50, 20],
+                    popperOptions: { modifiers: [{ name: 'flip', enabled: true }] },
+                    appendTo: undefined,
+                    ...customs,
+                }}
+                onCloseModal={onCloseModal}
+            >
+                {children}
+            </AccountPreview>
+        );
+    };
     return (
-        <div className={cx('comment-item')}>
+        <div className={cx('comment-item')} ref={wrapperRef}>
             <Link to={'/@' + userName} className={cx('avatar-wrapper')} onClick={onCloseModal}>
-                <Img
-                    className={cx('avatar')}
-                    src="https://files.fullstack.edu.vn/f8-tiktok/users/4031/6357e24771515.jpg"
-                />
+                <AccPreview customs={{ offset: [2, 4] }}>
+                    <Img className={cx('avatar')} src={avatarUrl} />
+                </AccPreview>
             </Link>
             <div className={cx('body')}>
-                <AccountPreview
-                    avatarUrl={avatarUrl}
-                    userName={userName}
-                    fullName={`${firstName} ${lastName}`}
-                    tick={tick}
-                    followerCount={followersCount}
-                    likeCount={userLikesCount}
-                    bio={bio}
-                    customTippy={{ zIndex: 1000001, offset: [-50, 20] }}
-                    onCloseModal={onCloseModal}
-                >
+                <AccPreview>
                     <Link to={'/@' + userName} className={cx('fullname')} onClick={onCloseModal}>
                         {`${firstName} ${lastName}`} <ShowTick tick={tick} />
                     </Link>
-                </AccountPreview>
+                </AccPreview>
                 <p className={cx('content')}>{comment}</p>
                 <p className={cx('other')}>
                     <span>{createdAt}</span>
@@ -64,4 +80,4 @@ function CommentShow({ data, onCloseModal }) {
         </div>
     );
 }
-export default CommentShow;
+export default memo(CommentShow);

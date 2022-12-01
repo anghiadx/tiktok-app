@@ -1,0 +1,9 @@
+.hashtag {
+    display: inline-flex;
+    font-weight: 600;
+    line-height: var(--primary-line-height);
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
