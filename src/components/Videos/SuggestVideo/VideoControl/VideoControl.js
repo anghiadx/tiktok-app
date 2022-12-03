@@ -9,6 +9,8 @@ import { iconFlag, iconMute, iconPauseVideo, iconPlayVideo, iconVolume } from '~
 import TiktokLoading from '~/components/Loadings/TiktokLoading';
 import { VideoContextKey } from '~/contexts/VideoContext';
 import { VideoModalContextKey } from '~/contexts/VideoModalContext';
+import Img from '~/components/Img';
+import assetImages from '~/assets/images/images';
 
 const cx = classNames.bind(styles);
 
@@ -135,6 +137,9 @@ function VideoControl({ videoId, videoInfo }) {
 
     const updateInViewArr = () => {
         videoArray[videoId].inView = isInView;
+
+        // when the inview status of this video changes -> update the next video
+        // (so that next video can play or stop respectively)
         videoArray[videoId + 1]?.update?.call(this, (prev) => !prev);
     };
 
@@ -200,6 +205,11 @@ function VideoControl({ videoId, videoInfo }) {
     };
 
     const handleOpenVideoModal = () => {
+        // if having video priority -> reset about -1
+        setPriorityVideo(-1);
+        // put the video to the top of inview
+        videoArray[videoId].wrapperIntoView();
+
         const propsVideoModal = {
             index: videoId,
             data: videoInfo,
@@ -211,21 +221,30 @@ function VideoControl({ videoId, videoInfo }) {
     };
     return (
         <div className={cx('player-space', directionVideoClass)}>
-            <p className={cx('default-space')}></p>
             {loading && playing && <SvgIcon className={cx('video-loading')} icon={<TiktokLoading medium />} />}
-            <img className={cx('thumb')} src={thumbUrl} alt="" ref={inViewRef} />
-            <video
-                ref={videoRef}
-                className={cx('video', {
-                    hidden: defaultStatus,
-                })}
-                loop
-                onWaiting={() => setLoading(true)}
-                onPlaying={() => setLoading(false)}
-                onClick={handleOpenVideoModal}
-            >
-                <source src={videoUrl} />
-            </video>
+            <div className={cx('default-space')} onClick={handleOpenVideoModal}>
+                <Img
+                    className={cx('thumb')}
+                    src={thumbUrl}
+                    ref={inViewRef}
+                    fallback={
+                        directionVideoClass === 'vertical'
+                            ? assetImages.imageTransparentVertical
+                            : assetImages.imageTransparentHorizontal
+                    }
+                />
+                <video
+                    ref={videoRef}
+                    className={cx('video', {
+                        hidden: defaultStatus,
+                    })}
+                    loop
+                    onWaiting={() => setLoading(true)}
+                    onPlaying={() => setLoading(false)}
+                >
+                    <source src={videoUrl} />
+                </video>
+            </div>
 
             {/* Video Control */}
             <button className={cx('control', 'report-btn')}>

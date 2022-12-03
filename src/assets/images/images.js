@@ -1,5 +1,7 @@
 const assetImages = {
-    noImage: require('./files/no-image.png'),
+    noImage: require('./files/no-image.jpg'),
+    imageTransparentVertical: require('./files/image-transparent-vertical.png'),
+    imageTransparentHorizontal: require('./files/image-transparent-horizontal.png'),
     loginWithQRGuide: require('./files/loginWithQRGuide.gif'),
     loginWithQRGuideDark: require('./files/loginWithQRGuideDark.gif'),
     exampleQR: require('./files/exampleQR.jpg'),

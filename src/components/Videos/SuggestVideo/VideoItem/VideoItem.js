@@ -52,10 +52,15 @@ function VideoItem({ videoId, videoInfo, videoArray }) {
     } = videoInfo;
 
     useLayoutEffect(() => {
+        const optionsScroll = {
+            block: 'start',
+            behavior: 'smooth',
+        };
+
         videoArray[videoId] = {
             id: videoId,
             data: videoInfo,
-            wrapperIntoView: wrapperRef.current.scrollIntoView.bind(wrapperRef.current),
+            wrapperIntoView: wrapperRef.current.scrollIntoView.bind(wrapperRef.current, optionsScroll),
             inView: null,
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps

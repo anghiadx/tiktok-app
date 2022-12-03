@@ -7,7 +7,7 @@ import assetImages from '~/assets/images';
 const cx = classNames.bind(styles);
 
 const Img = forwardRef(function ({ className, src, alt = '', fallback = assetImages.noImage, ...props }, REF) {
-    const [error, setError] = useState(false);
+    const [error, setError] = useState(null);
 
     const handleImageError = () => {
         setError(fallback);

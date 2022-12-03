@@ -20,6 +20,7 @@ function Sidebar({ suggestedAcc = true, followingAcc = true }) {
     const customScrollbar = (className) => {
         return (props) => <div className={cx(className)} {...props}></div>;
     };
+    const currentUser = false;
     return (
         <div className={cx('wrapper')}>
             <div className={cx('inner-fixed')}>
@@ -42,7 +43,7 @@ function Sidebar({ suggestedAcc = true, followingAcc = true }) {
                         {suggestedAcc && <SuggestedAccount />}
 
                         {/* Followed */}
-                        {followingAcc && <FollowingAccount />}
+                        {currentUser && followingAcc && <FollowingAccount />}
 
                         {/* Discover */}
                         <Discover />

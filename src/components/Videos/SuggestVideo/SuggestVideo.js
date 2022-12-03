@@ -107,15 +107,10 @@ function SuggestVideo({ data = [] }) {
         const prevVideo = videoArray[currentVideoId - 1];
         const nextVideo = videoArray[currentVideoId + 1];
 
-        const optionsValue = {
-            block: 'start',
-            behavior: 'smooth',
-        };
-
         switch (type) {
             case 'up':
                 if (prevVideo) {
-                    prevVideo.wrapperIntoView(optionsValue);
+                    prevVideo.wrapperIntoView();
                     if (isVideoModalShow) {
                         const newProps = {
                             index: prevVideo.id,
@@ -128,7 +123,7 @@ function SuggestVideo({ data = [] }) {
 
             default:
                 if (nextVideo) {
-                    nextVideo.wrapperIntoView(optionsValue);
+                    nextVideo.wrapperIntoView();
                     if (isVideoModalShow) {
                         const newProps = {
                             index: nextVideo.id,
