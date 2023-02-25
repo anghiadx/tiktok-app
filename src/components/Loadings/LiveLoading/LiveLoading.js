@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 import styles from './LiveLoading.module.scss';
 import LottieIcon from '~/components/LottieIcon';
-import { liveStreamHeart, liveAnimation } from '~/assets/lotties';
+import { liveStreamHeart } from '~/assets/lotties';
 
 const cx = classNames.bind(styles);
 
@@ -15,7 +15,6 @@ function LiveLoading() {
                 <p className={cx('description')}></p>
             </div>
             <LottieIcon className={cx('heart-icon')} icon={liveStreamHeart} />
-            <LottieIcon className={cx('live-stream-icon')} icon={liveAnimation} />
         </div>
     );
 }

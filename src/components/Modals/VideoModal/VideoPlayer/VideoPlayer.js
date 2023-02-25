@@ -28,7 +28,7 @@ function VideoPlayer({
     // Get video data
     const { thumb_url: thumbUrl, file_url: videoUrl } = data;
 
-    // This Component State
+    // This Component's State
     const [playing, setPlaying] = useState(true);
     const [videoStart, setVideoStart] = useState(false);
     const [muted, setMuted] = useState(false);
@@ -78,6 +78,10 @@ function VideoPlayer({
     useEffect(() => {
         const handleKeyUp = (e) => {
             if (e.keyCode === 77) {
+                // if there is an open modal then do nothing
+                const isModalShow = document.body.classList.contains('modal');
+                if (isModalShow) return;
+
                 setMuted(!muted);
             }
         };

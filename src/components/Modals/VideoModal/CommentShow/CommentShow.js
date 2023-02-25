@@ -25,8 +25,9 @@ function CommentShow({ videoId, onCloseModal }) {
             setLoading(true);
 
             const dataResponse = await commentService.get(videoId);
+            const dataOk = Array.isArray(dataResponse) ? dataResponse : [];
 
-            setComments(dataResponse);
+            setComments(dataOk);
             setLoading(false);
         };
         fetchAPI();

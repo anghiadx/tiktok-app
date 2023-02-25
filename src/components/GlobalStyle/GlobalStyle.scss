@@ -55,6 +55,7 @@
     --text-gray-color: #ffffffbf;
     --text-gray-color2: #ffffff80;
 
+    --black-color: white;
     --white-color: #121212;
     --white-color-2: rgba(255, 255, 255, 0.08);
     --white-color-3: #252525;
@@ -91,7 +92,8 @@ body {
     background-color: var(--white-color);
     overflow-y: overlay;
 
-    &.hidden {
+    &.hidden,
+    &.video-modal {
         overflow: hidden;
     }
 }

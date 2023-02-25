@@ -8,7 +8,7 @@ function useVideoModal(ModalComponent) {
 
     const videoModalShow = () => {
         setIsVideoModalShow(true);
-        document.body.classList.add('hidden', 'modal');
+        document.body.classList.add('video-modal');
 
         // Location change
         const { pathname, hash, search } = window.location;
@@ -18,7 +18,7 @@ function useVideoModal(ModalComponent) {
 
     const modalHide = (type) => {
         setIsVideoModalShow(false);
-        document.body.classList.remove('hidden', 'modal');
+        document.body.classList.remove('video-modal');
         window.history.replaceState(null, '', urlStart);
     };
 

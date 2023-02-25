@@ -41,6 +41,10 @@ function SuggestVideo({ data = [] }) {
     // Handle key down event
     useEffect(() => {
         const handleKeyUp = (e) => {
+            // if there is an open modal then do nothing
+            const isModalShow = document.body.classList.contains('modal');
+            if (isModalShow) return;
+
             e.preventDefault();
             const keyCode = e.keyCode;
 
@@ -68,12 +72,17 @@ function SuggestVideo({ data = [] }) {
             }
         };
         const handleKeyDown = (e) => {
+            // if there is an open modal then do nothing
+            const isModalShow = document.body.classList.contains('modal');
+            if (isModalShow) return;
+
             const keyCode = e.keyCode;
             const blackList = [40, 38, 32, 77];
             if (blackList.includes(keyCode)) {
                 e.preventDefault();
             }
         };
+
         window.addEventListener('keyup', handleKeyUp);
         window.addEventListener('keydown', handleKeyDown);
 
