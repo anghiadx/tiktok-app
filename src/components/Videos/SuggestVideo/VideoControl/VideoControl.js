@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useRef, useState, useContext } from 'react';
+import { useEffect, useRef, useState, useContext, memo } from 'react';
 import { useInView } from 'react-intersection-observer';
 import classNames from 'classnames/bind';
 
@@ -14,7 +14,7 @@ import assetImages from '~/assets/images/images';
 
 const cx = classNames.bind(styles);
 
-function VideoControl({ videoId, videoInfo }) {
+function VideoControl({ videoId, videoInfo, setThumbLoaded }) {
     // Get data from video info
     const {
         thumb_url: thumbUrl,
@@ -115,7 +115,6 @@ function VideoControl({ videoId, videoInfo }) {
             playing && handleResetVideo();
             return;
         }
-
         if (isInView && !userInteracting) {
             const activeId = findFirstInViewId();
             videoId === activeId ? setPlaying(true) : handleResetVideo();
@@ -140,7 +139,9 @@ function VideoControl({ videoId, videoInfo }) {
 
         // when the inview status of this video changes -> update the next video
         // (so that next video can play or stop respectively)
-        videoArray[videoId + 1]?.update?.call(this, (prev) => !prev);
+        if (videoArray[videoId + 1]?.update) {
+            videoArray[videoId + 1].update((prev) => !prev);
+        }
     };
 
     const findFirstInViewId = () => {
@@ -176,8 +177,8 @@ function VideoControl({ videoId, videoInfo }) {
     };
 
     const handleResetVideo = () => {
-        // reset time
-        videoRef.current.currentTime = 0;
+        // Reload video and set the states to default
+        videoRef.current.load();
         setPlaying(false);
         setDefaultStatus(true);
         setUserInteracting(false);
@@ -232,6 +233,7 @@ function VideoControl({ videoId, videoInfo }) {
                             ? assetImages.imageTransparentVertical
                             : assetImages.imageTransparentHorizontal
                     }
+                    onLoad={() => setThumbLoaded(true)}
                 />
                 <video
                     ref={videoRef}
@@ -288,4 +290,4 @@ VideoControl.propTypes = {
     videoInfo: PropTypes.object.isRequired,
 };
 
-export default VideoControl;
+export default memo(VideoControl);

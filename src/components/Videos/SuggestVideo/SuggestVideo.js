@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import VideoItem from './VideoItem';
 import { useLocalStorage } from '~/hooks';
 import configs from '~/configs';
@@ -16,17 +16,19 @@ function SuggestVideo({ data = [] }) {
     const [dataStorage, setDataStorage] = useLocalStorage(videoStorageKey);
 
     // State
-    const [videoArray] = useState([]);
     const [volume, setVolume] = useState(dataStorage.volume || 0.6);
     const [muted, setMuted] = useState(true);
     const [priorityVideo, setPriorityVideo] = useState(-1);
+
+    // Ref
+    const videoArrayRef = useRef([]);
 
     // Set value for context
     const contextValue = {
         volumeState: [volume, setVolume],
         mutedState: [muted, setMuted],
         priorityVideoState: [priorityVideo, setPriorityVideo],
-        videoArray: videoArray,
+        videoArray: videoArrayRef.current,
     };
 
     // Set volume value to localstorage when it changed
@@ -107,14 +109,14 @@ function SuggestVideo({ data = [] }) {
 
     // Function
     function handleScroll(type) {
-        const fisrtInViewId = videoArray.findIndex((inViewObj) => inViewObj.inView === true);
+        const fisrtInViewId = videoArrayRef.current.findIndex((inViewObj) => inViewObj.inView === true);
         const currentVideoId = priorityVideo !== -1 ? priorityVideo : fisrtInViewId;
 
         if (currentVideoId === -1) {
             return;
         }
-        const prevVideo = videoArray[currentVideoId - 1];
-        const nextVideo = videoArray[currentVideoId + 1];
+        const prevVideo = videoArrayRef.current[currentVideoId - 1];
+        const nextVideo = videoArrayRef.current[currentVideoId + 1];
 
         switch (type) {
             case 'up':
@@ -148,7 +150,7 @@ function SuggestVideo({ data = [] }) {
     return (
         <VideoContext value={contextValue}>
             {data.map((video, index) => {
-                return <VideoItem key={index} videoArray={videoArray} videoInfo={video} videoId={index} />;
+                return <VideoItem key={index} videoArray={videoArrayRef.current} videoInfo={video} videoId={index} />;
             })}
         </VideoContext>
     );

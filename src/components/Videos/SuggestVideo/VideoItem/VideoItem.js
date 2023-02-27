@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import PropTypes from 'prop-types';
-import { memo, useContext, useLayoutEffect, useRef } from 'react';
+import { memo, useContext, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 
@@ -23,6 +23,9 @@ const cx = classNames.bind(styles);
 function VideoItem({ videoId, videoInfo, videoArray }) {
     // Get Modal context value
     const { loginModalShow } = useContext(ModalContextKey);
+
+    // State
+    const [thumbLoaded, setThumbLoaded] = useState(false);
 
     // ref
     const wrapperRef = useRef();
@@ -122,33 +125,35 @@ function VideoItem({ videoId, videoInfo, videoArray }) {
                 </div>
 
                 <div className={cx('video-player')}>
-                    {/* Video control */}
-                    <VideoControl videoInfo={videoInfo} videoId={videoId} />
+                    {/* Video container */}
+                    <VideoControl videoInfo={videoInfo} videoId={videoId} setThumbLoaded={setThumbLoaded} />
 
-                    {/* Interactive space */}
-                    <div className={cx('interactive-space')}>
-                        <label className={cx('interactive-item')}>
-                            <button className={cx('item-icon')} onClick={!currentUser ? loginModalShow : null}>
-                                <SvgIcon icon={iconHeart} />
-                            </button>
-                            <strong className={cx('item-count')}>{likesCount}</strong>
-                        </label>
-                        <label className={cx('interactive-item')}>
-                            <button className={cx('item-icon')} onClick={!currentUser ? loginModalShow : null}>
-                                <SvgIcon icon={iconComment} />
-                            </button>
-                            <strong className={cx('item-count')}>{commentsCount}</strong>
-                        </label>
-
-                        <SharePopper data={videoShares}>
+                    {/* Interactive container */}
+                    {thumbLoaded && (
+                        <div className={cx('interactive-space')}>
                             <label className={cx('interactive-item')}>
-                                <button className={cx('item-icon')}>
-                                    <SvgIcon icon={iconShare} />
+                                <button className={cx('item-icon')} onClick={!currentUser ? loginModalShow : null}>
+                                    <SvgIcon icon={iconHeart} />
                                 </button>
-                                <strong className={cx('item-count')}>{sharesCount || 'Chia sẻ'}</strong>
+                                <strong className={cx('item-count')}>{likesCount}</strong>
                             </label>
-                        </SharePopper>
-                    </div>
+                            <label className={cx('interactive-item')}>
+                                <button className={cx('item-icon')} onClick={!currentUser ? loginModalShow : null}>
+                                    <SvgIcon icon={iconComment} />
+                                </button>
+                                <strong className={cx('item-count')}>{commentsCount}</strong>
+                            </label>
+
+                            <SharePopper data={videoShares}>
+                                <label className={cx('interactive-item')}>
+                                    <button className={cx('item-icon')}>
+                                        <SvgIcon icon={iconShare} />
+                                    </button>
+                                    <strong className={cx('item-count')}>{sharesCount || 'Chia sẻ'}</strong>
+                                </label>
+                            </SharePopper>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
