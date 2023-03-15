@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { memo, useContext, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
+import { useSelector } from 'react-redux';
 
 import styles from './VideoItem.module.scss';
 import Button from '~/components/Button';
@@ -33,7 +34,7 @@ function VideoItem({ videoId, videoInfo, videoArray }) {
     // get data from temp data
     const { videoShares } = dataTemp.shares;
 
-    const currentUser = false;
+    const { isAuth } = useSelector((state) => state.auth);
 
     // Get data from video info
     const {
@@ -108,7 +109,7 @@ function VideoItem({ videoId, videoInfo, videoArray }) {
                             </p>
                         </Link>
                     </AccountPreview>
-                    <Button outline className={cx('follow-btn')} onClick={!currentUser ? loginModalShow : null}>
+                    <Button outline className={cx('follow-btn')} onClick={!isAuth ? loginModalShow : null}>
                         Follow
                     </Button>
 
@@ -132,13 +133,13 @@ function VideoItem({ videoId, videoInfo, videoArray }) {
                     {thumbLoaded && (
                         <div className={cx('interactive-space')}>
                             <label className={cx('interactive-item')}>
-                                <button className={cx('item-icon')} onClick={!currentUser ? loginModalShow : null}>
+                                <button className={cx('item-icon')} onClick={!isAuth ? loginModalShow : null}>
                                     <SvgIcon icon={iconHeart} />
                                 </button>
                                 <strong className={cx('item-count')}>{likesCount}</strong>
                             </label>
                             <label className={cx('interactive-item')}>
-                                <button className={cx('item-icon')} onClick={!currentUser ? loginModalShow : null}>
+                                <button className={cx('item-icon')} onClick={!isAuth ? loginModalShow : null}>
                                     <SvgIcon icon={iconComment} />
                                 </button>
                                 <strong className={cx('item-count')}>{commentsCount}</strong>

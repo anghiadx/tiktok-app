@@ -3,6 +3,7 @@ import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { useSelector } from 'react-redux';
 import Button from '~/components/Button';
 import Img from '~/components/Img';
 import ShowTick from '~/components/ShowTick';
@@ -53,7 +54,7 @@ function VideoModal(props) {
 
     const { loginModalShow } = useContext(ModalContextKey);
 
-    const currentUser = false;
+    const { isAuth } = useSelector((state) => state.auth);
 
     useEffect(() => {
         window.history.replaceState(null, '', `/#/video/${videoId}`);
@@ -96,12 +97,7 @@ function VideoModal(props) {
                                 </div>
                             </AccountPreview>
                         </Link>
-                        <Button
-                            className={cx('follow-btn')}
-                            outline
-                            medium
-                            onClick={!currentUser ? loginModalShow : null}
-                        >
+                        <Button className={cx('follow-btn')} outline medium onClick={!isAuth ? loginModalShow : null}>
                             Follow
                         </Button>
                     </div>
@@ -121,7 +117,7 @@ function VideoModal(props) {
                                 <p
                                     className={cx('count-item')}
                                     style={{ cursor: 'pointer' }}
-                                    onClick={!currentUser ? loginModalShow : null}
+                                    onClick={!isAuth ? loginModalShow : null}
                                 >
                                     <span className={cx('count-icon')}>
                                         <SvgIcon icon={iconHeart} />
@@ -210,7 +206,7 @@ function VideoModal(props) {
 
                 <footer className={cx('create-comment')}>
                     <div className={cx('no-login')}>
-                        <p className={cx('notify-btn')} onClick={!currentUser ? loginModalShow : null}>
+                        <p className={cx('notify-btn')} onClick={!isAuth ? loginModalShow : null}>
                             Please log in to comment
                         </p>
                     </div>

@@ -2,7 +2,9 @@ import PropTypes from 'prop-types';
 import { useEffect, useRef, useState, useContext, memo } from 'react';
 import { useInView } from 'react-intersection-observer';
 import classNames from 'classnames/bind';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { toggleMuted, changeMuted, changeVolume } from '~/redux/slices/videoSlice';
 import styles from './VideoControl.module.scss';
 import SvgIcon from '~/components/SvgIcon';
 import { iconFlag, iconMute, iconPauseVideo, iconPlayVideo, iconVolume } from '~/components/SvgIcon/iconsRepo';
@@ -27,9 +29,13 @@ function VideoControl({ videoId, videoInfo, setThumbLoaded }) {
     const directionVideoClass = videoWidth - videoHeight < 0 ? 'vertical' : 'horizontal';
 
     // Get data from the context
-    const { volumeState, mutedState, videoArray, priorityVideoState } = useContext(VideoContextKey);
+    const { videoArray, priorityVideoState } = useContext(VideoContextKey);
     const { videoModalState, setPropsVideoModal } = useContext(VideoModalContextKey);
     const [isVideoModalShow, videoModalShow] = videoModalState;
+
+    // Redux state
+    const dispatch = useDispatch();
+    const { volume, muted } = useSelector((state) => state.video);
 
     // STATE
     const [, setRender] = useState(false);
@@ -38,8 +44,6 @@ function VideoControl({ videoId, videoInfo, setThumbLoaded }) {
     const [loading, setLoading] = useState(false);
     const [userInteracting, setUserInteracting] = useState(false);
 
-    const [volume, setVolume] = volumeState;
-    const [muted, setMuted] = mutedState;
     const [priorityVideo, setPriorityVideo] = priorityVideoState;
 
     // INVIEW STATE
@@ -173,7 +177,7 @@ function VideoControl({ videoId, videoInfo, setThumbLoaded }) {
     };
 
     const handleVolumeBtn = () => {
-        setMuted(!muted);
+        dispatch(toggleMuted());
     };
 
     const handleResetVideo = () => {
@@ -195,14 +199,16 @@ function VideoControl({ videoId, videoInfo, setThumbLoaded }) {
         // Set volume of video
         videoRef.current.volume = valueValid / 100;
 
-        valueValid === 0 && !muted && setMuted(true);
-        valueValid > 0 && muted && setMuted(false);
+        valueValid === 0 && !muted && dispatch(changeMuted(true));
+        valueValid > 0 && muted && dispatch(changeMuted(false));
     };
 
     const handleSetVolume = (e) => {
         const value = +e.target.value;
         const valueValid = valueValidate(value, 0, 100);
-        setVolume(valueValid / 100);
+
+        const action = changeVolume(valueValid / 100);
+        dispatch(action);
     };
 
     const handleOpenVideoModal = () => {
@@ -214,8 +220,6 @@ function VideoControl({ videoId, videoInfo, setThumbLoaded }) {
         const propsVideoModal = {
             index: videoId,
             data: videoInfo,
-            setVolumeOrigin: setVolume,
-            setMutedOrigin: setMuted,
         };
         setPropsVideoModal(propsVideoModal);
         videoModalShow();

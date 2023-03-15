@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { useState, useEffect, useMemo, useContext } from 'react';
 import classNames from 'classnames/bind';
+import { useSelector } from 'react-redux';
 import styles from './VideoProfile.module.scss';
 import SvgIcon from '~/components/SvgIcon';
 import { iconLock, iconLockRegular, iconPlayRegular } from '~/components/SvgIcon/iconsRepo';
@@ -8,7 +9,6 @@ import VideoLoading from '~/components/Loadings/VideoLoading';
 import VideoPreview from '~/components/Videos/VideoPreview';
 import NotFoundNotify from '~/components/NotFound/NotFoundNotify';
 import { useLocalStorage } from '~/hooks';
-import configs from '~/configs';
 import { VideoModalContextKey } from '~/contexts/VideoModalContext';
 
 const cx = classNames.bind(styles);
@@ -17,10 +17,11 @@ function VideoProfile({ user, data }) {
     const [playId, setPlayId] = useState(0);
     const [listType, setListType] = useState('videos');
 
+    // redux
+    const { volume } = useSelector((state) => state.video);
+
     // Modal video data
-    const videoStorageKey = configs.localStorage.videoControl;
-    const [dataStorage, setDataStorage] = useLocalStorage(videoStorageKey);
-    const [volumeModal, setVolumeModal] = useState(dataStorage.volume || 0.6);
+    const { setDataStorage } = useLocalStorage();
     const { propsVideoModal, setPropsVideoModal, videoModalState } = useContext(VideoModalContextKey);
     const [isVideoModalShow] = videoModalState;
 
@@ -42,11 +43,11 @@ function VideoProfile({ user, data }) {
     // Set volume value to localstorage when it changed
     useEffect(() => {
         const data = {
-            volume: volumeModal,
+            volume: volume,
         };
         setDataStorage(data);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [volumeModal]);
+    }, [volume]);
 
     useEffect(() => {
         setPlayId(0);
@@ -58,7 +59,6 @@ function VideoProfile({ user, data }) {
         if (isVideoModalShow) {
             propsVideoModal.handleNextVideo = handleNextVideo;
             propsVideoModal.handlePrevVideo = handlePrevVideo;
-            propsVideoModal.setVolumeOrigin = setVolumeModal;
 
             setPropsVideoModal({ ...propsVideoModal });
         }

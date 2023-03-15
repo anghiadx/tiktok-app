@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState, useContext, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleMuted } from '~/redux/slices/videoSlice';
 import VideoItem from './VideoItem';
 import { useLocalStorage } from '~/hooks';
-import configs from '~/configs';
 import VideoContext from '~/contexts/VideoContext';
 import { VideoModalContextKey } from '~/contexts/VideoModalContext';
 
@@ -12,12 +13,13 @@ function SuggestVideo({ data = [] }) {
     const [isVideoModalShow] = videoModalState;
 
     // Local storage
-    const videoStorageKey = configs.localStorage.videoControl;
-    const [dataStorage, setDataStorage] = useLocalStorage(videoStorageKey);
+    const { setDataStorage } = useLocalStorage();
+
+    // Redux
+    const dispatch = useDispatch();
+    const { volume } = useSelector((state) => state.video);
 
     // State
-    const [volume, setVolume] = useState(dataStorage.volume || 0.6);
-    const [muted, setMuted] = useState(true);
     const [priorityVideo, setPriorityVideo] = useState(-1);
 
     // Ref
@@ -25,8 +27,6 @@ function SuggestVideo({ data = [] }) {
 
     // Set value for context
     const contextValue = {
-        volumeState: [volume, setVolume],
-        mutedState: [muted, setMuted],
         priorityVideoState: [priorityVideo, setPriorityVideo],
         videoArray: videoArrayRef.current,
     };
@@ -53,7 +53,7 @@ function SuggestVideo({ data = [] }) {
             switch (keyCode) {
                 // key M
                 case 77:
-                    setMuted(!muted);
+                    dispatch(toggleMuted());
                     break;
 
                 // Space & down arrow

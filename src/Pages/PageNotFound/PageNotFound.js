@@ -13,9 +13,7 @@ import { useLocalStorage } from '~/hooks';
 const cx = classNames.bind(styles);
 
 function PageNotFound() {
-    const appStorageKey = configs.localStorage.app;
-
-    const [dataStorage] = useLocalStorage(appStorageKey);
+    const { dataStorage } = useLocalStorage();
     const [animateComplete, setAnimateComplete] = useState(false);
     const lottieOptions = {
         loop: false,

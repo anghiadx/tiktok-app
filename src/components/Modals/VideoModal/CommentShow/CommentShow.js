@@ -14,10 +14,10 @@ function CommentShow({ videoId, onCloseModal }) {
     const loadingComment = Array(9).fill();
 
     // Fake current user to get comment
-    const currentUser = true;
+    const isAuth = true;
 
     useEffect(() => {
-        if (!currentUser) {
+        if (!isAuth) {
             return;
         }
 
@@ -47,7 +47,7 @@ function CommentShow({ videoId, onCloseModal }) {
 
     return (
         <div className={cx('comment-list')}>
-            {!currentUser ? (
+            {!isAuth ? (
                 <p className={cx('no-login')}>Hãy đăng nhập để bình luận và xem bình luận của người khác!</p>
             ) : (
                 renderComment()

@@ -2,14 +2,11 @@ import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import { useLocalStorage } from '~/hooks';
 import styles from './ThemeMode.module.scss';
-import configs from '~/configs';
 
 const cx = classNames.bind(styles);
 
 function ThemeMode() {
-    const appStorageKey = configs.localStorage.app;
-
-    const [dataStorage, setDataStorage] = useLocalStorage(appStorageKey);
+    const { dataStorage, setDataStorage } = useLocalStorage();
     const [isDarkMode, setIsDarkMode] = useState(dataStorage.theme === 'dark');
 
     const themeToggle = () => {

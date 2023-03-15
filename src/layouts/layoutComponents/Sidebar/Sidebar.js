@@ -2,6 +2,7 @@
 import PropTypes from 'prop-types';
 import React, { memo, useState } from 'react';
 import classNames from 'classnames/bind';
+import { useSelector } from 'react-redux';
 
 import styles from './Sidebar.module.scss';
 import Navigation from './Navigation';
@@ -20,7 +21,9 @@ function Sidebar({ suggestedAcc = true, followingAcc = true }) {
     const customScrollbar = (className) => {
         return (props) => <div className={cx(className)} {...props}></div>;
     };
-    const currentUser = false;
+
+    const { isAuth } = useSelector((state) => state.auth);
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('inner-fixed')}>
@@ -37,13 +40,13 @@ function Sidebar({ suggestedAcc = true, followingAcc = true }) {
                     <div className={cx('content')}>
                         <Navigation />
                         {/* Login Notify */}
-                        <LoginNotify />
+                        {!isAuth && <LoginNotify />}
 
                         {/* Sugges Account */}
                         {suggestedAcc && <SuggestedAccount />}
 
                         {/* Followed */}
-                        {currentUser && followingAcc && <FollowingAccount />}
+                        {isAuth && followingAcc && <FollowingAccount />}
 
                         {/* Discover */}
                         <Discover />

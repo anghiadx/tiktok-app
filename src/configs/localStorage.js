@@ -1,6 +1,5 @@
-const localStorageKey = {
-    app: 'APP',
-    videoControl: 'VIDEO-CONTROL',
+const localStorage = {
+    key: 'TIKTOK_CLONE_STORAGE',
 };
 
-export default localStorageKey;
+export default localStorage;

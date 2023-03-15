@@ -1,4 +1,8 @@
-function useLocalStorage(key) {
+import configs from '~/configs';
+
+const key = configs.localStorage.key;
+
+function useLocalStorage() {
     const getItem = () => {
         const dataStorage = JSON.parse(localStorage.getItem(key)) || {};
         return dataStorage;
@@ -15,7 +19,10 @@ function useLocalStorage(key) {
 
     const dataStorage = getItem();
 
-    return [dataStorage, setItem];
+    return {
+        dataStorage,
+        setDataStorage: setItem,
+    };
 }
 
 export default useLocalStorage;

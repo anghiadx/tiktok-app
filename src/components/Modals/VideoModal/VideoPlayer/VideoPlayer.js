@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames/bind';
-import styles from './VideoPlayer.module.scss';
+import { useSelector, useDispatch } from 'react-redux';
 
+import { toggleMuted, changeMuted, changeVolume } from '~/redux/slices/videoSlice';
+import styles from './VideoPlayer.module.scss';
 import SvgIcon from '~/components/SvgIcon';
 import {
     iconArrowToBot2,
@@ -16,36 +18,23 @@ import TiktokLoading from '~/components/Loadings/TiktokLoading';
 
 const cx = classNames.bind(styles);
 
-function VideoPlayer({
-    index,
-    data = {},
-    handleClose,
-    handlePrevVideo,
-    handleNextVideo,
-    setMutedOrigin,
-    setVolumeOrigin,
-}) {
+function VideoPlayer({ index, data = {}, handleClose, handlePrevVideo, handleNextVideo }) {
     // Get video data
     const { thumb_url: thumbUrl, file_url: videoUrl } = data;
+
+    // Redux
+    const dispatch = useDispatch();
+    const { volume, muted } = useSelector((state) => state.video);
 
     // This Component's State
     const [playing, setPlaying] = useState(true);
     const [videoStart, setVideoStart] = useState(false);
-    const [muted, setMuted] = useState(false);
-    const [volume, setVolume] = useState(0.6);
     const [loading, setLoading] = useState(false);
 
     // Ref
     const videoRef = useRef();
     const volumeBarRef = useRef();
     const volumeDotRef = useRef();
-
-    // Get current origin state and set for current state of component
-    useLayoutEffect(() => {
-        !!setMutedOrigin && setStateByState(setMutedOrigin, setMuted);
-        !!setVolumeOrigin && setStateByState(setVolumeOrigin, setVolume);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
 
     useEffect(() => {
         playing
@@ -82,7 +71,8 @@ function VideoPlayer({
                 const isModalShow = document.body.classList.contains('modal');
                 if (isModalShow) return;
 
-                setMuted(!muted);
+                const action = toggleMuted();
+                dispatch(action);
             }
         };
         window.addEventListener('keyup', handleKeyUp);
@@ -90,18 +80,9 @@ function VideoPlayer({
         return () => {
             window.removeEventListener('keyup', handleKeyUp);
         };
-    }, [muted]);
+    }, [muted, dispatch]);
 
     // == FUNCTION
-    const setStateByState = (setStateOld, setStateNew) => {
-        setStateOld((prevState) => {
-            setTimeout(() => {
-                setStateNew(prevState);
-            });
-            return prevState;
-        });
-    };
-
     const volumeValidate = (volume) => {
         let volumeValid = volume;
 
@@ -114,13 +95,12 @@ function VideoPlayer({
         return volumeValid;
     };
 
-    const toggltPlay = () => {
+    const togglePlay = () => {
         setPlaying(!playing);
     };
 
     const handleToggleMute = () => {
-        setMuted(!muted);
-        !!setMutedOrigin && setMutedOrigin(!muted);
+        dispatch(toggleMuted());
     };
 
     const handleVideoStart = () => {
@@ -139,18 +119,19 @@ function VideoPlayer({
         videoRef.current.volume = volumeValid;
 
         if (value === 0 && !muted) {
-            setMuted(true);
-            !!setMutedOrigin && setMutedOrigin(true);
+            const action = changeMuted(true);
+            dispatch(action);
         } else if (value > 0 && muted) {
-            setMuted(false);
-            !!setMutedOrigin && setMutedOrigin(false);
+            const action = changeMuted(false);
+            dispatch(action);
         }
     };
 
     const handleSetVolume = (e) => {
         const value = e.target.value;
         const volumeValid = volumeValidate(value / 100);
-        !!setVolumeOrigin && setVolumeOrigin(volumeValid);
+        const action = changeVolume(volumeValid);
+        dispatch(action);
     };
 
     const handleClickPrev = (e) => {
@@ -164,7 +145,7 @@ function VideoPlayer({
     };
 
     return (
-        <div className={cx('video-player')} onClick={toggltPlay}>
+        <div className={cx('video-player')} onClick={togglePlay}>
             <p className={cx('video__background')} style={{ backgroundImage: `url('${thumbUrl}')` }}></p>
             <div className={cx('video__space')}>
                 <img className={cx({ hidden: videoStart })} src={thumbUrl} alt="" />
@@ -239,8 +220,6 @@ VideoPlayer.propTypes = {
     handleClose: PropTypes.func,
     handlePrevVideo: PropTypes.func,
     handleNextVideo: PropTypes.func,
-    setMutedOrigin: PropTypes.func,
-    setVolumeOrigin: PropTypes.func,
 };
 
 export default VideoPlayer;

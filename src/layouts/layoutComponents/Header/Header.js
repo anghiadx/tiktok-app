@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
+import { useSelector } from 'react-redux';
 
 import styles from './header.module.scss';
 import SvgIcon from '~/components/SvgIcon';
@@ -20,9 +21,9 @@ const cx = classNames.bind(styles);
 function Header() {
     const { loginModalShow, keyboardModalShow } = useContext(ModalContextKey);
 
-    let currentUser = false;
+    const { isAuth } = useSelector((state) => state.auth);
 
-    const menuInfo = currentUser ? dataTemp.menus.PRIVATE_MENU : dataTemp.menus.PUBLIC_MENU;
+    const menuInfo = isAuth ? dataTemp.menus.PRIVATE_MENU : dataTemp.menus.PUBLIC_MENU;
 
     // Handle Menu
     const handleDefaultClickMenu = (itemInfo) => {
@@ -52,15 +53,15 @@ function Header() {
                 {/* Action Container */}
                 <div className={cx('action-container')}>
                     <Button
-                        to={currentUser ? configs.routes.upload : null}
+                        to={isAuth ? configs.routes.upload : null}
                         primary
                         leftIcon={<SvgIcon icon={iconPlus} size={20} />}
-                        onClick={!currentUser ? loginModalShow : null}
+                        onClick={!isAuth ? loginModalShow : null}
                     >
                         Tải lên
                     </Button>
 
-                    {currentUser ? (
+                    {isAuth ? (
                         <>
                             <Tippy content="Tin nhắn">
                                 <button className={cx('user-action-icon', 'plane-icon')}>
@@ -83,7 +84,7 @@ function Header() {
                     )}
 
                     <MenuPopper items={menuInfo} handleClickMenu={handleDefaultClickMenu}>
-                        {currentUser ? (
+                        {isAuth ? (
                             <Img
                                 src="https://p16-sign-sg.tiktokcdn.com/aweme/720x720/tiktok-obj/6968378549614936066.jpeg?x-expires=1664776800&x-signature=F0fDoT9MjF4CTqrNRAXksYBPwIE%3D"
                                 alt=""

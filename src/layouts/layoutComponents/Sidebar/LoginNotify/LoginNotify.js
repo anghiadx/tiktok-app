@@ -10,12 +10,10 @@ const cx = classNames.bind(styles);
 function LoginNotify() {
     const { loginModalShow } = useContext(ModalContextKey);
 
-    const currentUser = false;
-
     return (
         <BorderTopContainer className={cx('login-notify')}>
             <p className={cx('text')}>Đăng nhập để follow các tác giả, thích video và xem bình luận.</p>
-            <Button outline large className={cx('login-btn')} onClick={!currentUser ? loginModalShow : null}>
+            <Button outline large className={cx('login-btn')} onClick={loginModalShow}>
                 Đăng nhập
             </Button>
         </BorderTopContainer>

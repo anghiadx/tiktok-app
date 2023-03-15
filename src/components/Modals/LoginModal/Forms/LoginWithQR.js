@@ -4,13 +4,11 @@ import assetImages from '~/assets/images';
 import SvgIcon from '~/components/SvgIcon';
 import { iconFollow, iconScanQR } from '~/components/SvgIcon/iconsRepo';
 import { useLocalStorage } from '~/hooks';
-import configs from '~/configs';
 
 const cx = classNames.bind(styles);
 
 function LoginWithQR() {
-    const appStorageKey = configs.localStorage.app;
-    const [dataAppStorage] = useLocalStorage(appStorageKey);
+    const { dataStorage } = useLocalStorage();
 
     return (
         <div className={cx('LoginQR-container')}>
@@ -31,11 +29,7 @@ function LoginWithQR() {
             </div>
             <div className={cx('right-space')}>
                 <img
-                    src={
-                        dataAppStorage.theme === 'dark'
-                            ? assetImages.loginWithQRGuideDark
-                            : assetImages.loginWithQRGuide
-                    }
+                    src={dataStorage.theme === 'dark' ? assetImages.loginWithQRGuideDark : assetImages.loginWithQRGuide}
                     alt="Guide"
                 />
             </div>
