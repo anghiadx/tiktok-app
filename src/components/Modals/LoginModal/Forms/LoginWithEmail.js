@@ -4,6 +4,8 @@ import styles from './Forms.module.scss';
 import SvgIcon from '~/components/SvgIcon';
 import { iconEyeHide, iconEyeShow, iconWarning } from '~/components/SvgIcon/iconsRepo';
 import Button from '~/components/Button';
+import { login } from '~/redux/slices/authSlice';
+import { useDispatch } from 'react-redux';
 
 const cx = classNames.bind(styles);
 
@@ -13,8 +15,11 @@ function LoginWithEmail() {
     const [showPass, setShowPass] = useState(false);
 
     // Input state
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('xucana@gmail.com');
+    const [password, setPassword] = useState('Fastpassword@17');
+
+    // Redux
+    const dispatch = useDispatch();
 
     const handleToggleShowPass = () => {
         setShowPass(!showPass);
@@ -28,6 +33,12 @@ function LoginWithEmail() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        const loginData = JSON.stringify({
+            email: email,
+            password: password,
+        });
+
+        dispatch(login(loginData));
     };
 
     return (

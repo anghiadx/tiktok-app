@@ -143,6 +143,7 @@ export const PUBLIC_MENU = [
 
 export const PRIVATE_MENU = [
     {
+        type: 'view-profile',
         icon: <SvgIcon icon={iconProfile} />,
         title: 'Xem hồ sơ',
     },
@@ -162,6 +163,7 @@ export const PRIVATE_MENU = [
     ...PUBLIC_MENU,
 
     {
+        type: 'user-logout',
         icon: <SvgIcon icon={iconLogout} />,
         title: 'Đăng xuất',
         separate: true,

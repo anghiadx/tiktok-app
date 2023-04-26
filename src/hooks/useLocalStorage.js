@@ -9,6 +9,7 @@ function useLocalStorage() {
     };
 
     const setItem = (objSet) => {
+        const dataStorage = getItem();
         Object.assign(dataStorage, objSet);
 
         // convert data storage to json
@@ -17,11 +18,20 @@ function useLocalStorage() {
         return localStorage.setItem(key, jsonData);
     };
 
-    const dataStorage = getItem();
+    const deleteItem = (item) => {
+        const dataStorage = getItem();
+        delete dataStorage[item];
+
+        // convert data storage to json
+        const jsonData = JSON.stringify(dataStorage);
+
+        return localStorage.setItem(key, jsonData);
+    };
 
     return {
-        dataStorage,
+        dataStorage: getItem(),
         setDataStorage: setItem,
+        deleteStorage: deleteItem,
     };
 }
 

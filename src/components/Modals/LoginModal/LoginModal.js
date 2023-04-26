@@ -1,7 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
+import { useSelector } from 'react-redux';
+
 import styles from './LoginModal.module.scss';
 import { ModalWrapper } from '~/components/Modals';
 import SvgIcon from '~/components/SvgIcon';
@@ -12,12 +14,21 @@ import { loginModalData, registerModalData } from '~/temp/data/modals';
 const cx = classNames.bind(styles);
 
 function LoginModal({ handleClose }) {
+    // Redux
+    const { isAuth } = useSelector((state) => state.auth);
+
+    // State
     const [isClose, setIsClose] = useState(false);
     const [tabList, setTabList] = useState([loginModalData]);
     const [registering, setRegistering] = useState(false);
     const [fullRegisterList, setFullRegisterList] = useState(false);
 
     let currentTab = tabList[tabList.length - 1];
+
+    useEffect(() => {
+        isAuth && handleCloseModal();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isAuth]);
 
     // Handle when click close btn
     const handleCloseModal = () => {
