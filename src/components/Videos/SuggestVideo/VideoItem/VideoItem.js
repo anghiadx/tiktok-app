@@ -18,15 +18,22 @@ import HashtagFilter from '~/components/Filters/HashtagFilter';
 import dataTemp from '~/temp/data';
 
 import { ModalContextKey } from '~/contexts/ModalContext';
+import { VideoModalContextKey } from '~/contexts/VideoModalContext';
+import { VideoContextKey } from '~/contexts/VideoContext';
 
 const cx = classNames.bind(styles);
 
-function VideoItem({ videoId, videoInfo, videoArray }) {
+function VideoItem({ videoId, videoInfo }) {
     // Get Modal context value
     const { loginModalShow } = useContext(ModalContextKey);
+    const { videoArray, priorityVideoState } = useContext(VideoContextKey);
+    const { videoModalState, setPropsVideoModal } = useContext(VideoModalContextKey);
+    const [, setPriorityVideo] = priorityVideoState;
+    const [, videoModalShow] = videoModalState;
 
     // State
     const [thumbLoaded, setThumbLoaded] = useState(false);
+
 
     // ref
     const wrapperRef = useRef();
@@ -69,6 +76,22 @@ function VideoItem({ videoId, videoInfo, videoArray }) {
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+
+    // Handle open video modal
+    const handleOpenVideoModal = () => {
+        // if having video priority -> reset about -1
+        setPriorityVideo(-1);
+        // put the video to the top of inview
+        videoArray[videoId].wrapperIntoView();
+
+        const propsVideoModal = {
+            index: videoId,
+            data: videoInfo,
+        };
+        setPropsVideoModal(propsVideoModal);
+        videoModalShow();
+    };
 
     return (
         <div ref={wrapperRef} className={cx('wrapper')}>
@@ -127,24 +150,28 @@ function VideoItem({ videoId, videoInfo, videoArray }) {
 
                 <div className={cx('video-player')}>
                     {/* Video container */}
-                    <VideoControl videoInfo={videoInfo} videoId={videoId} setThumbLoaded={setThumbLoaded} />
+                    <VideoControl videoInfo={videoInfo} videoId={videoId} setThumbLoaded={setThumbLoaded} onClick={handleOpenVideoModal} />
 
                     {/* Interactive container */}
                     {thumbLoaded && (
                         <div className={cx('interactive-space')}>
+                            {/* Like video */}
                             <label className={cx('interactive-item')}>
                                 <button className={cx('item-icon')} onClick={!isAuth ? loginModalShow : null}>
                                     <SvgIcon icon={iconHeart} />
                                 </button>
                                 <strong className={cx('item-count')}>{likesCount}</strong>
                             </label>
+
+                            {/* Comment video */}
                             <label className={cx('interactive-item')}>
-                                <button className={cx('item-icon')} onClick={!isAuth ? loginModalShow : null}>
+                                <button className={cx('item-icon')} onClick={!isAuth ? loginModalShow : handleOpenVideoModal}>
                                     <SvgIcon icon={iconComment} />
                                 </button>
                                 <strong className={cx('item-count')}>{commentsCount}</strong>
                             </label>
 
+                            {/* Share video */}
                             <SharePopper data={videoShares}>
                                 <label className={cx('interactive-item')}>
                                     <button className={cx('item-icon')}>
@@ -164,7 +191,6 @@ function VideoItem({ videoId, videoInfo, videoArray }) {
 VideoItem.propTypes = {
     videoId: PropTypes.number,
     videoInfo: PropTypes.object.isRequired,
-    videoArray: PropTypes.array,
 };
 
 export default memo(VideoItem);

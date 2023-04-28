@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import classNames from 'classnames/bind';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+
 import styles from './Forms.module.scss';
 import SvgIcon from '~/components/SvgIcon';
 import { iconEyeHide, iconEyeShow, iconWarning } from '~/components/SvgIcon/iconsRepo';
 import Button from '~/components/Button';
 import { login } from '~/redux/slices/authSlice';
 import { useDispatch } from 'react-redux';
+import { NotifyContextKey } from '~/contexts/NotifyContext';
 
 const cx = classNames.bind(styles);
 
@@ -13,13 +17,17 @@ function LoginWithEmail() {
     // eslint-disable-next-line no-unused-vars
     const [error, setError] = useState('');
     const [showPass, setShowPass] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     // Input state
-    const [email, setEmail] = useState('xucana@gmail.com');
-    const [password, setPassword] = useState('Fastpassword@17');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     // Redux
     const dispatch = useDispatch();
+
+    // Context
+    const showNotify = useContext(NotifyContextKey);
 
     const handleToggleShowPass = () => {
         setShowPass(!showPass);
@@ -29,20 +37,29 @@ function LoginWithEmail() {
         const value = e.target.value;
         const invalidValue = value.includes(' ');
         invalidValue || setPassword(e.target.value);
+        error && setError('');
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const loginData = JSON.stringify({
             email: email,
             password: password,
         });
 
-        dispatch(login(loginData));
+        setLoading(true);
+        const action = await dispatch(login(loginData));
+        setLoading(false);
+
+        if (action.payload.message) {
+            !error && setError('Thông tin email hoặc mật khẩu không chính xác!');
+        } else {
+            showNotify('Đăng nhập thành công!');
+        }
     };
 
     return (
-        <form>
+        <form onSubmit={handleSubmit}>
             {/* Header */}
             <div className={cx('form-header')}>
                 <label className={cx('title')}>Email hoặc TikTok ID</label>
@@ -56,6 +73,7 @@ function LoginWithEmail() {
                     placeholder="Email hoặc TikTok ID"
                     onChange={(e) => {
                         setEmail(e.target.value);
+                        error && setError('');
                     }}
                 />
             </div>
@@ -82,15 +100,14 @@ function LoginWithEmail() {
 
             <span className={cx('forgot-password')}>Quên mật khẩu?</span>
 
-            {/* Submit */}
+            {/* Submit btn */}
             <Button
                 className={cx('submit-btn', { disable: !email || !password })}
                 color
                 large
-                disable={!email || !password}
-                onClick={handleSubmit}
+                disable={!email || !password || loading}
             >
-                Đăng nhập
+                {!loading ? 'Đăng nhập' : <FontAwesomeIcon className={cx('loading-icon')} icon={faCircleNotch} />}
             </Button>
         </form>
     );

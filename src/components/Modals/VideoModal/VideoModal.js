@@ -193,7 +193,7 @@ function VideoModal(props) {
                         {/* Copy Link */}
 
                         <div className={cx('copy-link')}>
-                            <p className={cx('link')}>Https://tiktok.nghiane.cf/</p>
+                            <p className={cx('link')}>{window.location.href}</p>
                             <button className={cx('copy-btn')}>Sao chép liên kết</button>
                         </div>
                     </div>

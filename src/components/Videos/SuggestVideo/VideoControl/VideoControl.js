@@ -16,7 +16,7 @@ import assetImages from '~/assets/images/images';
 
 const cx = classNames.bind(styles);
 
-function VideoControl({ videoId, videoInfo, setThumbLoaded }) {
+function VideoControl({ videoId, videoInfo, setThumbLoaded, onClick:handleOpenVideoModal }) {
     // Get data from video info
     const {
         thumb_url: thumbUrl,
@@ -30,8 +30,8 @@ function VideoControl({ videoId, videoInfo, setThumbLoaded }) {
 
     // Get data from the context
     const { videoArray, priorityVideoState } = useContext(VideoContextKey);
-    const { videoModalState, setPropsVideoModal } = useContext(VideoModalContextKey);
-    const [isVideoModalShow, videoModalShow] = videoModalState;
+    const { videoModalState } = useContext(VideoModalContextKey);
+    const [isVideoModalShow] = videoModalState;
 
     // Redux state
     const dispatch = useDispatch();
@@ -210,20 +210,7 @@ function VideoControl({ videoId, videoInfo, setThumbLoaded }) {
         const action = changeVolume(valueValid / 100);
         dispatch(action);
     };
-
-    const handleOpenVideoModal = () => {
-        // if having video priority -> reset about -1
-        setPriorityVideo(-1);
-        // put the video to the top of inview
-        videoArray[videoId].wrapperIntoView();
-
-        const propsVideoModal = {
-            index: videoId,
-            data: videoInfo,
-        };
-        setPropsVideoModal(propsVideoModal);
-        videoModalShow();
-    };
+    
     return (
         <div className={cx('player-space', directionVideoClass)}>
             {loading && playing && <SvgIcon className={cx('video-loading')} icon={<TiktokLoading medium />} />}
@@ -292,6 +279,8 @@ function VideoControl({ videoId, videoInfo, setThumbLoaded }) {
 VideoControl.propTypes = {
     videoId: PropTypes.number,
     videoInfo: PropTypes.object.isRequired,
+    setThumbLoaded: PropTypes.func,
+    onClick: PropTypes.func
 };
 
 export default memo(VideoControl);

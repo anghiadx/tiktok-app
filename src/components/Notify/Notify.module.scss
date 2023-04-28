@@ -1,0 +1,34 @@
+.wrapper {
+    position: fixed;
+    top: 16px;
+    left: 0;
+    right: 0;
+    z-index: 999999999;
+    text-align: center;
+    pointer-events: none;
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+.notify {
+    display: inline-block;
+    width: 50%;
+    min-width: 300px;
+    padding: 10px 8px;
+    background-color: rgba(84, 84, 84, 0.92);
+    color: white;
+    font-weight: 600;
+    font-size: 1.4rem;
+    animation: showEffect 0.4s;
+}
+
+@keyframes showEffect {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

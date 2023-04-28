@@ -2,6 +2,12 @@ import { httpRequest } from '~/utils';
 
 const path = 'auth/';
 
+export const register = async (registerData = {}) => {
+    const response = await httpRequest.post(path + 'register', registerData);
+
+    return response;
+};
+
 export const login = async (loginData = {}) => {
     const response = await httpRequest.post(path + 'login', loginData);
 

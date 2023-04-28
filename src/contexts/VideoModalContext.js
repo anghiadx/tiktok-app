@@ -12,7 +12,6 @@ function VideoModalContext({ children }) {
     return (
         <VideoModalContextKey.Provider value={contextValue}>
             {children}
-
             <VideoModalComponent />
         </VideoModalContextKey.Provider>
     );

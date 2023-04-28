@@ -17,6 +17,13 @@ export const getCurrentUser = createAsyncThunk('auth/getCurrentUser', async () =
     return currentUser;
 });
 
+// register action
+export const register = createAsyncThunk('auth/register', async (registerData) => {
+    const responseData = await authService.register(registerData);
+
+    return responseData;
+});
+
 // login action
 export const login = createAsyncThunk('auth/login', async (loginData) => {
     const responseData = await authService.login(loginData);
@@ -44,6 +51,21 @@ const authSlice = createSlice({
             .addCase(getCurrentUser.fulfilled, (state, action) => {
                 state.isAuth = true;
                 state.currentUser = action.payload;
+            })
+            .addCase(register.fulfilled, (state, action) => {
+                const userData = action.payload.data;
+                if (userData?.nickname) {
+                    // Save the token to localstorage
+                    const token = action.payload.meta.token;
+                    const dataStorage = {
+                        token,
+                    };
+                    setDataStorage(dataStorage);
+
+                    // Update auth state
+                    state.isAuth = true;
+                    state.currentUser = userData;
+                }
             })
             .addCase(login.fulfilled, (state, action) => {
                 const userData = action.payload.data;

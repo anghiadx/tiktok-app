@@ -17,12 +17,14 @@ import Search from './Search';
 import configs from '~/configs';
 import dataTemp from '~/temp/data';
 import { ModalContextKey } from '~/contexts/ModalContext';
+import { NotifyContextKey } from '~/contexts/NotifyContext';
 
 const cx = classNames.bind(styles);
 
 function Header() {
     // context
     const { loginModalShow, keyboardModalShow } = useContext(ModalContextKey);
+    const showNotify = useContext(NotifyContextKey);
 
     // redux
     const dispatch = useDispatch();
@@ -49,7 +51,10 @@ function Header() {
                 }
                 break;
             case 'user-logout':
-                dispatch(logout());
+                dispatch(logout()).then(() => {
+                    showNotify('Tài khoản đã đăng xuất!');
+                });
+
                 break;
             default:
                 // console.log(itemInfo);

@@ -46,6 +46,6 @@ export const post = async (path, data, options = {}) => {
         return response.data;
     } catch (err) {
         console.log('Failed to post: ', err);
-        return err.response;
+        return err.response.data;
     }
 };
