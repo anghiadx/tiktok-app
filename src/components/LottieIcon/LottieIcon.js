@@ -1,6 +1,7 @@
 import Lottie from 'lottie-react';
+import { forwardRef } from 'react';
 
-function LottieIcon({ className, icon, options }) {
+function LottieIcon({ className, icon, options }, ref) {
     const lottieOptions = {
         loop: true,
         autoplay: true,
@@ -11,7 +12,7 @@ function LottieIcon({ className, icon, options }) {
         ...options,
     };
 
-    return <Lottie className={className} {...lottieOptions} />;
+    return <Lottie lottieRef={ref} className={className} {...lottieOptions} />;
 }
 
-export default LottieIcon;
+export default forwardRef(LottieIcon);

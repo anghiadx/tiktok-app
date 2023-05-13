@@ -12,7 +12,9 @@ function Button({
     outline = false,
     rounded = false,
     xsmall = false,
+    xs = false,
     small = false,
+    xmedium = false,
     medium = false,
     large = false,
     href,
@@ -55,7 +57,9 @@ function Button({
 
         // btn size
         xsmall,
+        xs,
         small,
+        xmedium,
         medium,
         large,
 
@@ -89,7 +93,10 @@ Button.propTypes = {
     color: PropTypes.bool,
     outline: PropTypes.bool,
     rounded: PropTypes.bool,
+    xsmall: PropTypes.bool,
+    xs: PropTypes.bool,
     small: PropTypes.bool,
+    xmedium: PropTypes.bool,
     medium: PropTypes.bool,
     large: PropTypes.bool,
     href: PropTypes.string,
@@ -99,6 +106,7 @@ Button.propTypes = {
     disable: PropTypes.bool,
     className: PropTypes.string,
     iconClassName: PropTypes.string,
+    textClassName: PropTypes.string,
 };
 
 export default Button;

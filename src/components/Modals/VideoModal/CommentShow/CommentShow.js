@@ -7,8 +7,8 @@ import { commentService } from '~/services';
 
 const cx = classNames.bind(styles);
 
-function CommentShow({ videoId, onCloseModal }) {
-    const [comments, setComments] = useState([]);
+function CommentShow({ videoId, onCloseModal, commentState }) {
+    const [comments, setComments] = commentState;
     const [loading, setLoading] = useState(true);
 
     const loadingComment = Array(9).fill();

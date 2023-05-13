@@ -9,23 +9,22 @@ import styles from './VideoItem.module.scss';
 import Button from '~/components/Button';
 import Img from '~/components/Img';
 import SvgIcon from '~/components/SvgIcon';
-import { iconComment, iconHeart, iconMusic, iconShare } from '~/components/SvgIcon/iconsRepo';
+import { iconMusic } from '~/components/SvgIcon/iconsRepo';
 import ShowTick from '~/components/ShowTick';
 import AccountPreview from '~/components/Items/AccountItem/AccountPreview';
 import VideoControl from '../VideoControl';
-import SharePopper from '~/components/Shares/SharePopper';
 import HashtagFilter from '~/components/Filters/HashtagFilter';
-import dataTemp from '~/temp/data';
 
-import { ModalContextKey } from '~/contexts/ModalContext';
 import { VideoModalContextKey } from '~/contexts/VideoModalContext';
 import { VideoContextKey } from '~/contexts/VideoContext';
+import InteractiveVideo from './InteractiveVideo';
+
+import HandleFollow from '~/components/UserInteractive/HandleFollow';
 
 const cx = classNames.bind(styles);
 
 function VideoItem({ videoId, videoInfo }) {
     // Get Modal context value
-    const { loginModalShow } = useContext(ModalContextKey);
     const { videoArray, priorityVideoState } = useContext(VideoContextKey);
     const { videoModalState, setPropsVideoModal } = useContext(VideoModalContextKey);
     const [, setPriorityVideo] = priorityVideoState;
@@ -34,32 +33,24 @@ function VideoItem({ videoId, videoInfo }) {
     // State
     const [thumbLoaded, setThumbLoaded] = useState(false);
 
-
     // ref
     const wrapperRef = useRef();
-
-    // get data from temp data
-    const { videoShares } = dataTemp.shares;
 
     const { isAuth } = useSelector((state) => state.auth);
 
     // Get data from video info
     const {
         user: {
+            id: userId,
+            is_followed,
             avatar: avatarUrl,
             nickname: userName,
             first_name: firstName,
             last_name: lastName,
             tick,
-            bio,
-            followers_count: followerCount,
-            likes_count: likeCount,
         },
         description,
         music: musicInfo,
-        likes_count: likesCount,
-        comments_count: commentsCount,
-        shares_count: sharesCount,
     } = videoInfo;
 
     useLayoutEffect(() => {
@@ -76,7 +67,6 @@ function VideoItem({ videoId, videoInfo }) {
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
 
     // Handle open video modal
     const handleOpenVideoModal = () => {
@@ -96,16 +86,7 @@ function VideoItem({ videoId, videoInfo }) {
     return (
         <div ref={wrapperRef} className={cx('wrapper')}>
             <Link className={cx('big-avatar')} to={'/@' + userName}>
-                <AccountPreview
-                    avatarUrl={avatarUrl}
-                    userName={userName}
-                    fullName={`${firstName} ${lastName}`}
-                    tick={tick}
-                    bio={bio}
-                    followerCount={followerCount}
-                    likeCount={likeCount}
-                    customTippy={{ delay: [1000, 500], offset: [0, 6] }}
-                >
+                <AccountPreview outline userInfo={videoInfo.user} customTippy={{ delay: [1000, 500], offset: [0, 6] }}>
                     <Img className={cx('avatar')} src={avatarUrl} />
                 </AccountPreview>
             </Link>
@@ -113,13 +94,8 @@ function VideoItem({ videoId, videoInfo }) {
                 <div className={cx('video-info')}>
                     {/* User info */}
                     <AccountPreview
-                        avatarUrl={avatarUrl}
-                        userName={userName}
-                        fullName={`${firstName} ${lastName}`}
-                        tick={tick}
-                        bio={bio}
-                        followerCount={followerCount}
-                        likeCount={likeCount}
+                        outline
+                        userInfo={videoInfo.user}
                         customTippy={{ delay: [1000, 250], offset: [0, 16] }}
                     >
                         <Link className={cx('user-info')} to={'/@' + userName}>
@@ -132,9 +108,22 @@ function VideoItem({ videoId, videoInfo }) {
                             </p>
                         </Link>
                     </AccountPreview>
-                    <Button outline className={cx('follow-btn')} onClick={!isAuth ? loginModalShow : null}>
-                        Follow
-                    </Button>
+
+                    {/* Follow btn */}
+                    <HandleFollow
+                        followElement={
+                            <Button outline className={cx('follow-btn')}>
+                                Follow
+                            </Button>
+                        }
+                        followedElement={
+                            <Button primary xs className={cx('follow-btn')}>
+                                Đang Follow
+                            </Button>
+                        }
+                        defaultFollowed={is_followed}
+                        userId={userId}
+                    />
 
                     {/* Description  */}
                     <p className={cx('description')}>
@@ -150,37 +139,20 @@ function VideoItem({ videoId, videoInfo }) {
 
                 <div className={cx('video-player')}>
                     {/* Video container */}
-                    <VideoControl videoInfo={videoInfo} videoId={videoId} setThumbLoaded={setThumbLoaded} onClick={handleOpenVideoModal} />
+                    <VideoControl
+                        videoInfo={videoInfo}
+                        videoId={videoId}
+                        setThumbLoaded={setThumbLoaded}
+                        onClick={handleOpenVideoModal}
+                    />
 
                     {/* Interactive container */}
                     {thumbLoaded && (
-                        <div className={cx('interactive-space')}>
-                            {/* Like video */}
-                            <label className={cx('interactive-item')}>
-                                <button className={cx('item-icon')} onClick={!isAuth ? loginModalShow : null}>
-                                    <SvgIcon icon={iconHeart} />
-                                </button>
-                                <strong className={cx('item-count')}>{likesCount}</strong>
-                            </label>
-
-                            {/* Comment video */}
-                            <label className={cx('interactive-item')}>
-                                <button className={cx('item-icon')} onClick={!isAuth ? loginModalShow : handleOpenVideoModal}>
-                                    <SvgIcon icon={iconComment} />
-                                </button>
-                                <strong className={cx('item-count')}>{commentsCount}</strong>
-                            </label>
-
-                            {/* Share video */}
-                            <SharePopper data={videoShares}>
-                                <label className={cx('interactive-item')}>
-                                    <button className={cx('item-icon')}>
-                                        <SvgIcon icon={iconShare} />
-                                    </button>
-                                    <strong className={cx('item-count')}>{sharesCount || 'Chia sẻ'}</strong>
-                                </label>
-                            </SharePopper>
-                        </div>
+                        <InteractiveVideo
+                            isAuth={isAuth}
+                            handleOpenVideoModal={handleOpenVideoModal}
+                            videoInfo={videoInfo}
+                        />
                     )}
                 </div>
             </div>

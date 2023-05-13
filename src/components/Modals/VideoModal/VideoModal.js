@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import Tippy from '@tippyjs/react';
@@ -9,10 +9,8 @@ import Img from '~/components/Img';
 import ShowTick from '~/components/ShowTick';
 import SvgIcon from '~/components/SvgIcon';
 import {
-    iconComment,
     iconEmbed,
     iconFacebookShare,
-    iconHeart,
     iconMusic,
     iconPlaneShare,
     iconShareMini,
@@ -27,6 +25,9 @@ import AccountPreview from '~/components/Items/AccountItem/AccountPreview';
 import VideoPlayer from './VideoPlayer';
 import { ModalContextKey } from '~/contexts/ModalContext';
 import HashtagFilter from '~/components/Filters/HashtagFilter';
+import VideoInteractive from './VideoInteractive';
+import CommentCreator from './CommentCreator';
+import HandleFollow from '~/components/UserInteractive/HandleFollow';
 
 const cx = classNames.bind(styles);
 
@@ -37,24 +38,23 @@ function VideoModal(props) {
         created_at: createdAt,
         description,
         music: musicInfo,
-        likes_count: likesCount,
-        comments_count: commentsCount,
         user: {
+            id: userId,
+            is_followed,
             avatar: avatarUrl,
             nickname: userName,
             first_name: firstName,
             last_name: lastName,
             tick,
-            bio,
-
-            followers_count: followersCount,
-            likes_count: userLikesCount,
         },
     } = data;
 
     const { loginModalShow } = useContext(ModalContextKey);
 
     const { isAuth } = useSelector((state) => state.auth);
+
+    // State
+    const [comments, setComments] = useState([]);
 
     useEffect(() => {
         window.history.replaceState(null, '', `/#/video/${videoId}`);
@@ -63,6 +63,7 @@ function VideoModal(props) {
 
     return (
         <div className={cx('wrapper')}>
+            {/* VIDEO PLAYER */}
             <div className={cx('video-container')}>
                 <VideoPlayer {...props} />
             </div>
@@ -73,13 +74,8 @@ function VideoModal(props) {
                     <div className={cx('info__account')}>
                         <Link to={'/@' + userName}>
                             <AccountPreview
-                                avatarUrl={avatarUrl}
-                                userName={userName}
-                                fullName={`${firstName} ${lastName}`}
-                                tick={tick}
-                                followerCount={followersCount}
-                                likeCount={userLikesCount}
-                                bio={bio}
+                                outline
+                                userInfo={data.user}
                                 customTippy={{ zIndex: 1000001, offset: [0, 4] }}
                                 onCloseModal={handleClose}
                             >
@@ -97,9 +93,20 @@ function VideoModal(props) {
                                 </div>
                             </AccountPreview>
                         </Link>
-                        <Button className={cx('follow-btn')} outline medium onClick={!isAuth ? loginModalShow : null}>
-                            Follow
-                        </Button>
+                        <HandleFollow
+                            followElement={
+                                <Button className={cx('follow-btn')} outline medium>
+                                    Follow
+                                </Button>
+                            }
+                            followedElement={
+                                <Button className={cx('follow-btn')} primary medium>
+                                    Đang Follow
+                                </Button>
+                            }
+                            defaultFollowed={is_followed}
+                            userId={userId}
+                        />
                     </div>
 
                     <p className={cx('description')}>
@@ -113,25 +120,8 @@ function VideoModal(props) {
                     <div className={cx('info__interactive')}>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                             {/* Count */}
-                            <div className={cx('counts-list')}>
-                                <p
-                                    className={cx('count-item')}
-                                    style={{ cursor: 'pointer' }}
-                                    onClick={!isAuth ? loginModalShow : null}
-                                >
-                                    <span className={cx('count-icon')}>
-                                        <SvgIcon icon={iconHeart} />
-                                    </span>
-                                    <strong className={cx('count-title')}>{likesCount}</strong>
-                                </p>
 
-                                <p className={cx('count-item')}>
-                                    <span className={cx('count-icon')}>
-                                        <SvgIcon icon={iconComment} />
-                                    </span>
-                                    <strong className={cx('count-title')}>{commentsCount}</strong>
-                                </p>
-                            </div>
+                            <VideoInteractive isAuth={isAuth} loginModalShow={loginModalShow} videoInfo={data} />
 
                             {/* Share */}
                             <div className={cx('shares-list')}>
@@ -201,14 +191,18 @@ function VideoModal(props) {
 
                 {/* COMMENT */}
                 <section className={cx('comment-container')}>
-                    <CommentShow videoId={videoId} onCloseModal={handleClose} />
+                    <CommentShow videoId={videoId} onCloseModal={handleClose} commentState={[comments, setComments]} />
                 </section>
 
                 <footer className={cx('create-comment')}>
-                    <div className={cx('no-login')}>
-                        <p className={cx('notify-btn')} onClick={!isAuth ? loginModalShow : null}>
-                            Please log in to comment
-                        </p>
+                    <div className={cx('comment-create-wrapper')}>
+                        {isAuth ? (
+                            <CommentCreator setComments={setComments} videoInfo={data} />
+                        ) : (
+                            <p className={cx('notify-btn')} onClick={!isAuth ? loginModalShow : null}>
+                                Please log in to comment
+                            </p>
+                        )}
                     </div>
                 </footer>
             </div>

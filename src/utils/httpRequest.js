@@ -8,16 +8,23 @@ const request = axios.create({
 const getRequestOptions = (options) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const { dataStorage } = useLocalStorage();
+    const dataAuthorization = {};
+    const headerOptions = options.headers || {};
 
-    const headerOptions = options.header || {};
+    // Get authorization
+    if (dataStorage.token) {
+        dataAuthorization.Authorization = `Bearer ${dataStorage.token}`;
+    } else if (headerOptions.Authorization) {
+        dataAuthorization.Authorization = headerOptions.Authorization;
+    }
 
     const requestOptions = {
         ...options,
 
         headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${dataStorage.token}`,
             ...headerOptions,
+            ...dataAuthorization,
         },
     };
 

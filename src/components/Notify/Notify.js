@@ -5,9 +5,9 @@ const cx = classNames.bind(styles);
 
 function Notify({ children }) {
     return (
-        <p className={cx('wrapper')}>
+        <div className={cx('wrapper')}>
             <p className={cx('notify')}>{children}</p>
-        </p>
+        </div>
     );
 }
 

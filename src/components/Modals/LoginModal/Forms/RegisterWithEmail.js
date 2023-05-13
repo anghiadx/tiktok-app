@@ -39,6 +39,7 @@ function RegisterWithEmail() {
 
     const [showPass, setShowPass] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [logined, setLogined] = useState(false);
 
     // Error state
     const [isPassError, setIsPassError] = useState(false);
@@ -171,7 +172,13 @@ function RegisterWithEmail() {
         if (action.payload.message) {
             setEmailErrorMessage('Email này hiện không khả dụng!');
         } else {
-            showNotify('Đăng ký thành công! Tài khoản của bạn hiện đang đăng nhập!');
+            showNotify('Đăng ký thành công! Tài khoản của bạn hiện đã được đăng nhập!');
+            setLogined(true);
+
+            // reload to reset videos data
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
         }
     };
 
@@ -276,7 +283,7 @@ function RegisterWithEmail() {
                 className={cx('submit-btn', { disable: disableSubmitBtn })}
                 color
                 large
-                disable={disableSubmitBtn || loading}
+                disable={disableSubmitBtn || loading || logined}
                 onClick={handleSubmit}
             >
                 {!loading ? 'Đăng ký' : <FontAwesomeIcon className={cx('loading-icon')} icon={faCircleNotch} />}

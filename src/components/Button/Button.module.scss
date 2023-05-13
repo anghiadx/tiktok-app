@@ -39,6 +39,7 @@
     border-radius: 2px;
 
     &:hover {
+        border-color: rgb(208, 209, 211);
         background-color: var(--background-gray-color-03);
     }
 }
@@ -84,7 +85,7 @@
         font-size: 1.4rem;
         font-weight: 400;
         color: var(--text-gray-color);
-        border-color: var(--background-gray-color-02);
+        border-color: var(--background-gray-color-2);
     }
 
     .icon {
@@ -103,6 +104,20 @@
     }
 }
 
+.xs {
+    &.primary {
+        min-height: 28px;
+        min-width: 50px;
+        padding: 0 10px;
+        font-weight: 500;
+        border-radius: 4px;
+
+        &:hover {
+            background-color: var(--background-gray-color-248);
+        }
+    }
+}
+
 .small {
     &.primary {
         min-height: 32px;
@@ -113,8 +128,22 @@
         color: var(--text-gray-color);
 
         &:hover {
-            border-color: var(--background-gray-color-02);
+            border-color: var(--background-gray-color-2);
             background-color: var(--white-color-4);
+        }
+    }
+}
+
+.xmedium {
+    &.primary {
+        min-width: 50px;
+        padding: 0 8px;
+        font-weight: 500;
+        border-radius: 4px;
+
+        &:hover {
+            border-color: rgb(208, 209, 211);
+            background-color: var(--background-gray-color-248);
         }
     }
 }

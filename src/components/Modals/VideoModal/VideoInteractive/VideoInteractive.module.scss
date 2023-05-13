@@ -1,0 +1,31 @@
+.counts-list {
+    display: flex;
+}
+.count-item {
+    display: flex;
+    align-items: center;
+}
+.count-item + .count-item {
+    margin-left: 20px;
+}
+.count-icon {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 6px;
+    font-size: 20px;
+    background-color: var(--background-gray-color-06);
+}
+.count-title {
+    font-size: 1.2rem;
+    line-height: 17px;
+    color: var(--background-gray-color-75);
+}
+
+.heart-icon {
+    margin-top: 2px;
+    height: 246%;
+}

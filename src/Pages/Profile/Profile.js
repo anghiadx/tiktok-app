@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import TippyHeadless from '@tippyjs/react/headless';
@@ -20,10 +20,10 @@ import AvatarLoading from '~/components/Loadings/AvatarLoading';
 import LineLoadingMedium from '~/components/Loadings/LineLoadingMedium';
 import ShowTick from '~/components/ShowTick';
 import NotFoundNotify from '~/components/NotFound/NotFoundNotify';
-import { ModalContextKey } from '~/contexts/ModalContext';
 import { accountService } from '~/services';
 import SharePopper from '~/components/Shares/SharePopper';
 import dataTemp from '~/temp/data';
+import HandleFollow from '~/components/UserInteractive/HandleFollow';
 
 const cx = classNames.bind(styles);
 
@@ -32,7 +32,6 @@ function Profile() {
     const [videoData, setVideoData] = useState(null);
 
     const { username: usernameParams } = useParams();
-    const { loginModalShow } = useContext(ModalContextKey);
 
     // get data from temp data
     const { profileShares } = dataTemp.shares;
@@ -44,6 +43,8 @@ function Profile() {
     };
 
     const {
+        id: userId,
+        is_followed,
         nickname: username,
         first_name: firstName,
         last_name: lastName,
@@ -150,9 +151,21 @@ function Profile() {
                                 {username} <ShowTick tick={tick} size={20} />
                             </h2>
                             <h1 className={cx('account__fullname')}>{`${firstName} ${lastName}`}</h1>
-                            <Button className={cx('follow-btn')} color medium onClick={loginModalShow}>
-                                Follow
-                            </Button>
+
+                            <HandleFollow
+                                followElement={
+                                    <Button className={cx('follow-btn')} color medium>
+                                        Follow
+                                    </Button>
+                                }
+                                followedElement={
+                                    <Button className={cx('follow-btn')} primary medium>
+                                        Đang Follow
+                                    </Button>
+                                }
+                                defaultFollowed={is_followed}
+                                userId={userId}
+                            />
                         </div>
                     </div>
                     <div className={cx('count-info')}>

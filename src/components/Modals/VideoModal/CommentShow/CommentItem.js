@@ -15,16 +15,7 @@ function CommentShow({ data, onCloseModal }) {
         comment,
         likes_count: likesCount,
         created_at,
-        user: {
-            first_name: firstName,
-            last_name: lastName,
-            nickname: userName,
-            avatar: avatarUrl,
-            followers_count: followersCount,
-            likes_count: userLikesCount,
-            tick,
-            bio,
-        },
+        user: { first_name: firstName, last_name: lastName, nickname: userName, avatar: avatarUrl, tick },
     } = data;
 
     const wrapperRef = useRef();
@@ -34,13 +25,8 @@ function CommentShow({ data, onCloseModal }) {
     const AccPreview = ({ children, customs = {} }) => {
         return (
             <AccountPreview
-                avatarUrl={avatarUrl}
-                userName={userName}
-                fullName={`${firstName} ${lastName}`}
-                tick={tick}
-                followerCount={followersCount}
-                likeCount={userLikesCount}
-                bio={bio}
+                outline
+                userInfo={data.user}
                 customTippy={{
                     zIndex: 9,
                     offset: [-50, 20],

@@ -1,0 +1,155 @@
+.wrapper {
+    display: flex;
+    align-items: flex-end;
+
+    font-size: 1.4rem;
+}
+.input-container {
+    flex-grow: 1;
+    position: relative;
+    padding: 10px 9px;
+    background-color: var(--background-gray-color-06);
+    border: 1px solid transparent;
+    border-radius: 8px;
+
+    &:focus-within {
+        border-color: var(--background-gray-color-2);
+    }
+}
+
+.content-input {
+    display: block;
+    width: calc(100% - 40px);
+    background-color: transparent;
+    border: none;
+    padding: 1px 0;
+    color: var(--text-primary-color);
+    caret-color: var(--primary-color);
+
+    resize: none;
+    overflow-y: hidden;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.char-count {
+    margin-top: 8px;
+    color: var(--text-gray-color2);
+
+    &.full {
+        color: var(--primary-color);
+    }
+}
+
+.submit-btn {
+    justify-content: flex-end;
+    width: 48px;
+    height: 39px;
+    margin-right: 4px;
+    padding: 0;
+    font-size: inherit;
+    color: var(--primary-color);
+
+    &.disable {
+        color: var(--background-gray-color-75);
+    }
+}
+
+// ============  EMOJI =================
+
+.emoji {
+    position: absolute;
+    right: 9px;
+    bottom: 0;
+    width: 32px;
+    height: 32px;
+    margin: 3px;
+    font-size: 22px;
+    cursor: pointer;
+    border-radius: 8px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.active,
+    &:hover {
+        background-color: var(--background-gray-color-12);
+    }
+}
+
+.emoji-panel {
+    width: 364px;
+}
+
+.emoji-popper {
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+    padding-top: 0;
+    font-size: 24px;
+}
+.tab-value {
+    // flex-grow: 1;
+    height: 300px;
+    overflow: hidden overlay;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+
+    .value-item {
+        width: 40px;
+        height: 40px;
+        margin: 5px 6px;
+        border-radius: 8px;
+        background-color: transparent;
+
+        &:hover {
+            background-color: var(--background-gray-color-06);
+        }
+    }
+
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+        margin-top: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 2px;
+        background-color: var(--background-gray-color-12);
+    }
+
+    &:hover {
+        &::-webkit-scrollbar-thumb {
+            background-color: var(--background-gray-color-34);
+        }
+    }
+}
+
+.tab-list {
+    flex-shrink: 0;
+    flex-basis: 51px;
+
+    display: flex;
+    align-items: center;
+
+    border-top: 1px solid var(--background-gray-color-12);
+
+    .tab-item {
+        width: 40px;
+        height: 40px;
+        margin: 0 6px;
+        border-radius: 8px;
+        background-color: transparent;
+
+        &.active {
+            background-color: var(--background-gray-color-06);
+        }
+    }
+}

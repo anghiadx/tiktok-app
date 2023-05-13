@@ -2,13 +2,13 @@ import { useState, useContext } from 'react';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+import { useDispatch } from 'react-redux';
 
 import styles from './Forms.module.scss';
 import SvgIcon from '~/components/SvgIcon';
 import { iconEyeHide, iconEyeShow, iconWarning } from '~/components/SvgIcon/iconsRepo';
 import Button from '~/components/Button';
 import { login } from '~/redux/slices/authSlice';
-import { useDispatch } from 'react-redux';
 import { NotifyContextKey } from '~/contexts/NotifyContext';
 
 const cx = classNames.bind(styles);
@@ -18,6 +18,7 @@ function LoginWithEmail() {
     const [error, setError] = useState('');
     const [showPass, setShowPass] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [logined, setLogined] = useState(false);
 
     // Input state
     const [email, setEmail] = useState('');
@@ -55,6 +56,11 @@ function LoginWithEmail() {
             !error && setError('Thông tin email hoặc mật khẩu không chính xác!');
         } else {
             showNotify('Đăng nhập thành công!');
+            setLogined(true);
+            // reload to reset videos data
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
         }
     };
 
@@ -105,7 +111,7 @@ function LoginWithEmail() {
                 className={cx('submit-btn', { disable: !email || !password })}
                 color
                 large
-                disable={!email || !password || loading}
+                disable={!email || !password || loading || logined}
             >
                 {!loading ? 'Đăng nhập' : <FontAwesomeIcon className={cx('loading-icon')} icon={faCircleNotch} />}
             </Button>

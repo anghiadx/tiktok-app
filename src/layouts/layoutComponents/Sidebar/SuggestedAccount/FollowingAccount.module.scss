@@ -1,0 +1,23 @@
+.title {
+    padding: 0 8px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--text-gray-color);
+}
+
+.content {
+    line-height: 20px;
+    padding: 0px 8px;
+    color: var(--text-gray-color2);
+    font-weight: 400;
+    font-size: 1.4rem;
+}
+
+// Reponsive
+@media (max-width: 1071px) {
+    .no-followed {
+        display: none;
+    }
+}

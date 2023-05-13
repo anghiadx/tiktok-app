@@ -88,15 +88,15 @@ function Header() {
 
                     {isAuth ? (
                         <>
-                            <Tippy content="Tin nhắn">
+                            <Tippy content="Tin nhắn" zIndex={99999}>
                                 <button className={cx('user-action-icon', 'plane-icon')}>
                                     <SvgIcon icon={iconPlane} size={26} />
                                 </button>
                             </Tippy>
-                            <Tippy content="Hộp thư">
+                            <Tippy content="Hộp thư" zIndex={99999}>
                                 <button className={cx('user-action-icon')}>
                                     <SvgIcon icon={iconMessage} size={32} />
-                                    <span className={cx('notify')}>10</span>
+                                    {/* <span className={cx('notify')}>10</span> */}
                                 </button>
                             </Tippy>
                         </>

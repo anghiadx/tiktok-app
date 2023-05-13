@@ -32,8 +32,6 @@
     z-index: 10;
     color: white;
     text-align: center;
-
-    transform: scale(0.94);
 }
 
 .info__avatar {
@@ -67,4 +65,14 @@
     min-width: 164px !important;
     min-height: 37px;
     margin-top: 8px;
+    font-size: 1.7rem !important;
+}
+.info__followed-btn {
+    border-color: var(--background-gray-color-12);
+    background-color: var(--white-color-4);
+    color: var(--text-primary-color);
+
+    &:hover {
+        background-color: var(--background-gray-color-248);
+    }
 }

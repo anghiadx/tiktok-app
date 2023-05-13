@@ -61,10 +61,6 @@ const authSlice = createSlice({
                         token,
                     };
                     setDataStorage(dataStorage);
-
-                    // Update auth state
-                    state.isAuth = true;
-                    state.currentUser = userData;
                 }
             })
             .addCase(login.fulfilled, (state, action) => {
@@ -76,10 +72,6 @@ const authSlice = createSlice({
                         token,
                     };
                     setDataStorage(dataStorage);
-
-                    // Update auth state
-                    state.isAuth = true;
-                    state.currentUser = userData;
                 }
             })
             .addCase(logout.fulfilled, (state, action) => {

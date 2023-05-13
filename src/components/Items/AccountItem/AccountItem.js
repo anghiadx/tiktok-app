@@ -11,15 +11,7 @@ import ShowTick from '~/components/ShowTick';
 const cx = classNames.bind(styles);
 
 function AccountItem({ accountInfo, hoverActivate = false, customTippy }) {
-    const {
-        avatar: avatarUrl,
-        nickname: userName,
-        first_name: firstName,
-        last_name: lastName,
-        tick,
-        followers_count: followerCount,
-        likes_count: likeCount,
-    } = accountInfo;
+    const { avatar: avatarUrl, nickname: userName, first_name: firstName, last_name: lastName, tick } = accountInfo;
 
     const fullName = `${firstName} ${lastName}`;
 
@@ -33,12 +25,7 @@ function AccountItem({ accountInfo, hoverActivate = false, customTippy }) {
 
         const accountPopperProps = {
             className: cx('preview-container'),
-            avatarUrl,
-            userName,
-            fullName,
-            tick,
-            followerCount,
-            likeCount,
+            userInfo: accountInfo,
             customTippy,
         };
 

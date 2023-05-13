@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useContext } from 'react';
 import TippyHeadless from '@tippyjs/react/headless';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
@@ -9,27 +8,11 @@ import PopperWrapper from '~/components/Popper';
 import Button from '~/components/Button';
 import Img from '~/components/Img';
 import ShowTick from '~/components/ShowTick';
-import { ModalContextKey } from '~/contexts/ModalContext';
+import HandleFollow from '~/components/UserInteractive/HandleFollow';
 
 const cx = classNames.bind(styles);
 
-function AccountPreview({
-    children,
-    className,
-    avatarUrl,
-    userName,
-    fullName,
-    tick,
-    followerCount,
-    likeCount,
-    bio,
-    customTippy,
-    onCloseModal,
-}) {
-    const currentUse = false;
-
-    const { loginModalShow } = useContext(ModalContextKey);
-
+function AccountPreview({ userInfo, children, className, customTippy, onCloseModal, outline = false }) {
     const renderPreview = (attrs) => (
         <div
             className={cx({
@@ -42,30 +25,46 @@ function AccountPreview({
             <PopperWrapper className={cx('preview-account')}>
                 {/* Header */}
                 <div className={cx('preview-header')}>
-                    <Link to={`/@${userName}`} onClick={onCloseModal}>
-                        <Img className={cx('avatar')} src={avatarUrl} alt={fullName} />
+                    <Link to={`/@${userInfo?.nickname}`} onClick={onCloseModal}>
+                        <Img
+                            className={cx('avatar')}
+                            src={userInfo?.avatar}
+                            alt={`${userInfo?.first_name} ${userInfo?.last_name}`}
+                        />
                     </Link>
-                    <Button color={!bio} outline={!!bio} medium={!!bio} onClick={!currentUse ? loginModalShow : null}>
-                        Follow
-                    </Button>
+
+                    <HandleFollow
+                        followElement={
+                            <Button color={!outline} outline={outline} medium={outline}>
+                                Follow
+                            </Button>
+                        }
+                        followedElement={
+                            <Button primary xmedium>
+                                Đang Follow
+                            </Button>
+                        }
+                        defaultFollowed={userInfo?.is_followed}
+                        userId={userInfo?.id}
+                    />
                 </div>
 
                 {/* Body */}
-                <Link to={`/@${userName}`} className={cx('preview-body')} onClick={onCloseModal}>
-                    <span className={cx('username')}>{userName}</span>
-                    {<ShowTick tick={tick} />}
+                <Link to={`/@${userInfo?.nickname}`} className={cx('preview-body')} onClick={onCloseModal}>
+                    <span className={cx('username')}>{userInfo?.nickname}</span>
+                    {<ShowTick tick={userInfo?.tick} />}
                     <br />
-                    <span className={cx('name')}>{fullName}</span>
+                    <span className={cx('name')}>{`${userInfo?.first_name} ${userInfo?.last_name}`}</span>
                 </Link>
 
                 {/* Footer */}
                 <footer className={cx('preview-footer')}>
-                    <b className={cx('user-status')}>{followerCount}</b>
+                    <b className={cx('user-status')}>{userInfo?.followers_count}</b>
                     <span className={cx('user-status-title')}>Follower</span>
-                    <b className={cx('user-status')}>{likeCount}</b>
+                    <b className={cx('user-status')}>{userInfo?.likes_count}</b>
                     <span className={cx('user-status-title')}>Thích</span>
 
-                    {bio && <div className={cx('bio')}>{bio}</div>}
+                    {userInfo?.bio && <div className={cx('bio')}>{userInfo?.bio}</div>}
                 </footer>
             </PopperWrapper>
         </div>
@@ -97,11 +96,7 @@ function AccountPreview({
 AccountPreview.propTypes = {
     children: PropTypes.element,
     className: PropTypes.string,
-    avatarUrl: PropTypes.string,
-    userName: PropTypes.string,
-    fullName: PropTypes.string,
-    tick: PropTypes.bool,
-    bio: PropTypes.string,
+    userInfo: PropTypes.object,
     customTippy: PropTypes.object,
     onCloseModal: PropTypes.func,
 };

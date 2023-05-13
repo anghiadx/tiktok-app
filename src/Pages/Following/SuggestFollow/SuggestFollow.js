@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './SuggestFollow.module.scss';
 import VideoPreview from '~/components/Videos/VideoPreview';
@@ -7,8 +7,8 @@ import ShowTick from '~/components/ShowTick';
 import Button from '~/components/Button';
 import { Link } from 'react-router-dom';
 import VideoLoading from '~/components/Loadings/VideoLoading';
-import { ModalContextKey } from '~/contexts/ModalContext';
 import { accountService } from '~/services';
+import HandleFollow from '~/components/UserInteractive/HandleFollow';
 
 const cx = classNames.bind(styles);
 
@@ -16,26 +16,21 @@ function SuggestFollow() {
     const [dataSuggest, setData] = useState([]);
     const [playId, setPlayId] = useState(0);
 
-    const { loginModalShow } = useContext(ModalContextKey);
-
     const defaultLoading = Array(15).fill();
 
     useEffect(() => {
         const getSuggestFollow = async () => {
-            const dataResponse = await accountService.getSuggestedAccount(15);
+            const dataResponse = await accountService.getSuggestedAccount(18);
             setData(dataResponse);
         };
         getSuggestFollow();
     }, []);
 
-    const handleFollow = (e) => {
-        e.preventDefault();
-        loginModalShow();
-    };
-
     const renderSuggestList = () => {
         const dataRender = dataSuggest.map((userInfo, index) => {
             const {
+                is_followed,
+                id: userId,
                 avatar: avatarUrl,
                 nickname: username,
                 first_name: firstName,
@@ -55,9 +50,22 @@ function SuggestFollow() {
                                     {username}
                                     <ShowTick tick={tick} size={12} />
                                 </h4>
-                                <Button className={cx('info__follow-btn')} color medium onClick={handleFollow}>
-                                    Follow
-                                </Button>
+
+                                <HandleFollow
+                                    followElement={
+                                        <Button className={cx('info__follow-btn')} color medium>
+                                            Follow
+                                        </Button>
+                                    }
+                                    followedElement={
+                                        <Button className={cx('info__follow-btn', 'info__followed-btn')} color medium>
+                                            Đang Follow
+                                        </Button>
+                                    }
+                                    defaultFollowed={is_followed}
+                                    userId={userId}
+                                    preventDefault
+                                />
                             </div>
                         </VideoPreview>
                     </Link>
