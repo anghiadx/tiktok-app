@@ -1,5 +1,6 @@
 .wrapper {
-    --layout-width: 1150px;
+    // --layout-width: 1150px; // Phiên bản cũ
+    --layout-width: 100%;
 
     scroll-margin-top: var(--g-header-height);
 }
@@ -16,11 +17,11 @@
     }
 
     .content {
-        flex: 1 1;
-        max-width: 720px;
+        flex: 1 1 auto;
+        display: flex;
+        justify-content: center;
+        // max-width: 720px; // Phiên bản cũ
         padding: 24px 0;
-        margin-left: 16px;
-        margin-right: 24px;
     }
 }
 

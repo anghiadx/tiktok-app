@@ -85,3 +85,14 @@
     cursor: pointer;
     -webkit-user-drag: none;
 }
+
+// Reponsive
+@media (min-width: 1071px) {
+    .wrapper {
+        --search-container-width: 415px;
+    }
+
+    .logo {
+        min-width: 300px;
+    }
+}

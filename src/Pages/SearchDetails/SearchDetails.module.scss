@@ -10,6 +10,8 @@
 }
 
 .wrapper {
+    max-width: 800px;
+    min-width: 520px;
     padding: 0 24px 67px 16px;
     scroll-margin-top: var(--g-header-height);
 }

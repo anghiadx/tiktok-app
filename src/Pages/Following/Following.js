@@ -51,7 +51,7 @@ function Following() {
             <SuggestFollow />
         </div>
     ) : (
-        <div>
+        <div className={cx('video-wrapper')}>
             <SuggestVideo data={videoList} />
 
             {!fullList && (

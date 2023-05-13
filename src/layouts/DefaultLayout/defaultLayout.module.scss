@@ -1,9 +1,10 @@
 .wrapper {
-    --layout-width: 1150px;
+    // --layout-width: 1150px; // Phiên bản cũ
+    --layout-width: 100%;
 }
 .container {
     max-width: var(--layout-width);
-    // min-height: 1000px;
+    // min-height: 1000px; // Chỉ dùng để test
     margin: 0 auto;
     margin-top: var(--g-header-height);
     display: flex;
@@ -17,7 +18,8 @@
     .content {
         flex: 1 1 auto;
         display: flex;
-        justify-content: flex-end;
+        // justify-content: flex-end; // Phiên bản cũ
+        justify-content: center;
 
         > * {
             flex-grow: 1;

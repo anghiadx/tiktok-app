@@ -1,5 +1,12 @@
 .wrapper {
-    padding-top: 20px;
+    flex: 1 1 auto;
+    max-width: 720px;
+    // padding-top: 20px;
+}
+.video-wrapper {
+    flex: 1 1 auto;
+    max-width: 692px;
+    padding: 0 16px 24px 16px;
 }
 .auto-load-more {
     display: flex;
