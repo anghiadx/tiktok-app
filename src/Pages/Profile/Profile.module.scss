@@ -87,6 +87,38 @@
         border-radius: 50%;
         object-fit: cover;
     }
+
+    .interactive-btn {
+        display: flex;
+        align-items: center;
+        margin-top: 16px;
+    }
+
+    .unfollow-btn {
+        position: relative;
+        width: 36px;
+        min-width: auto;
+        margin-left: 8px;
+    }
+
+    .unfollow-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        inset: 0;
+    }
+
+    .edit-btn {
+        min-width: 136px;
+    }
+
+    .message-btn {
+        width: auto;
+        min-width: 164px;
+        min-height: 36px;
+        font-size: 1.7rem;
+    }
 }
 
 .account__username {
@@ -101,10 +133,6 @@
     line-height: 25px;
     font-size: 1.8rem;
     font-weight: 600;
-}
-
-.follow-btn {
-    margin-top: 16px;
 }
 
 .count-info {

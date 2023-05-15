@@ -25,3 +25,9 @@ export const getCurrentUser = async () => {
 
     return response.data;
 };
+
+export const updateCurrentUser = async (data) => {
+    const response = await httpRequest.post(path + 'me?_method=PATCH', data);
+
+    return response.data;
+};

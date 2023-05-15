@@ -1,0 +1,149 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    width: calc(100vw - 32px);
+    max-width: 700px;
+    height: 700px;
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        padding: 24px 24px 12px 24px;
+        line-height: 36px;
+        border-bottom: 0.5px solid var(--background-gray-color-2);
+
+        h2 {
+            font-weight: 600;
+        }
+    }
+
+    section {
+        padding: 8px 24px 0 24px;
+    }
+
+    footer {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0 24px;
+        border-top: 0.5px solid var(--background-gray-color-2);
+
+        button {
+            min-width: 96px;
+            font-size: 1.4rem;
+        }
+    }
+}
+
+.close-btn {
+    width: 30px;
+    height: 30px;
+    margin-right: 8px;
+    background-color: transparent;
+    opacity: 0.7;
+}
+
+.group {
+    display: flex;
+    padding: 12px 0;
+    border-bottom: 0.5px solid var(--background-gray-color-12);
+
+    .title {
+        flex: 0 0 120px;
+        margin-right: 24px;
+        font-weight: 600;
+        line-height: 24px;
+    }
+
+    .content {
+        flex: 0 0 auto;
+        min-width: 360px;
+    }
+}
+
+.input-box {
+    height: 38px;
+    width: 100%;
+    padding: 7px 12px;
+    border-radius: 4px;
+    caret-color: var(--primary-color);
+    background-color: var(--background-gray-color-06);
+
+    &:focus {
+        outline: var(--background-gray-color-2) solid 1.5px;
+    }
+
+    &.error {
+        outline: var(--primary-color) solid 1.5px;
+    }
+}
+
+.textarea-box {
+    height: initial;
+    line-height: 24px;
+    padding: 12px;
+    border: none;
+    resize: none;
+}
+
+.description {
+    max-width: 460px;
+    margin-top: 8px;
+    font-size: 1.2rem;
+    color: var(--text-gray-color);
+    overflow: hidden;
+
+    &.error {
+        color: var(--primary-color);
+    }
+
+    & + & {
+        display: none;
+    }
+}
+
+.avatar-container {
+    text-align: center;
+
+    label {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .avatar {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .avatar-edit {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 32px;
+        height: 32px;
+        background-color: var(--white-color-3);
+        border: 1px solid rgb(208, 208, 211);
+        border-radius: 50%;
+    }
+}
+
+.disable-btn {
+    color: var(--text-gray-color);
+    background-color: var(--background-gray-color-12);
+}
+
+.loading-icon {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}

@@ -94,7 +94,7 @@ function CommentCreator({ videoInfo, setComments }) {
                     onKeyUp={(e) => e.stopPropagation()}
                     onKeyDown={(e) => {
                         e.stopPropagation();
-                        if (e.code === 'Enter') {
+                        if (e.keyCode === 13) {
                             e.preventDefault();
                             // Submit
                             handleSubmit();

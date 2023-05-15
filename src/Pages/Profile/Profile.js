@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
+import Tippy from '@tippyjs/react';
 import TippyHeadless from '@tippyjs/react/headless';
+import { useSelector } from 'react-redux';
 
 import styles from './Profile.module.scss';
 import Img from '~/components/Img';
@@ -10,7 +12,9 @@ import SvgIcon from '~/components/SvgIcon';
 import {
     iconBlock,
     iconFlag,
+    iconFollowed,
     iconLinkRegular,
+    iconNote,
     iconSeeMoreHorizontal,
     iconShareRegular,
 } from '~/components/SvgIcon/iconsRepo';
@@ -24,14 +28,22 @@ import { accountService } from '~/services';
 import SharePopper from '~/components/Shares/SharePopper';
 import dataTemp from '~/temp/data';
 import HandleFollow from '~/components/UserInteractive/HandleFollow';
+import { ModalContextKey } from '~/contexts/ModalContext';
 
 const cx = classNames.bind(styles);
 
 function Profile() {
+    // State
     const [infoUser, setInfoUser] = useState(null);
     const [videoData, setVideoData] = useState(null);
 
     const { username: usernameParams } = useParams();
+
+    // Ref
+    const unfollowRef = useRef();
+
+    // Context
+    const { updateProfileModalShow } = useContext(ModalContextKey);
 
     // get data from temp data
     const { profileShares } = dataTemp.shares;
@@ -57,6 +69,11 @@ function Profile() {
         website_url: websiteAddress,
     } = infoUser || {};
 
+    // Redux
+    const { currentUser } = useSelector((state) => state.auth);
+    const { followedId } = useSelector((state) => state.followed);
+    const isFollowed = followedId.includes(userId);
+
     useEffect(() => {
         const getUserInfo = async () => {
             const dataResponse = await accountService.getUserAccount(usernameParams);
@@ -73,7 +90,7 @@ function Profile() {
 
         setInfoUser(null);
         setVideoData(null);
-    }, [usernameParams]);
+    }, [usernameParams, currentUser]);
 
     return (
         <div className={cx('wrapper')}>
@@ -152,20 +169,56 @@ function Profile() {
                             </h2>
                             <h1 className={cx('account__fullname')}>{`${firstName} ${lastName}`}</h1>
 
-                            <HandleFollow
-                                followElement={
-                                    <Button className={cx('follow-btn')} color medium>
-                                        Follow
+                            {/* BTN CONTAINER */}
+                            <div className={cx('interactive-btn')}>
+                                {/* Profile of current user */}
+                                {currentUser.id === userId ? (
+                                    <Button
+                                        className={cx('edit-btn')}
+                                        primary
+                                        leftIcon={<SvgIcon size={20} icon={iconNote} />}
+                                        onClick={updateProfileModalShow}
+                                    >
+                                        Sửa hồ sơ
                                     </Button>
-                                }
-                                followedElement={
-                                    <Button className={cx('follow-btn')} primary medium>
-                                        Đang Follow
-                                    </Button>
-                                }
-                                defaultFollowed={is_followed}
-                                userId={userId}
-                            />
+                                ) : (
+                                    <>
+                                        {/* Message btn */}
+                                        {isFollowed && (
+                                            <Button className={cx('message-btn')} outline large>
+                                                Tin nhắn
+                                            </Button>
+                                        )}
+
+                                        {/* Follow Btn */}
+                                        <HandleFollow
+                                            followElement={
+                                                <Button color medium>
+                                                    Follow
+                                                </Button>
+                                            }
+                                            followedElement={
+                                                <Button className={cx('unfollow-btn')} primary>
+                                                    <SvgIcon
+                                                        ref={unfollowRef}
+                                                        size={20}
+                                                        icon={iconFollowed}
+                                                        className={cx('unfollow-icon')}
+                                                    />
+                                                    <Tippy
+                                                        content="Bỏ follow"
+                                                        reference={unfollowRef}
+                                                        placement="bottom"
+                                                        offset={[0, 12]}
+                                                    />
+                                                </Button>
+                                            }
+                                            defaultFollowed={is_followed}
+                                            userId={userId}
+                                        />
+                                    </>
+                                )}
+                            </div>
                         </div>
                     </div>
                     <div className={cx('count-info')}>
