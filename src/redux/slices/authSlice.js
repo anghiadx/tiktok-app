@@ -45,6 +45,10 @@ const authSlice = createSlice({
         toggle: (state) => {
             state.isAuth = !state.isAuth;
         },
+        updateCurrentUser: (state, action) => {
+            const newCurrentUser = action.payload;
+            state.currentUser = newCurrentUser;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -86,6 +90,6 @@ const authSlice = createSlice({
 
 const { reducer, actions } = authSlice;
 
-export const { toggle } = actions;
+export const { toggle, updateCurrentUser } = actions;
 
 export default reducer;

@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
-function SvgIcon({ icon, size, style = {}, className, onClick }) {
+import { forwardRef } from 'react';
+
+const SvgIcon = forwardRef(({ icon, size, style = {}, className, onClick }, ref) => {
     return (
-        <i className={className} style={{ lineHeight: 0, fontSize: size, ...style }} onClick={onClick}>
+        <i ref={ref} className={className} style={{ lineHeight: 0, fontSize: size, ...style }} onClick={onClick}>
             {icon}
         </i>
     );
-}
+});
 
 SvgIcon.propTypes = {
     icon: PropTypes.element,
