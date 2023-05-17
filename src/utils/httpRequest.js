@@ -56,3 +56,16 @@ export const post = async (path, data, options = {}) => {
         return err.response.data;
     }
 };
+
+export const dele = async (path, options = {}) => {
+    const requestOptions = getRequestOptions(options);
+
+    try {
+        const response = await request.delete(path, requestOptions);
+
+        return response.data;
+    } catch (err) {
+        console.log('Failed to get: ', err);
+        return err.response;
+    }
+};

@@ -1,6 +1,6 @@
 import { createContext, useRef } from 'react';
 import { useModal } from '~/hooks';
-import { LoginModal, KeyboardModal, DownloadMobileModal, UpdateProfileModal } from '~/components/Modals';
+import { LoginModal, KeyboardModal, DownloadMobileModal, UpdateProfileModal, ConfirmModal } from '~/components/Modals';
 
 export const ModalContextKey = createContext();
 
@@ -9,12 +9,14 @@ function ModalContext({ children }) {
     const [KeyboardModalComponent, keyboardModalShow] = useModal(KeyboardModal);
     const [DownloadMobileModalComponent, downloadMobileModalShow] = useModal(DownloadMobileModal);
     const [UpdateProfileModalComponent, updateProfileModalShow] = useModal(UpdateProfileModal);
+    const [ConfirmModalComponent, confirmModalShow] = useModal(ConfirmModal);
 
     const contextValue = useRef({
         loginModalShow,
         keyboardModalShow,
         downloadMobileModalShow,
         updateProfileModalShow,
+        confirmModalShow,
     });
 
     return (
@@ -25,6 +27,7 @@ function ModalContext({ children }) {
             <KeyboardModalComponent />
             <DownloadMobileModalComponent />
             <UpdateProfileModalComponent />
+            <ConfirmModalComponent />
         </ModalContextKey.Provider>
     );
 }

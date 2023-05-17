@@ -3,10 +3,15 @@ import { createPortal } from 'react-dom';
 
 function useModal(ModalComponent) {
     const [isShow, setIsShow] = useState(false);
+    const [dataModal, setDataModal] = useState({});
 
-    const modalShow = () => {
+    // typeof data = object
+    const modalShow = (data) => {
         setIsShow(true);
         document.body.classList.add('hidden', 'modal');
+
+        // send data to modal component
+        data && setDataModal(data);
     };
 
     const modalHide = () => {
@@ -15,7 +20,7 @@ function useModal(ModalComponent) {
     };
 
     const ModalExport = () => {
-        return isShow && createPortal(<ModalComponent handleClose={modalHide} />, document.body);
+        return isShow && createPortal(<ModalComponent handleClose={modalHide} {...dataModal} />, document.body);
     };
 
     return [ModalExport, modalShow];

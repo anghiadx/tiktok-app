@@ -26,3 +26,8 @@ export const create = async (videoId, comment = '') => {
 
     return dataResponse.data;
 };
+
+export const dele = async (commentId) => {
+    const dataResponse = await httpRequest.dele(`comments/${commentId}`);
+    return dataResponse;
+};

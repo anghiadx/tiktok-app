@@ -21,14 +21,31 @@
     color: white;
     font-weight: 600;
     font-size: 1.4rem;
-    animation: showEffect 0.4s;
+    animation: showEffect 0.3s;
+}
+
+.close-notify {
+    animation: hideEffect 0.3s forwards;
 }
 
 @keyframes showEffect {
     from {
+        transform: translateY(-100%);
         opacity: 0;
     }
     to {
+        transform: translateY(0%);
         opacity: 1;
+    }
+}
+
+@keyframes hideEffect {
+    from {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-100%);
+        opacity: 0;
     }
 }

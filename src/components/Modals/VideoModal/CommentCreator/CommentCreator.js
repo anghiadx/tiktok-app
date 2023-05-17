@@ -50,7 +50,11 @@ function CommentCreator({ videoInfo, setComments }) {
         value.startsWith(' ') || (value.length <= maxValueLength && setCommentValue(value));
     };
 
-    const handleSubmit = async () => {
+    const handleCreateComment = async () => {
+        if (loading || !commentValue) {
+            return;
+        }
+
         setLoading(true);
         const dataComment = await commentService.create(videoInfo.id, commentValue);
         setLoading(false);
@@ -69,6 +73,9 @@ function CommentCreator({ videoInfo, setComments }) {
             // Reset input
             setCommentValue('');
             inputRef.current.focus();
+
+            // Show notifiy
+            showNotify('Đã đăng bình luận!', 3000);
         } else {
             showNotify('Không thể bình luận. Vui lòng thử lại!');
         }
@@ -97,7 +104,7 @@ function CommentCreator({ videoInfo, setComments }) {
                         if (e.keyCode === 13) {
                             e.preventDefault();
                             // Submit
-                            handleSubmit();
+                            handleCreateComment();
                         }
                     }}
                 ></textarea>
@@ -119,7 +126,7 @@ function CommentCreator({ videoInfo, setComments }) {
                     disable: loading || !commentValue,
                 })}
                 disable={loading || !commentValue}
-                onClick={handleSubmit}
+                onClick={handleCreateComment}
             >
                 Đăng
             </Button>

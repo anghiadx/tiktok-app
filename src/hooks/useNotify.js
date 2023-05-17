@@ -1,32 +1,34 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import Notify from '~/components/Notify';
 
 function useNotify() {
-    // const [isShow, setIsShow] = useState(false);
+    const [isShow, setIsShow] = useState(false);
+    const [timeouts, setTimeouts] = useState(0);
     const [notify, setNotify] = useState('');
     const [divWrapper, setDivWrapper] = useState(true);
 
-    const setTimeRef = useRef();
-
-    const showNotify = useCallback((notify, timeout = 2000) => {
+    const showNotify = useCallback((notify, timeout = 3000) => {
         setNotify(notify);
-        clearTimeout(setTimeRef.current);
+        setTimeouts(timeout);
         setDivWrapper((prev) => !prev);
-
-        // Auto close notify after 3s
-        setTimeRef.current = setTimeout(() => {
-            setNotify('');
-        }, timeout);
+        setIsShow(true);
     }, []);
 
     const NotifyComponent = () => {
         const PortalWrapper = divWrapper ? 'div' : 'section';
         return (
-            notify &&
+            isShow &&
             createPortal(
                 <PortalWrapper>
-                    <Notify>{notify}</Notify>
+                    <Notify
+                        timeout={timeouts}
+                        handleClose={() => {
+                            setIsShow(false);
+                        }}
+                    >
+                        {notify}
+                    </Notify>
                 </PortalWrapper>,
                 document.body,
             )

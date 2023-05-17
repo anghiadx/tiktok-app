@@ -191,7 +191,12 @@ function VideoModal(props) {
 
                 {/* COMMENT */}
                 <section className={cx('comment-container')}>
-                    <CommentShow videoId={videoId} onCloseModal={handleClose} commentState={[comments, setComments]} />
+                    <CommentShow
+                        videoId={videoId}
+                        authorId={userId}
+                        onCloseModal={handleClose}
+                        commentState={[comments, setComments]}
+                    />
                 </section>
 
                 <footer className={cx('create-comment')}>
