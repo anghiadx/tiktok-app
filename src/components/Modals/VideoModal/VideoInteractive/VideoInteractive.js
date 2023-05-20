@@ -13,17 +13,29 @@ const cx = classNames.bind(styles);
 function VideoInteractive({ isAuth, loginModalShow, videoInfo }) {
     const [isLiked, setIsLiked] = useState(videoInfo.is_liked);
 
-    const handleLikeVideo = () => {
-        if (isLiked) {
-            likeService.unlikeVideo(videoInfo.id);
-            videoInfo.likes_count -= 1;
-        } else {
-            likeService.likeVideo(videoInfo.id);
-            videoInfo.likes_count += 1;
-        }
-
+    const handleLikeVideo = async () => {
         setIsLiked(!isLiked);
         videoInfo.is_liked = !isLiked;
+
+        let dataResponse;
+        if (isLiked) {
+            videoInfo.likes_count -= 1;
+            dataResponse = await likeService.unlikeVideo(videoInfo.id);
+        } else {
+            videoInfo.likes_count += 1;
+            dataResponse = await likeService.likeVideo(videoInfo.id);
+        }
+
+        if (!dataResponse) {
+            if (isLiked) {
+                videoInfo.likes_count += 1;
+            } else {
+                videoInfo.likes_count -= 1;
+            }
+
+            setIsLiked(isLiked);
+            videoInfo.is_liked = isLiked;
+        }
     };
 
     return (

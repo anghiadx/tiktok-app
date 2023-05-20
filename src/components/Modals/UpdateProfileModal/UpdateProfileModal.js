@@ -2,8 +2,6 @@ import { useState, useEffect, useContext, useRef } from 'react';
 import classNames from 'classnames/bind';
 import styles from './UpdateProfileModal.module.scss';
 import { useSelector, useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 
 import { updateCurrentUser } from '~/redux/slices/authSlice';
 import ModalWrapper from '../ModalWrapper';
@@ -272,9 +270,10 @@ function UpdateProfileModal({ handleClose }) {
                     })}
                     color
                     disable={disableSubmit || loading}
+                    loading={loading}
                     onClick={handleUpdate}
                 >
-                    {!loading ? 'Lưu' : <FontAwesomeIcon className={cx('loading-icon')} icon={faCircleNotch} />}
+                    Lưu
                 </Button>
             </footer>
         </ModalWrapper>

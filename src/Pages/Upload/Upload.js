@@ -1,20 +1,68 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect, useContext, useCallback } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Upload.module.scss';
 import Button from '~/components/Button';
+import SetupVideo from './UploadComponents/SetupVideo';
+import { NotifyContextKey } from '~/contexts/NotifyContext';
 
 const cx = classNames.bind(styles);
 
 function Upload() {
-    const [uploaded] = useState(false);
+    const [file, setFile] = useState();
+
+    // Context
+    const showNotify = useContext(NotifyContextKey);
+
+    // ref
+    const fileRef = useRef();
+    const keepSetup = useRef(false);
+
+    // Giữ giao diện setup từ sau lần chọn file đầu tiên
+    useEffect(() => {
+        keepSetup.current = true;
+    }, []);
+
+    const handleSelectFile = useCallback((e) => {
+        const [file] = e.target.files;
+
+        if (file) {
+            const fileValid = file?.type.startsWith('video/');
+
+            fileValid ? setFile(file) : showNotify('Định dạng file không hỗ trợ. Vui lòng chọn lại!');
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const handleDeleteDefault = (e) => {
+        e.preventDefault();
+    };
+
+    const handleDropFile = useCallback((e) => {
+        e.preventDefault();
+        const [file] = e.dataTransfer.files;
+
+        if (file) {
+            const fileValid = file?.type.startsWith('video/');
+
+            fileValid ? setFile(file) : showNotify('Tập tin không được hỗ trợ. Hãy sử dụng định dạng MP4 hoặc WebM.');
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div className={cx('wrapper')}>
             <section className={cx('body')}>
                 <div className={cx('inner')}>
-                    {!uploaded ? (
+                    {!keepSetup.current ? (
                         <div className={cx('upload-container')}>
-                            <div className={cx('file-container')}>
+                            <div
+                                className={cx('file-container')}
+                                onDragOver={handleDeleteDefault}
+                                onDrop={handleDropFile}
+                                onClick={() => {
+                                    fileRef.current.click();
+                                }}
+                            >
                                 <img
                                     src="https://lf16-tiktok-common.ttwstatic.com/obj/tiktok-web-common-sg/ies/creator_center/svgs/cloud-icon1.ecf0bf2b.svg"
                                     alt=""
@@ -33,8 +81,16 @@ function Upload() {
                                 </Button>
                             </div>
                         </div>
-                    ) : null}
+                    ) : (
+                        <SetupVideo
+                            file={file}
+                            setFile={setFile}
+                            handleSelectFile={handleSelectFile}
+                            handleDropFile={handleDropFile}
+                        />
+                    )}
                 </div>
+                <input ref={fileRef} type="file" accept="video/*" hidden onChange={handleSelectFile} />
             </section>
         </div>
     );

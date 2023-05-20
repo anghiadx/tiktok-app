@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 
 import styles from './AccountItem.module.scss';
-import PopperWrapper from '~/components/Popper';
+import { PopperWrapper } from '~/components/Popper';
 import Button from '~/components/Button';
 import Img from '~/components/Img';
 import ShowTick from '~/components/ShowTick';

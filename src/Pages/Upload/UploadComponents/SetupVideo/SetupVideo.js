@@ -1,70 +1,216 @@
-import { useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import classNames from 'classnames/bind';
 import Button from '~/components/Button/Button';
+import VideoCover from '../VideoCover';
+import Popper from '~/components/Popper';
+import SvgIcon from '~/components/SvgIcon';
+import { iconHashtag, iconMusic, iconSmallArrow, iconTextWarning, iconTickBox } from '~/components/SvgIcon/iconsRepo';
 
 import styles from './SetupVideo.module.scss';
+import Switch from '~/components/Switch';
+import VideoPreview from '../VideoPreview';
+import VideoUpload from '../VideoUpload';
+import { ModalContextKey } from '~/contexts/ModalContext';
+import { NotifyContextKey } from '~/contexts/NotifyContext';
+import { videoService } from '~/services';
 
 const cx = classNames.bind(styles);
 
-function SetupVideo() {
-    const [noteInput, setNoteInput] = useState('');
-    const [searchInput, setSearchInput] = useState('');
-    const [isTagFriend, setIsTagFriend] = useState(false);
+// Setup
+const maxNoteInput = 150;
+const maxMusicInput = 50;
 
-    const maxNoteInput = 150;
+const viewableData = [
+    {
+        type: 'Công khai',
+        value: 'public',
+    },
+    {
+        type: 'Bạn bè',
+        value: 'friends',
+    },
+    {
+        type: 'Riêng tư',
+        value: 'private',
+    },
+];
+const allowuserData = {
+    Comment: true,
+    Duet: true,
+    Stitch: true,
+};
+
+function SetupVideo({ file, setFile, handleSelectFile, handleDropFile }) {
+    // Redux
+    const { currentUser } = useSelector((state) => state.auth);
+
+    // State
+    const [noteValue, setNoteValue] = useState(''); // Mô tả video
+    const [musicValue, setMusicValue] = useState(`Nhạc nền - ${currentUser.first_name} ${currentUser.last_name}`); // Âm nhạc trong video
+    const [showMusicInput, setShowMusicInput] = useState(false);
+    const [viewId, setViewId] = useState(0); // Chế độ hiển thị
+    const [viewableShow, setViewableShow] = useState(false);
+    const [allowuser, setAllowuser] = useState(allowuserData); // Cho phép người dùng comment, duet hoặc stitch
+    const [runcopyright, setRuncopyright] = useState(false); // Chạy kiểm tra bản quyền
+
+    const [loading, setLoading] = useState(false);
 
     // REF
     const noteInputRef = useRef();
-    const searchInputRef = useRef();
+    const timeCoverRef = useRef(0);
+
+    // Context
+    const { confirmModalShow } = useContext(ModalContextKey);
+    const showNotify = useContext(NotifyContextKey);
+
+    useEffect(() => {
+        if (!file) {
+            return;
+        }
+
+        // Setup
+        if (!noteValue) {
+            const fileName = file.name;
+            const dotIndex = fileName.lastIndexOf('.');
+            const fileNameOk = fileName.slice(0, dotIndex);
+
+            setNoteValue(fileNameOk);
+            noteInputRef.current.innerText = fileNameOk;
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [file]);
+
+    const confirmStopSetup = () => {
+        const dataConfirm = {
+            content: (
+                <div className={cx('confirm-modal-content')}>
+                    <h2>Hủy bỏ bài đăng này?</h2>
+                    <p>Video và tất cả chỉnh sửa sẽ bị hủy bỏ.</p>
+                </div>
+            ),
+
+            apply: (
+                <Button
+                    to="/"
+                    className={cx('confirm-modal-apply')}
+                    onClick={() => {
+                        showNotify('Bạn đã hủy bỏ bài đăng!');
+                    }}
+                >
+                    Hủy bỏ
+                </Button>
+            ),
+            cancel: <p className={cx('confirm-modal-cancel')}>Tiếp tục chỉnh sửa</p>,
+        };
+
+        confirmModalShow(dataConfirm);
+    };
+
+    const confirmUploadSuccess = () => {
+        const dataConfirm = {
+            content: (
+                <div className={cx('confirm-sucess-content')}>
+                    <h2>Video của bạn đã được tải lên TikTok!</h2>
+                </div>
+            ),
+
+            apply: (
+                <Button className={cx('confirm-sucess-apply')} onClick={handleResetState}>
+                    Tải video khác lên
+                </Button>
+            ),
+            cancel: (
+                <Button
+                    to={`/@${currentUser.nickname}`}
+                    className={cx('confirm-sucess-cancel')}
+                    onClick={() => {
+                        showNotify('Video đã được đăng tải thành công!');
+                    }}
+                >
+                    Xem hồ sơ
+                </Button>
+            ),
+        };
+
+        confirmModalShow(dataConfirm);
+    };
+
+    const handleResetState = () => {
+        setFile(null);
+        setNoteValue('');
+        setMusicValue(`Nhạc nền - ${currentUser.first_name} ${currentUser.last_name}`);
+        timeCoverRef.current = 0;
+        noteInputRef.current.innerText = '';
+    };
+
+    const handleUploadVideo = () => {
+        const dataUpload = new FormData();
+
+        // append file
+        dataUpload.append('upload_file', file);
+        // description
+        dataUpload.append('description', noteValue);
+        // music
+        musicValue && dataUpload.append('music', musicValue);
+        // cover
+        dataUpload.append('thumbnail_time', Math.floor(timeCoverRef.current));
+        // Viewable
+        dataUpload.append('viewable', viewableData[viewId].value);
+
+        const fetchAPI = async () => {
+            setLoading(true);
+            const dataResponse = await videoService.upload(dataUpload);
+            setLoading(false);
+
+            // Upload success or not
+            dataResponse
+                ? confirmUploadSuccess()
+                : showNotify('Có lỗi xảy ra trong quá trình đăng video. Vui lòng thử lại!');
+        };
+
+        fetchAPI();
+    };
 
     return (
-        <>
+        <div className={cx('wrapper')}>
             <div className={cx('head-title')}>
                 <h2>Tải video lên</h2>
                 <p>Đăng video vào tài khoản của bạn</p>
             </div>
             <div className={cx('content')}>
+                {/* LEFT CONTAINER */}
                 <div className={cx('content__left')}>
                     {/* File container */}
-                    <div className={cx('file-container')}>
-                        <img
-                            src="https://lf16-tiktok-common.ttwstatic.com/obj/tiktok-web-common-sg/ies/creator_center/svgs/cloud-icon1.ecf0bf2b.svg"
-                            alt=""
+                    {file ? (
+                        <VideoPreview
+                            file={file}
+                            setFile={setFile}
+                            videoDescription={noteValue}
+                            videoMusic={musicValue}
+                            currentUser={currentUser}
                         />
-                        <h3 className={cx('title')}>Chọn video để tải lên</h3>
-                        <p className={cx('descript')}>Hoặc kéo và thả tập tin</p>
-                        <p className={cx('detail-descript')}>MP4 hoặc WebM</p>
-                        <p className={cx('detail-descript')}>Độ phân giải 720x1280 trở lên</p>
-                        <p className={cx('detail-descript')}>Tối đa 30 phút</p>
-                        <p className={cx('detail-descript')}>Nhỏ hơn 2 GB</p>
-                        <Button className={cx('upload-btn')} color>
-                            Chọn tập tin
-                        </Button>
-                    </div>
+                    ) : (
+                        <VideoUpload
+                            setFile={setFile}
+                            handleSelectFile={handleSelectFile}
+                            handleDropFile={handleDropFile}
+                        />
+                    )}
                 </div>
+
+                {/* RIGHT CONTAINER */}
                 <div className={cx('content__right')}>
-                    <div className={cx('edit-container')}>
-                        <img
-                            alt=""
-                            src="https://lf16-tiktok-common.ttwstatic.com/obj/tiktok-web-common-sg/ies/creator_center/svgs/divide_black.e1e40d5b.svg"
-                        />
-                        <div className={cx('edit__content')}>
-                            <strong className={cx('content__title')}>Chia video và chỉnh sửa</strong>
-                            <p className={cx('content__descript')}>
-                                Bạn có thể nhanh chóng phân chia video thành nhiều phần, loại bỏ các phần thừa và chuyển
-                                video ngang thành video dọc
-                            </p>
-                        </div>
-                        <Button className={cx('edit__btn')} color>
-                            Chỉnh sửa
-                        </Button>
-                    </div>
-                    <div className={cx('container', 'note-container')}>
-                        <div style={{ visibility: isTagFriend ? 'hidden' : 'visible' }}>
+                    <div className={cx('input-container')}>
+                        {/* Chú thích */}
+                        <div
+                            className={cx('note-container')}
+                            style={{ visibility: showMusicInput ? 'hidden' : 'visible' }}
+                        >
                             <div className={cx('note__title')}>
-                                <span className={cx('container__title')}>Chú thích</span>
+                                <span className={cx('title')}>Chú thích</span>
                                 <span className={cx('title__count')}>
-                                    {noteInput.length} / {maxNoteInput}
+                                    {noteValue.length} / {maxNoteInput}
                                 </span>
                             </div>
                             <div className={cx('note__input')}>
@@ -75,73 +221,184 @@ function SetupVideo() {
                                     spellCheck={false}
                                     onInput={(e) => {
                                         const value = e.target.innerText;
-                                        value.length <= maxNoteInput && setNoteInput(value);
+                                        if (value.length <= maxNoteInput) {
+                                            setNoteValue(value);
+                                        } else {
+                                            e.target.innerText = noteValue;
+                                            showNotify('Tối đa ' + maxNoteInput + ' ký tự', 2000);
+                                        }
                                     }}
                                 ></div>
                                 <div className={cx('input-control')}>
-                                    <span
-                                        className={cx('control')}
-                                        onClick={() => {
-                                            setIsTagFriend(true);
-                                            setTimeout(() => searchInputRef.current.focus());
-                                        }}
-                                    >
-                                        <img
-                                            src="https://lf16-tiktok-common.ttwstatic.com/obj/tiktok-web-common-sg/ies/creator_center/svgs/at.062a03e9.svg"
-                                            alt=""
-                                        />
-                                    </span>
-                                    <span className={cx('control')}>
-                                        <img
-                                            src="https://lf16-tiktok-common.ttwstatic.com/obj/tiktok-web-common-sg/ies/creator_center/svgs/hashtag.234f1b9c.svg"
-                                            alt=""
-                                        />
+                                    <span className={cx('control')} onClick={() => setShowMusicInput(!showMusicInput)}>
+                                        <SvgIcon icon={iconMusic} size={20} />
                                     </span>
                                 </div>
                             </div>
                         </div>
-                        {/* Tag friend */}
+
+                        {/* Âm nhạc trong video */}
+
                         <div
-                            style={{
-                                position: 'absolute',
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                visibility: isTagFriend ? 'visible' : 'hidden',
-                            }}
+                            className={cx('note-container', 'music-container')}
+                            style={{ visibility: showMusicInput ? 'visible' : 'hidden' }}
                         >
-                            <p className={cx('container__title')}>@Bạn bè</p>
-                            <div className={cx('tag__input')}>
-                                <img
-                                    className={cx('tag__icon')}
-                                    src="https://lf16-tiktok-common.ttwstatic.com/obj/tiktok-web-common-sg/ies/creator_center/svgs/search.a65ed16d.svg"
-                                    alt=""
-                                />
+                            <div className={cx('note__title')}>
+                                <span className={cx('title')}>Âm nhạc trong video</span>
+                                <span className={cx('title__count')}>
+                                    {musicValue.length} / {maxMusicInput}
+                                </span>
+                            </div>
+                            <div className={cx('note__input')}>
                                 <input
-                                    ref={searchInputRef}
-                                    type="text"
-                                    value={searchInput}
+                                    className={cx('input')}
+                                    spellCheck={false}
+                                    value={musicValue}
+                                    placeholder="Tên bản nhạc trong video"
                                     onChange={(e) => {
                                         const value = e.target.value;
-                                        setSearchInput(value);
+                                        value.length <= maxMusicInput
+                                            ? setMusicValue(value)
+                                            : showNotify('Tối đa ' + maxMusicInput + ' ký tự', 2000);
                                     }}
                                 />
-                                <img
-                                    className={cx('tag__icon')}
-                                    src="https://lf16-tiktok-common.ttwstatic.com/obj/tiktok-web-common-sg/ies/creator_center/svgs/close.ab98f6c7.svg"
-                                    alt=""
-                                    onClick={() => {
-                                        setIsTagFriend(false);
-                                        setSearchInput('');
-                                        setTimeout(() => noteInputRef.current.focus());
-                                    }}
-                                />
+                                <div className={cx('input-control')}>
+                                    <span className={cx('control')} onClick={() => setShowMusicInput(!showMusicInput)}>
+                                        <SvgIcon icon={iconHashtag} size={20} />
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    {/* Anh bia */}
+                    <div className={cx('cover-container')}>
+                        <p className={cx('title')}>Ảnh bìa</p>
+                        <VideoCover file={file} timeCoverRef={timeCoverRef} />
+                    </div>
+
+                    {/* Quyen rieng tu */}
+                    <div>
+                        <p className={cx('title')}>Ai có thể xem video này</p>
+                        <Popper
+                            className={cx('viewable-popper')}
+                            render={
+                                <>
+                                    {viewableData.map((viewInfo, index) => {
+                                        return (
+                                            <Button
+                                                key={index}
+                                                className={cx('viewable-btn', {
+                                                    active: index === viewId,
+                                                })}
+                                                onClick={() => {
+                                                    setViewId(index);
+                                                    setViewableShow(false);
+                                                }}
+                                            >
+                                                {viewInfo.type}
+                                            </Button>
+                                        );
+                                    })}
+                                </>
+                            }
+                            customTippy={{
+                                visible: viewableShow,
+                                placement: 'bottom-end',
+                                onClickOutside: () => setViewableShow(false),
+                                offset: [0, 6],
+                            }}
+                        >
+                            <div className={cx('viewable-container')} onClick={() => setViewableShow(!viewableShow)}>
+                                <span>{viewableData[viewId].type}</span>
+                                <SvgIcon
+                                    className={cx('arrow-icon', { rotate: viewableShow })}
+                                    icon={iconSmallArrow}
+                                    size={14}
+                                />
+                            </div>
+                        </Popper>
+                    </div>
+
+                    {/* Cho phép người dùng */}
+                    <div>
+                        <p className={cx('title')}>Cho phép người dùng:</p>
+                        <div className={cx('allow-user-container')}>
+                            {Object.keys(allowuser).map((key, index) => {
+                                const id = `checkbox-${Math.random() * 10000}`;
+                                return (
+                                    <div key={index} className={cx('checkbox-group')}>
+                                        <input
+                                            type="checkbox"
+                                            id={id}
+                                            hidden
+                                            checked={allowuser[key]}
+                                            onChange={(e) => {
+                                                const val = e.target.checked;
+                                                const newState = { ...allowuser };
+                                                newState[key] = val;
+                                                setAllowuser(newState);
+                                            }}
+                                        />
+                                        <label htmlFor={id}>
+                                            <p className={cx('checkbox-icon')}>
+                                                <SvgIcon icon={iconTickBox} size={12} />
+                                            </p>
+                                            {key}
+                                        </label>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    {/* Chạy quy trình kiểm tra bản quyền */}
+                    <div className={cx('runcopyright-container')}>
+                        <div style={{ display: 'flex' }}>
+                            <p className={cx('title')}>Chạy quy trình kiểm tra bản quyền</p>
+                            <Switch
+                                className={cx('switch')}
+                                isOn={runcopyright}
+                                handleToggle={() => setRuncopyright(!runcopyright)}
+                            />
+                        </div>
+
+                        <div className={cx('runcopyright-content')}>
+                            {runcopyright ? (
+                                <p className={cx('on')}>
+                                    <SvgIcon icon={iconTextWarning} size={16} />
+                                    <span>Kiểm tra bản quyền chỉ bắt đầu sau khi bạn tải video của mình lên.</span>
+                                </p>
+                            ) : (
+                                <p className={cx('off')}>
+                                    Chúng tôi sẽ kiểm tra xem video của bạn có sử dụng âm thanh vi phạm bản quyền hay
+                                    không. Nếu chúng tôi phát hiện có vi phạm, bạn có thể chỉnh sửa video trước khi
+                                    đăng.<strong>Tìm hiểu thêm</strong>
+                                </p>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* ĐĂNG */}
+                    <div className={cx('submit-container')}>
+                        <Button className={cx('submit-btn')} primary onClick={confirmStopSetup}>
+                            Hủy bỏ
+                        </Button>
+                        <Button
+                            className={cx('submit-btn', {
+                                disable: !file || !noteValue,
+                            })}
+                            color
+                            loading={loading}
+                            disable={!file || !noteValue || loading}
+                            onClick={handleUploadVideo}
+                        >
+                            Đăng
+                        </Button>
+                    </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 

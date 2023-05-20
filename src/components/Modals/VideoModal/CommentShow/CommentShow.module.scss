@@ -45,25 +45,9 @@
     }
 }
 
-.arrow-popper {
-    top: -8px;
-    height: 8px;
-    overflow-y: clip;
-    z-index: 1;
-
-    &::before {
-        content: '';
-        position: absolute;
-        width: 15px;
-        height: 15px;
-        transform: translateX(-50%) translateY(17%) rotate(45deg);
-        background-color: var(--white-color-3);
-        box-shadow: var(--box-shadow-popper);
-    }
-}
-
 // CONFIRM MODAL CUSTOM
 .confirm-modal-content {
+    max-width: 310px;
     padding: 28px 24px;
     font-size: 2.4rem;
     font-weight: 700;

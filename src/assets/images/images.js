@@ -10,6 +10,9 @@ const assetImages = {
     downloadWithAmazon: require('./download-app/download-with-amazon.png'),
     downloadWithGooglePlay: require('./download-app/download-with-googleplay.png'),
     pageNotFoundBackground: require('./backgrounds/page-not-found.png'),
+    liveIcon: require('../images/backgrounds/phone/live.svg').default,
+    searchIcon: require('../images/backgrounds/phone/search.svg').default,
+    interactiveIcon: require('../images/backgrounds/phone/interactive.svg').default,
 };
 
 export default assetImages;

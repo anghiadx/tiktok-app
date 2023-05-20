@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import styles from './Button.module.scss';
 
 const cx = classNames.bind(styles);
@@ -22,6 +24,7 @@ function Button({
     leftIcon,
     rightIcon,
     disable = false,
+    loading = false,
     className,
     iconClassName,
     textClassName,
@@ -80,9 +83,17 @@ function Button({
 
     return (
         <Component className={classNames} {...btnProps}>
-            {leftIcon && <span className={iconClassNames}>{leftIcon}</span>}
-            <span className={textClassNames}>{children}</span>
-            {rightIcon && <span className={iconClassNames}>{rightIcon}</span>}
+            {loading ? (
+                <span className={textClassNames}>
+                    <FontAwesomeIcon className={cx('loading-icon')} icon={faCircleNotch} />
+                </span>
+            ) : (
+                <>
+                    {leftIcon && <span className={iconClassNames}>{leftIcon}</span>}
+                    <span className={textClassNames}>{children}</span>
+                    {rightIcon && <span className={iconClassNames}>{rightIcon}</span>}
+                </>
+            )}
         </Component>
     );
 }
@@ -104,6 +115,7 @@ Button.propTypes = {
     leftIcon: PropTypes.node,
     rightIcon: PropTypes.node,
     disable: PropTypes.bool,
+    loading: PropTypes.bool,
     className: PropTypes.string,
     iconClassName: PropTypes.string,
     textClassName: PropTypes.string,

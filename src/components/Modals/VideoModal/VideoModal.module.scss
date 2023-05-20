@@ -73,6 +73,32 @@
     font-size: 1.4rem;
 }
 
+// More popper
+.more-popper {
+    width: 200px;
+    padding: 8px 16px;
+}
+
+.more-item {
+    width: 100%;
+    padding: 0;
+    min-height: 40px;
+    justify-content: flex-start;
+
+    & + & {
+        margin-left: 0;
+        border-top: 1px solid var(--background-gray-color-12);
+    }
+
+    &:hover {
+        color: var(--primary-color);
+    }
+}
+
+.see-more-btn {
+    background-color: transparent;
+}
+
 .follow-btn {
     height: 36px;
     margin-left: 12px;
@@ -179,4 +205,32 @@
     background-color: var(--background-gray-color-241);
 
     cursor: pointer;
+}
+
+// CONFIRM MODAL CUSTOM
+.confirm-modal-content {
+    max-width: 400px;
+    padding: 32px 12px;
+
+    h2 {
+        font-size: 2.4rem;
+        font-weight: 700;
+        line-height: 28px;
+        margin-bottom: 10px;
+    }
+
+    p {
+        font-size: 1.4rem;
+        color: var(--text-gray-color);
+    }
+}
+
+.confirm-modal-apply,
+.confirm-modal-cancel {
+    font-size: 1.5rem;
+}
+
+.confirm-modal-apply {
+    font-weight: 600;
+    color: var(--primary-color);
 }

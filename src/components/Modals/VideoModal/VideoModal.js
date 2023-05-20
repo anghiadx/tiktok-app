@@ -13,6 +13,8 @@ import {
     iconFacebookShare,
     iconMusic,
     iconPlaneShare,
+    iconRecycleBin,
+    iconSeeMoreHorizontal,
     iconShareMini,
     iconTwitter,
     iconWhatsApp,
@@ -24,10 +26,13 @@ import CommentShow from './CommentShow/';
 import AccountPreview from '~/components/Items/AccountItem/AccountPreview';
 import VideoPlayer from './VideoPlayer';
 import { ModalContextKey } from '~/contexts/ModalContext';
+import { NotifyContextKey } from '~/contexts/NotifyContext';
 import HashtagFilter from '~/components/Filters/HashtagFilter';
 import VideoInteractive from './VideoInteractive';
 import CommentCreator from './CommentCreator';
 import HandleFollow from '~/components/UserInteractive/HandleFollow';
+import Popper from '~/components/Popper';
+import { videoService } from '~/services';
 
 const cx = classNames.bind(styles);
 
@@ -49,9 +54,12 @@ function VideoModal(props) {
         },
     } = data;
 
-    const { loginModalShow } = useContext(ModalContextKey);
+    // Context
+    const { loginModalShow, confirmModalShow } = useContext(ModalContextKey);
+    const showNotify = useContext(NotifyContextKey);
 
-    const { isAuth } = useSelector((state) => state.auth);
+    // Redux
+    const { isAuth, currentUser } = useSelector((state) => state.auth);
 
     // State
     const [comments, setComments] = useState([]);
@@ -60,6 +68,36 @@ function VideoModal(props) {
         window.history.replaceState(null, '', `/#/video/${videoId}`);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const confirmDeleteVideo = () => {
+        // Create data modal
+        const dataConfirmModal = {
+            content: (
+                <div className={cx('confirm-modal-content')}>
+                    <h2>Bạn có chắc chắn muốn xóa video này?</h2>
+                    <p>
+                        Dữ liệu tạm thời của video có thể vẫn còn tồn tại, tuy nhiên các tương tác người dùng sẽ không
+                        thể thực thi trên video đã xóa. Làm mới trang để cập nhật dữ diệu mới nhất.
+                    </p>
+                </div>
+            ),
+            apply: (
+                <p className={cx('confirm-modal-apply')} onClick={handleDeleteVideo}>
+                    Xóa
+                </p>
+            ),
+            cancel: <p className={cx('confirm-modal-cancel')}>Hủy</p>,
+        };
+
+        // Show confirm modal
+        confirmModalShow(dataConfirmModal);
+    };
+
+    const handleDeleteVideo = async () => {
+        const responseData = await videoService.deleteVideo(videoId);
+
+        responseData?.message ? showNotify('Không thể xóa video. Vui lòng thử lại sau!') : showNotify('Đã xóa video');
+    };
 
     return (
         <div className={cx('wrapper')}>
@@ -93,20 +131,45 @@ function VideoModal(props) {
                                 </div>
                             </AccountPreview>
                         </Link>
-                        <HandleFollow
-                            followElement={
-                                <Button className={cx('follow-btn')} outline medium>
-                                    Follow
-                                </Button>
-                            }
-                            followedElement={
-                                <Button className={cx('follow-btn')} primary medium>
-                                    Đang Follow
-                                </Button>
-                            }
-                            defaultFollowed={is_followed}
-                            userId={userId}
-                        />
+
+                        {/* Nếu chính mình là người đăng video -> hiện see more / Ngược lại hiện trạng thái follow */}
+                        {userId === currentUser.id ? (
+                            <Popper
+                                className={cx('more-popper')}
+                                popperStyle="see-more"
+                                enableArrow
+                                render={
+                                    <>
+                                        <Button
+                                            className={cx('more-item')}
+                                            leftIcon={<SvgIcon icon={iconRecycleBin} size={22} />}
+                                            onClick={confirmDeleteVideo}
+                                        >
+                                            Xóa video
+                                        </Button>
+                                    </>
+                                }
+                            >
+                                <button className={cx('see-more-btn')}>
+                                    <SvgIcon icon={iconSeeMoreHorizontal} size={24} />
+                                </button>
+                            </Popper>
+                        ) : (
+                            <HandleFollow
+                                followElement={
+                                    <Button className={cx('follow-btn')} outline medium>
+                                        Follow
+                                    </Button>
+                                }
+                                followedElement={
+                                    <Button className={cx('follow-btn')} primary medium>
+                                        Đang Follow
+                                    </Button>
+                                }
+                                defaultFollowed={is_followed}
+                                userId={userId}
+                            />
+                        )}
                     </div>
 
                     <p className={cx('description')}>

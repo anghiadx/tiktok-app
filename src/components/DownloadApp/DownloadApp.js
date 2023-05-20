@@ -4,7 +4,7 @@ import styles from './DownloadApp.module.scss';
 import Button from '~/components/Button';
 import SvgIcon from '~/components/SvgIcon';
 import { iconArrowToTop, iconCloseX, iconMobile, iconPc } from '~/components/SvgIcon/iconsRepo';
-import PopperWrapper from '~/components/Popper';
+import { PopperWrapper } from '~/components/Popper';
 import { ModalContextKey } from '~/contexts/ModalContext';
 
 const cx = classNames.bind(styles);

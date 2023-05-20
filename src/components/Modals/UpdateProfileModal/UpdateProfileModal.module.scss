@@ -139,13 +139,3 @@
     color: var(--text-gray-color);
     background-color: var(--background-gray-color-12);
 }
-
-.loading-icon {
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    100% {
-        transform: rotate(360deg);
-    }
-}

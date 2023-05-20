@@ -1,12 +1,11 @@
 import { memo, useRef, useContext, useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
-import TippyHeadless from '@tippyjs/react/headless';
 import { useSelector } from 'react-redux';
 import LottieIcon from '~/components/LottieIcon';
 
 import { tiktokCommentLikeAnimate } from '~/assets/lotties';
-import { PopperWrapper } from '~/components/Popper';
+import Popper from '~/components/Popper';
 import Img from '~/components/Img';
 import ShowTick from '~/components/ShowTick';
 import SvgIcon from '~/components/SvgIcon';
@@ -168,42 +167,35 @@ function CommentShow({ index, data, authorId, onCloseModal, setComments }) {
             </div>
 
             {/* See more */}
-            <TippyHeadless
-                render={(attrs) => (
-                    <section tabIndex="-1" {...attrs}>
-                        <div className={cx('arrow-popper')} data-popper-arrow />
-                        <PopperWrapper className={cx('more-popper')}>
-                            {/* Người đăng comment khác bản thân -> hiện báo cáo */}
-                            {currentUser.id !== userId && (
-                                <Button className={cx('more-item')} leftIcon={<SvgIcon icon={iconFlag} size={24} />}>
-                                    Báo cáo
-                                </Button>
-                            )}
-                            {/* Bản thân là chủ video hoặc người đăng comment  -> Hiện xóa */}
-                            {(currentUser.id === authorId || currentUser.id === userId) && (
-                                <Button
-                                    className={cx('more-item')}
-                                    leftIcon={<SvgIcon icon={iconRecycleBin} size={24} />}
-                                    onClick={confirmDeleteComment}
-                                >
-                                    Xóa
-                                </Button>
-                            )}
-                        </PopperWrapper>
-                    </section>
-                )}
-                zIndex={999999}
-                placement="bottom-end"
-                interactive
-                delay={[0, 150]}
-                offset={[4, 8]}
-                popperOptions={{ modifiers: [{ name: 'flip', enabled: false }] }}
-                hideOnClick={false}
+            <Popper
+                className={cx('more-popper')}
+                enableArrow
+                popperStyle="see-more"
+                render={
+                    <>
+                        {/* Người đăng comment khác bản thân -> hiện báo cáo */}
+                        {currentUser.id !== userId && (
+                            <Button className={cx('more-item')} leftIcon={<SvgIcon icon={iconFlag} size={24} />}>
+                                Báo cáo
+                            </Button>
+                        )}
+                        {/* Bản thân là chủ video hoặc người đăng comment  -> Hiện xóa */}
+                        {(currentUser.id === authorId || currentUser.id === userId) && (
+                            <Button
+                                className={cx('more-item')}
+                                leftIcon={<SvgIcon icon={iconRecycleBin} size={24} />}
+                                onClick={confirmDeleteComment}
+                            >
+                                Xóa
+                            </Button>
+                        )}
+                    </>
+                }
             >
                 <button className={cx('more-icon')}>
                     <SvgIcon icon={iconSeeMoreHorizontal} size={21} />
                 </button>
-            </TippyHeadless>
+            </Popper>
         </div>
     );
 }

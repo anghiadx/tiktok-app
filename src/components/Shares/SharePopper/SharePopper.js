@@ -4,7 +4,7 @@ import TippyHeadless from '@tippyjs/react/headless';
 import classNames from 'classnames/bind';
 
 import styles from './SharePopper.module.scss';
-import PopperWrapper from '~/components/Popper';
+import { PopperWrapper } from '~/components/Popper';
 import Button from '~/components/Button';
 import SvgIcon from '~/components/SvgIcon';
 import { iconArrowToBot } from '~/components/SvgIcon/iconsRepo';

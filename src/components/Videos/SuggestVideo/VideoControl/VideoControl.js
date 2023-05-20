@@ -16,7 +16,7 @@ import assetImages from '~/assets/images/images';
 
 const cx = classNames.bind(styles);
 
-function VideoControl({ videoId, videoInfo, setThumbLoaded, onClick:handleOpenVideoModal }) {
+function VideoControl({ videoId, videoInfo, setThumbLoaded, onClick: handleOpenVideoModal }) {
     // Get data from video info
     const {
         thumb_url: thumbUrl,
@@ -210,7 +210,7 @@ function VideoControl({ videoId, videoInfo, setThumbLoaded, onClick:handleOpenVi
         const action = changeVolume(valueValid / 100);
         dispatch(action);
     };
-    
+
     return (
         <div className={cx('player-space', directionVideoClass)}>
             {loading && playing && <SvgIcon className={cx('video-loading')} icon={<TiktokLoading medium />} />}
@@ -280,7 +280,7 @@ VideoControl.propTypes = {
     videoId: PropTypes.number,
     videoInfo: PropTypes.object.isRequired,
     setThumbLoaded: PropTypes.func,
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
 };
 
 export default memo(VideoControl);

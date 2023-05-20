@@ -25,6 +25,7 @@
         "react-scripts": "5.0.1",
         "serve": "^14.0.1",
         "tippy.js": "^6.3.7",
+        "video-snapshot": "^1.0.11",
         "web-vitals": "^2.1.4"
     },
     "devDependencies": {

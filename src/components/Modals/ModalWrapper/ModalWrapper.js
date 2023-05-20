@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import styles from './ModalWrapper.module.scss';
-import PopperWrapper from '~/components/Popper';
+import { PopperWrapper } from '~/components/Popper';
 
 const cx = classNames.bind(styles);
 

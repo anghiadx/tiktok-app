@@ -27,7 +27,7 @@
     }
 }
 
-#theme-input:checked {
+.input:checked {
     border: 2px solid red;
 
     & + .switch {

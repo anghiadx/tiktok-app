@@ -1,0 +1,16 @@
+.arrow-popper {
+    top: -9px;
+    height: 9px;
+    overflow-y: clip;
+    z-index: 1;
+
+    &::before {
+        content: '';
+        position: absolute;
+        width: 15px;
+        height: 15px;
+        transform: translateX(-50%) translateY(25%) rotate(45deg);
+        background-color: var(--white-color-3);
+        box-shadow: var(--box-shadow-popper);
+    }
+}

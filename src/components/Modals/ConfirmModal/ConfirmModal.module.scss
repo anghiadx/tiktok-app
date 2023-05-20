@@ -1,5 +1,6 @@
 .wrapper {
-    width: 310px;
+    width: fit-content;
+    min-width: 310px;
 }
 
 .content {
@@ -8,14 +9,12 @@
 
 .apply,
 .cancel {
-    position: relative;
     min-height: 48px;
     border-top: 1px solid var(--background-gray-color-12);
     cursor: pointer;
 
     & > * {
-        position: absolute;
-        inset: 0;
+        min-height: inherit;
 
         display: flex;
         justify-content: center;

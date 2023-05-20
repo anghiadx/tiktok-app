@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import Tippy from '@tippyjs/react';
-import TippyHeadless from '@tippyjs/react/headless';
 import { useSelector } from 'react-redux';
 
 import styles from './Profile.module.scss';
@@ -18,7 +17,6 @@ import {
     iconSeeMoreHorizontal,
     iconShareRegular,
 } from '~/components/SvgIcon/iconsRepo';
-import PopperWrapper from '~/components/Popper';
 import VideoProfile from './VideoProfile';
 import AvatarLoading from '~/components/Loadings/AvatarLoading';
 import LineLoadingMedium from '~/components/Loadings/LineLoadingMedium';
@@ -29,6 +27,7 @@ import SharePopper from '~/components/Shares/SharePopper';
 import dataTemp from '~/temp/data';
 import HandleFollow from '~/components/UserInteractive/HandleFollow';
 import { ModalContextKey } from '~/contexts/ModalContext';
+import Popper from '~/components/Popper';
 
 const cx = classNames.bind(styles);
 
@@ -126,40 +125,40 @@ function Profile() {
                             </span>
                         </SharePopper>
 
-                        <TippyHeadless
-                            interactive
-                            placement="bottom-end"
-                            delay={[0, 400]}
-                            offset={[8, 10]}
-                            zIndex={10000}
-                            render={(attrs) => (
-                                <div tabIndex="-1" {...attrs}>
-                                    <PopperWrapper className={cx('more-popper')}>
-                                        <div className={cx('arrow-popper')} data-popper-arrow />
-                                        <Button
-                                            className={cx('more-item')}
-                                            textClassName={cx('item__text')}
-                                            primary
-                                            leftIcon={<SvgIcon icon={iconFlag} size={16} />}
-                                        >
-                                            Báo cáo
-                                        </Button>
-                                        <Button
-                                            className={cx('more-item')}
-                                            textClassName={cx('item__text')}
-                                            primary
-                                            leftIcon={<SvgIcon icon={iconBlock} size={16} />}
-                                        >
-                                            Chặn
-                                        </Button>
-                                    </PopperWrapper>
-                                </div>
-                            )}
+                        <Popper
+                            className={cx('more-popper')}
+                            render={
+                                <>
+                                    <Button
+                                        className={cx('more-item')}
+                                        textClassName={cx('item__text')}
+                                        primary
+                                        leftIcon={<SvgIcon icon={iconFlag} size={16} />}
+                                    >
+                                        Báo cáo
+                                    </Button>
+                                    <Button
+                                        className={cx('more-item')}
+                                        textClassName={cx('item__text')}
+                                        primary
+                                        leftIcon={<SvgIcon icon={iconBlock} size={16} />}
+                                    >
+                                        Chặn
+                                    </Button>
+                                </>
+                            }
+                            enableArrow
+                            customTippy={{
+                                placement: 'bottom-end',
+                                delay: [0, 400],
+                                offset: [8, 10],
+                                zIndex: 10000,
+                            }}
                         >
                             <span className={cx('icon')}>
                                 <SvgIcon icon={iconSeeMoreHorizontal} />
                             </span>
-                        </TippyHeadless>
+                        </Popper>
                     </div>
                     <div className={cx('account-info')}>
                         <Img src={avatarUrl} alt={username} />

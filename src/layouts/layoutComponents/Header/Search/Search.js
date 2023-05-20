@@ -6,7 +6,7 @@ import classNames from 'classnames/bind';
 import styles from './Search.module.scss';
 import SvgIcon from '~/components/SvgIcon';
 import { iconClose, iconLoading, iconSearch } from '~/components/SvgIcon/iconsRepo';
-import PopperWrapper from '~/components/Popper';
+import { PopperWrapper } from '~/components/Popper';
 import SeachAccountItem from '~/components/Items/SearchAccountItem';
 import configs from '~/configs';
 import { useDebounce } from '~/hooks';

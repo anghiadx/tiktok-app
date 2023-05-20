@@ -1,7 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
 import classNames from 'classnames/bind';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch } from 'react-redux';
 
 import { register } from '~/redux/slices/authSlice';
@@ -284,9 +282,10 @@ function RegisterWithEmail() {
                 color
                 large
                 disable={disableSubmitBtn || loading || logined}
+                loading={loading}
                 onClick={handleSubmit}
             >
-                {!loading ? 'Đăng ký' : <FontAwesomeIcon className={cx('loading-icon')} icon={faCircleNotch} />}
+                Đăng ký
             </Button>
         </form>
     );

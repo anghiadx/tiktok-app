@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react';
-import classNames from 'classnames/bind';
 import { useLocalStorage } from '~/hooks';
-import styles from './ThemeMode.module.scss';
-
-const cx = classNames.bind(styles);
+import Switch from '../Switch';
 
 function ThemeMode() {
     const { dataStorage, setDataStorage } = useLocalStorage();
@@ -28,12 +25,7 @@ function ThemeMode() {
         setDataStorage(themeData);
     }, [isDarkMode, setDataStorage]);
 
-    return (
-        <div>
-            <input type="checkbox" id={cx('theme-input')} hidden checked={isDarkMode} onChange={themeToggle} />
-            <label className={cx('switch')} htmlFor={cx('theme-input')}></label>
-        </div>
-    );
+    return <Switch isOn={isDarkMode} handleToggle={themeToggle} />;
 }
 
 export default ThemeMode;

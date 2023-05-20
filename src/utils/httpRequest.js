@@ -39,7 +39,7 @@ export const get = async (path, options = {}) => {
 
         return response.data;
     } catch (err) {
-        console.log('Failed to get: ', err);
+        // console.log('Failed to get: ', err);
         return err.response;
     }
 };
@@ -52,7 +52,7 @@ export const post = async (path, data, options = {}) => {
 
         return response.data;
     } catch (err) {
-        console.log('Failed to post: ', err);
+        // console.log('Failed to post: ', err);
         return err.response.data;
     }
 };
@@ -65,7 +65,7 @@ export const dele = async (path, options = {}) => {
 
         return response.data;
     } catch (err) {
-        console.log('Failed to get: ', err);
-        return err.response;
+        // console.log('Failed to delete: ', err);
+        return err.response.data;
     }
 };

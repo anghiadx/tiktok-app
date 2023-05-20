@@ -1,7 +1,5 @@
 import { useState, useContext } from 'react';
 import classNames from 'classnames/bind';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch } from 'react-redux';
 
 import styles from './Forms.module.scss';
@@ -112,8 +110,9 @@ function LoginWithEmail() {
                 color
                 large
                 disable={!email || !password || loading || logined}
+                loading={loading}
             >
-                {!loading ? 'Đăng nhập' : <FontAwesomeIcon className={cx('loading-icon')} icon={faCircleNotch} />}
+                Đăng nhập
             </Button>
         </form>
     );

@@ -1,0 +1,51 @@
+.file-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 24px;
+    min-height: 458px;
+    padding: 0 35px;
+    border: 2px dashed var(--background-gray-color-2);
+    border-radius: 8px;
+    background-color: inherit;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out 0s;
+
+    &:hover {
+        background-color: var(--background-gray-color-03);
+        border-color: var(--primary-color);
+    }
+
+    img {
+        width: 40px;
+        height: 29px;
+        margin: 0 auto;
+    }
+
+    .title {
+        margin-top: 24px;
+        font-size: 1.8rem;
+        font-weight: 500;
+    }
+
+    .descript {
+        margin-top: 4px;
+        font-size: 1.4rem;
+        color: var(--text-gray-color);
+    }
+
+    .detail-descript {
+        line-height: 1.5;
+        margin-bottom: 8px;
+        font-size: 1.4rem;
+        color: var(--text-gray-color2);
+    }
+
+    .upload-btn {
+        margin-top: 32px;
+        width: 100%;
+        max-width: 400px;
+    }
+}

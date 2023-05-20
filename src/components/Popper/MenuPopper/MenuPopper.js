@@ -5,7 +5,7 @@ import 'tippy.js/dist/tippy.css';
 import classNames from 'classnames/bind';
 
 import styles from './menuPopper.module.scss';
-import PopperWrapper from '~/components/Popper';
+import { PopperWrapper } from '~/components/Popper';
 import MenuItem from './MenuItem';
 import MenuHeader from './MenuHeader';
 

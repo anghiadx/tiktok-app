@@ -14,3 +14,15 @@ export const getSuggestVideo = async (page, type = 'for-you') => {
     }
     return dataResponse.data;
 };
+
+export const upload = async (dataUpload) => {
+    const dataResponse = await httpRequest.post(path, dataUpload);
+
+    return dataResponse.data;
+};
+
+export const deleteVideo = async (videoId) => {
+    const dataResponse = await httpRequest.dele(path + '/' + videoId);
+
+    return dataResponse;
+};
