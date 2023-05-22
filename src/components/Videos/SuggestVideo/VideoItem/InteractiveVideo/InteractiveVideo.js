@@ -10,11 +10,13 @@ import { ModalContextKey } from '~/contexts/ModalContext';
 import SharePopper from '~/components/Shares/SharePopper';
 import dataTemp from '~/temp/data';
 import { likeService } from '~/services';
+import { NotifyContextKey } from '~/contexts/NotifyContext';
 
 const cx = classNames.bind(styles);
 
 function InteractiveVideo({ isAuth, handleOpenVideoModal, videoInfo }) {
     const { loginModalShow } = useContext(ModalContextKey);
+    const showNotify = useContext(NotifyContextKey);
 
     // get data from temp data
     const { videoShares } = dataTemp.shares;
@@ -37,17 +39,31 @@ function InteractiveVideo({ isAuth, handleOpenVideoModal, videoInfo }) {
         isLiked && heartIconRef.current.setSpeed(1.5);
     }, [isLiked]);
 
-    const handleLikeVideo = () => {
-        if (isLiked) {
-            likeService.unlikeVideo(videoInfo.id);
-            videoInfo.likes_count -= 1;
-        } else {
-            likeService.likeVideo(videoInfo.id);
-            videoInfo.likes_count += 1;
-        }
-
+    const handleLikeVideo = async () => {
         setIsLiked(!isLiked);
         videoInfo.is_liked = !isLiked;
+
+        let dataResponse;
+
+        if (isLiked) {
+            videoInfo.likes_count -= 1;
+            dataResponse = likeService.unlikeVideo(videoInfo.id);
+        } else {
+            videoInfo.likes_count += 1;
+            dataResponse = likeService.likeVideo(videoInfo.id);
+        }
+
+        if (!dataResponse) {
+            if (isLiked) {
+                videoInfo.likes_count += 1;
+            } else {
+                videoInfo.likes_count -= 1;
+            }
+
+            setIsLiked(isLiked);
+            videoInfo.is_liked = isLiked;
+            showNotify('Không thể tương tác. Vui lòng thử lại!');
+        }
     };
 
     return (

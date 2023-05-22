@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import TippyHeadless from '@tippyjs/react/headless';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import styles from './AccountItem.module.scss';
 import { PopperWrapper } from '~/components/Popper';
@@ -13,6 +14,9 @@ import HandleFollow from '~/components/UserInteractive/HandleFollow';
 const cx = classNames.bind(styles);
 
 function AccountPreview({ userInfo, children, className, customTippy, onCloseModal, outline = false }) {
+    // Redux
+    const { currentUser } = useSelector((state) => state.auth);
+
     const renderPreview = (attrs) => (
         <div
             className={cx({
@@ -33,20 +37,22 @@ function AccountPreview({ userInfo, children, className, customTippy, onCloseMod
                         />
                     </Link>
 
-                    <HandleFollow
-                        followElement={
-                            <Button color={!outline} outline={outline} medium={outline}>
-                                Follow
-                            </Button>
-                        }
-                        followedElement={
-                            <Button primary xmedium>
-                                Đang Follow
-                            </Button>
-                        }
-                        defaultFollowed={userInfo?.is_followed}
-                        userId={userInfo?.id}
-                    />
+                    {userInfo?.id !== currentUser.id && (
+                        <HandleFollow
+                            followElement={
+                                <Button color={!outline} outline={outline} medium={outline}>
+                                    Follow
+                                </Button>
+                            }
+                            followedElement={
+                                <Button primary xmedium>
+                                    Đang Follow
+                                </Button>
+                            }
+                            defaultFollowed={userInfo?.is_followed}
+                            userId={userInfo?.id}
+                        />
+                    )}
                 </div>
 
                 {/* Body */}

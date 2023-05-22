@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import classNames from 'classnames/bind';
 import LottieIcon from '~/components/LottieIcon/LottieIcon';
 
@@ -7,11 +7,15 @@ import styles from './VideoInteractive.module.scss';
 import SvgIcon from '~/components/SvgIcon';
 import { iconComment, iconHeart } from '~/components/SvgIcon/iconsRepo';
 import { likeService } from '~/services';
+import { NotifyContextKey } from '~/contexts/NotifyContext';
 
 const cx = classNames.bind(styles);
 
 function VideoInteractive({ isAuth, loginModalShow, videoInfo }) {
     const [isLiked, setIsLiked] = useState(videoInfo.is_liked);
+
+    // Context
+    const showNotify = useContext(NotifyContextKey);
 
     const handleLikeVideo = async () => {
         setIsLiked(!isLiked);
@@ -35,6 +39,7 @@ function VideoInteractive({ isAuth, loginModalShow, videoInfo }) {
 
             setIsLiked(isLiked);
             videoInfo.is_liked = isLiked;
+            showNotify('Không thể tương tác. Vui lòng thử lại!');
         }
     };
 

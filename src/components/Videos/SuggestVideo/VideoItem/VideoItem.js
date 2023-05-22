@@ -36,7 +36,7 @@ function VideoItem({ videoId, videoInfo }) {
     // ref
     const wrapperRef = useRef();
 
-    const { isAuth } = useSelector((state) => state.auth);
+    const { isAuth, currentUser } = useSelector((state) => state.auth);
 
     // Get data from video info
     const {
@@ -110,20 +110,22 @@ function VideoItem({ videoId, videoInfo }) {
                     </AccountPreview>
 
                     {/* Follow btn */}
-                    <HandleFollow
-                        followElement={
-                            <Button outline className={cx('follow-btn')}>
-                                Follow
-                            </Button>
-                        }
-                        followedElement={
-                            <Button primary xs className={cx('follow-btn')}>
-                                Đang Follow
-                            </Button>
-                        }
-                        defaultFollowed={is_followed}
-                        userId={userId}
-                    />
+                    {userId !== currentUser.id && (
+                        <HandleFollow
+                            followElement={
+                                <Button outline className={cx('follow-btn')}>
+                                    Follow
+                                </Button>
+                            }
+                            followedElement={
+                                <Button primary xs className={cx('follow-btn')}>
+                                    Đang Follow
+                                </Button>
+                            }
+                            defaultFollowed={is_followed}
+                            userId={userId}
+                        />
+                    )}
 
                     {/* Description  */}
                     <p className={cx('description')}>

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames/bind';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -15,6 +15,7 @@ import {
     iconVolume,
 } from '~/components/SvgIcon/iconsRepo';
 import TiktokLoading from '~/components/Loadings/TiktokLoading';
+import { timeToPercent, percentToTime, timeFormat } from '~/funcHandler';
 
 const cx = classNames.bind(styles);
 
@@ -30,6 +31,10 @@ function VideoPlayer({ index, data = {}, handleClose, handlePrevVideo, handleNex
     const [playing, setPlaying] = useState(true);
     const [videoStart, setVideoStart] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    const [currentTime, setCurrentTime] = useState(0);
+    const [totalTime, setTotalTime] = useState(0);
+    const [progressValue, setProgressValue] = useState(0);
 
     // Ref
     const videoRef = useRef();
@@ -144,9 +149,48 @@ function VideoPlayer({ index, data = {}, handleClose, handlePrevVideo, handleNex
         handleNextVideo();
     };
 
+    // Progress control
+    const handleTimeUpdate = useCallback(
+        function () {
+            const currentTime = this.currentTime;
+            const percent = timeToPercent(currentTime, totalTime);
+            setCurrentTime(currentTime);
+            setProgressValue(percent);
+        },
+        [totalTime],
+    );
+
+    const handleProgressActive = () => {
+        videoRef.current.removeEventListener('timeupdate', handleTimeUpdate);
+    };
+
+    const handleProgressUnactive = () => {
+        videoRef.current.currentTime = currentTime;
+        videoRef.current.addEventListener('timeupdate', handleTimeUpdate);
+    };
+
+    const handleProgressChange = (e) => {
+        const percent = +e.target.value;
+        const currentTime = percentToTime(percent, totalTime);
+
+        setProgressValue(percent);
+        setCurrentTime(currentTime);
+    };
+
+    useEffect(() => {
+        const video = videoRef.current;
+        video.addEventListener('timeupdate', handleTimeUpdate);
+
+        return () => {
+            video.removeEventListener('timeupdate', handleTimeUpdate);
+        };
+    }, [handleTimeUpdate]);
+
     return (
         <div className={cx('video-player')} onClick={togglePlay}>
             <p className={cx('video__background')} style={{ backgroundImage: `url('${thumbUrl}')` }}></p>
+
+            {/* Video container */}
             <div className={cx('video__space')}>
                 <img className={cx({ hidden: videoStart })} src={thumbUrl} alt="" />
                 <video
@@ -156,11 +200,19 @@ function VideoPlayer({ index, data = {}, handleClose, handlePrevVideo, handleNex
                     onCanPlay={handleVideoStart}
                     onWaiting={() => setLoading(true)}
                     onPlaying={() => setLoading(false)}
+                    onLoadedData={(e) => {
+                        const totalTime = e.target.duration;
+                        setTotalTime(totalTime);
+                    }}
                 ></video>
             </div>
+
+            {/* Close btn */}
             <button className={cx('btn', 'close-btn')} onClick={() => handleClose('back')}>
                 <SvgIcon icon={iconCloseX} size={25} />
             </button>
+
+            {/* Report btn */}
             <button
                 className={cx('btn', 'report-btn')}
                 onClick={(e) => {
@@ -170,17 +222,21 @@ function VideoPlayer({ index, data = {}, handleClose, handlePrevVideo, handleNex
                 <SvgIcon icon={iconFlag} size={16} style={{ marginRight: 4 }} />
                 Báo cáo
             </button>
+
+            {/* Prev btn */}
             {index !== 0 && !!handlePrevVideo && (
                 <button className={cx('btn', 'prev-btn')} onClick={handleClickPrev}>
                     <SvgIcon icon={iconArrowToBot2} size={28} />
                 </button>
             )}
+            {/* Next btn */}
             {!!handleNextVideo && (
                 <button className={cx('btn', 'next-btn')} onClick={handleClickNext}>
                     <SvgIcon icon={iconArrowToBot2} size={28} />
                 </button>
             )}
 
+            {/* Volume control */}
             <div className={cx('volume-container')} onClick={(e) => e.stopPropagation()}>
                 <div className={cx('volume-control')}>
                     <div className={cx('volume-background')}>
@@ -202,6 +258,29 @@ function VideoPlayer({ index, data = {}, handleClose, handlePrevVideo, handleNex
                     {muted ? <SvgIcon icon={iconMute} size={24} /> : <SvgIcon icon={iconVolume} size={24} />}
                 </button>
             </div>
+
+            {/* Progress control */}
+            {totalTime && (
+                <div className={cx('progress-container')} onClick={(e) => e.stopPropagation()}>
+                    <div className={cx('progress-control')} style={{ '--progress-data': `${progressValue}%` }}>
+                        <div className={cx('progress-bar')}>
+                            <div className={cx('progress-dot')}></div>
+                        </div>
+                        <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            step="1"
+                            onChange={handleProgressChange}
+                            onMouseDown={handleProgressActive}
+                            onMouseUp={handleProgressUnactive}
+                        />
+                    </div>
+                    <p className={cx('progress-time')}>
+                        <span>{timeFormat(currentTime)}</span>/<span>{timeFormat(totalTime)}</span>
+                    </p>
+                </div>
+            )}
 
             {!playing && (
                 <span className={cx('play-icon')}>
