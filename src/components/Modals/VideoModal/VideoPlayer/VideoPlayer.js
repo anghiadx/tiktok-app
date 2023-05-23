@@ -16,10 +16,11 @@ import {
 } from '~/components/SvgIcon/iconsRepo';
 import TiktokLoading from '~/components/Loadings/TiktokLoading';
 import { timeToPercent, percentToTime, timeFormat } from '~/funcHandler';
+import VideoDeletedOverlay from '~/components/Videos/VideoDeletedOverlay';
 
 const cx = classNames.bind(styles);
 
-function VideoPlayer({ index, data = {}, handleClose, handlePrevVideo, handleNextVideo }) {
+function VideoPlayer({ index, data = {}, handleClose, handlePrevVideo, handleNextVideo, isDeleted }) {
     // Get video data
     const { thumb_url: thumbUrl, file_url: videoUrl } = data;
 
@@ -42,12 +43,17 @@ function VideoPlayer({ index, data = {}, handleClose, handlePrevVideo, handleNex
     const volumeDotRef = useRef();
 
     useEffect(() => {
+        if (isDeleted) {
+            videoRef.current.pause();
+            return;
+        }
+
         playing
             ? videoRef.current.play().catch((err) => {
                   err.code !== 20 && console.error(err);
               })
             : videoRef.current.pause();
-    }, [playing]);
+    }, [playing, isDeleted]);
 
     useEffect(() => {
         videoRef.current.muted = muted;
@@ -101,6 +107,10 @@ function VideoPlayer({ index, data = {}, handleClose, handlePrevVideo, handleNex
     };
 
     const togglePlay = () => {
+        // Nếu video đã xóa thì không làm gì cả
+        if (isDeleted) {
+            return;
+        }
         setPlaying(!playing);
     };
 
@@ -205,6 +215,9 @@ function VideoPlayer({ index, data = {}, handleClose, handlePrevVideo, handleNex
                         setTotalTime(totalTime);
                     }}
                 ></video>
+
+                {/* Deleted notify */}
+                {isDeleted && <VideoDeletedOverlay />}
             </div>
 
             {/* Close btn */}
@@ -274,6 +287,8 @@ function VideoPlayer({ index, data = {}, handleClose, handlePrevVideo, handleNex
                             onChange={handleProgressChange}
                             onMouseDown={handleProgressActive}
                             onMouseUp={handleProgressUnactive}
+                            onTouchStart={handleProgressActive}
+                            onTouchEnd={handleProgressUnactive}
                         />
                     </div>
                     <p className={cx('progress-time')}>

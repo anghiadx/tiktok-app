@@ -8,7 +8,7 @@ import { NotifyContextKey } from '~/contexts/NotifyContext';
 
 const cx = classNames.bind(styles);
 
-function CommentCreator({ videoInfo, setComments }) {
+function CommentCreator({ videoInfo, setComments, isDeleted }) {
     // Context
     const showNotify = useContext(NotifyContextKey);
 
@@ -51,6 +51,11 @@ function CommentCreator({ videoInfo, setComments }) {
     };
 
     const handleCreateComment = async () => {
+        if (isDeleted) {
+            showNotify('Video này hiện không tồn tại!');
+            return;
+        }
+
         if (loading || !commentValue) {
             return;
         }

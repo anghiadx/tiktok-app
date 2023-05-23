@@ -63,6 +63,7 @@ function VideoModal(props) {
 
     // State
     const [comments, setComments] = useState([]);
+    const [isDeleted, setIsDeleted] = useState(data?.isDeleted);
 
     useEffect(() => {
         window.history.replaceState(null, '', `/#/video/${videoId}`);
@@ -77,7 +78,7 @@ function VideoModal(props) {
                     <h2>Bạn có chắc chắn muốn xóa video này?</h2>
                     <p>
                         Dữ liệu tạm thời của video có thể vẫn còn tồn tại, tuy nhiên các tương tác người dùng sẽ không
-                        thể thực thi trên video đã xóa. Làm mới trang để cập nhật dữ diệu mới nhất.
+                        thể thực thi trên video đã xóa. Người khác cũng sẽ không còn thấy video này!
                     </p>
                 </div>
             ),
@@ -96,14 +97,20 @@ function VideoModal(props) {
     const handleDeleteVideo = async () => {
         const responseData = await videoService.deleteVideo(videoId);
 
-        responseData?.message ? showNotify('Không thể xóa video. Vui lòng thử lại sau!') : showNotify('Đã xóa video');
+        if (responseData?.message) {
+            showNotify('Không thể xóa video. Vui lòng thử lại sau!');
+        } else {
+            showNotify('Đã xóa video');
+            data.isDeleted = true;
+            setIsDeleted(true);
+        }
     };
 
     return (
         <div className={cx('wrapper')}>
             {/* VIDEO PLAYER */}
             <div className={cx('video-container')}>
-                <VideoPlayer {...props} />
+                <VideoPlayer isDeleted={isDeleted} {...props} />
             </div>
 
             {/* CONTENT */}
@@ -265,7 +272,7 @@ function VideoModal(props) {
                 <footer className={cx('create-comment')}>
                     <div className={cx('comment-create-wrapper')}>
                         {isAuth ? (
-                            <CommentCreator setComments={setComments} videoInfo={data} />
+                            <CommentCreator setComments={setComments} videoInfo={data} isDeleted={isDeleted} />
                         ) : (
                             <p className={cx('notify-btn')} onClick={!isAuth ? loginModalShow : null}>
                                 Please log in to comment

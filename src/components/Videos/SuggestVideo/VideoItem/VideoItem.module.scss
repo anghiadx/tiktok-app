@@ -13,6 +13,10 @@
         background-color: var(--background-gray-color-2);
         transform: scaleY(0.5);
     }
+
+    &.hidden {
+        display: none;
+    }
 }
 .avatar {
     border-radius: 50%;

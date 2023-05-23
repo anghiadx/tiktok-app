@@ -32,6 +32,14 @@ function VideoPreview({ file, setFile, videoDescription, videoMusic, currentUser
     // Context
     const { confirmModalShow } = useContext(ModalContextKey);
 
+    // Ref
+    const cdRef = useRef();
+    const videoRef = useRef();
+    const videoHeight = useRef(1);
+    const videoWidth = useRef(1);
+
+    const videoHorizontal = videoWidth.current / videoHeight.current >= 1;
+
     // Create video url from file
     useEffect(() => {
         if (!file) {
@@ -45,12 +53,28 @@ function VideoPreview({ file, setFile, videoDescription, videoMusic, currentUser
         };
     }, [file]);
 
+    // Create animate for cd
+    useEffect(() => {
+        const animate = [{ transform: 'rotate(0deg' }, { transform: 'rotate(360deg' }];
+
+        cdRef.current.animation = cdRef.current.animate(animate, {
+            duration: 6000,
+            iterations: 'Infinity',
+        });
+    }, []);
+
     // Play / pause video
     useEffect(() => {
         if (!totalTime) {
             return;
         }
-        isPlaying ? videoRef.current.play() : videoRef.current.pause();
+        if (isPlaying) {
+            videoRef.current.play();
+            cdRef.current.animation.play();
+        } else {
+            videoRef.current.pause();
+            cdRef.current.animation.pause();
+        }
     }, [isPlaying, totalTime]);
 
     // Muted / unmuted
@@ -71,13 +95,6 @@ function VideoPreview({ file, setFile, videoDescription, videoMusic, currentUser
             video.removeEventListener('timeupdate', handleTimeUpdate);
         };
     }, [handleTimeUpdate]);
-
-    // Ref
-    const videoRef = useRef();
-    const videoHeight = useRef(1);
-    const videoWidth = useRef(1);
-
-    const videoHorizontal = videoWidth.current / videoHeight.current >= 1;
 
     const confirmChangeVideo = () => {
         const dataConfirm = {
@@ -138,7 +155,16 @@ function VideoPreview({ file, setFile, videoDescription, videoMusic, currentUser
                         <div className={cx('section-right')}>
                             <p style={{ backgroundImage: `url('${currentUser.avatar}')` }}></p>
                             <img src={assetImages.interactiveIcon} alt="" />
-                            <p></p>
+                            <p ref={cdRef} style={{ '--avatar-data': `url('${currentUser.avatar}')` }}></p>
+                            <p
+                                className={cx('music-list', {
+                                    stop: !isPlaying,
+                                })}
+                            >
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </p>
                         </div>
 
                         <div className={cx('section-left')}>

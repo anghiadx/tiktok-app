@@ -114,7 +114,7 @@ function Sidebar({ suggestedAcc = true, followingAcc = true }) {
                                 <span className={cx('more')}>Thêm</span>
                             </p>
 
-                            <span className={cx('more')}>© 2022 TikTok - Clone by anghiadx</span>
+                            <span className={cx('more')}>© 2023 TikTok - Clone by anghiadx</span>
                         </BorderTopContainer>
                     </div>
                 </CustomScrollbar>

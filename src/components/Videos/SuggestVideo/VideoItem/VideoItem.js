@@ -84,7 +84,12 @@ function VideoItem({ videoId, videoInfo }) {
     };
 
     return (
-        <div ref={wrapperRef} className={cx('wrapper')}>
+        <div
+            ref={wrapperRef}
+            className={cx('wrapper', {
+                hidden: videoInfo.isDeleted, // hidden when video is deleted
+            })}
+        >
             <Link className={cx('big-avatar')} to={'/@' + userName}>
                 <AccountPreview outline userInfo={videoInfo.user} customTippy={{ delay: [1000, 500], offset: [0, 6] }}>
                     <Img className={cx('avatar')} src={avatarUrl} />

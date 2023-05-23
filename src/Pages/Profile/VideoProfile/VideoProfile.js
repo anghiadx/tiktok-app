@@ -73,10 +73,19 @@ function VideoProfile({ user, data }) {
     // Modal video function handler
     const handleNextVideo = () => {
         setPlayId((currentId) => {
-            const nextId = currentId + 1;
-            if (nextId >= currentList.length) {
+            let nextId;
+
+            for (let i = currentId + 1; i < currentList.length; i++) {
+                if (!currentList[i].isDeleted) {
+                    nextId = i;
+                    break;
+                }
+            }
+
+            if (nextId === undefined) {
                 return currentId;
             }
+
             const newProps = {
                 index: nextId,
                 data: currentList[nextId],
@@ -87,10 +96,19 @@ function VideoProfile({ user, data }) {
     };
     const handlePrevVideo = () => {
         setPlayId((currentId) => {
-            const prevId = currentId - 1;
-            if (prevId < 0) {
+            let prevId;
+
+            for (let i = currentId - 1; i >= 0; i--) {
+                if (!currentList[i].isDeleted) {
+                    prevId = i;
+                    break;
+                }
+            }
+
+            if (prevId === undefined) {
                 return currentId;
             }
+
             const newProps = {
                 index: prevId,
                 data: currentList[prevId],
@@ -119,7 +137,7 @@ function VideoProfile({ user, data }) {
             dataRender = currentList.map((video, index) => {
                 const { description, views_count: viewsCount } = video;
                 return (
-                    <div key={index} className={cx('video-item')}>
+                    <div key={index} className={cx('video-item', { hidden: video.isDeleted })}>
                         <div className={cx('item__content')}>
                             <VideoPreview videoId={index} playIdState={[playId, setPlayId]} data={video} modalActive />
 

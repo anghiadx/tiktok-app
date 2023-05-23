@@ -20,6 +20,7 @@
     height: 100%;
     background-color: var(--background-gray-color-06);
     position: relative;
+    z-index: 1;
 
     img,
     video {
@@ -50,6 +51,7 @@
     border-radius: 50%;
 
     position: absolute;
+    z-index: 2;
     color: white;
     background-color: rgba(255, 255, 255, 0.12);
     transition: opacity 0.3s ease 0s;
@@ -165,6 +167,7 @@
 
 .play-icon {
     position: absolute;
+    z-index: 1;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -174,6 +177,7 @@
 
 .loading {
     position: absolute;
+    z-index: 1;
     left: 50%;
     top: 50%;
     pointer-events: none;
@@ -193,6 +197,7 @@
     position: absolute;
     bottom: 28px;
     left: 50%;
+    z-index: 1;
     transform: translateX(-50%);
 
     display: flex;

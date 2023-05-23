@@ -52,8 +52,8 @@ function Upload() {
     return (
         <div className={cx('wrapper')}>
             <section className={cx('body')}>
-                <div className={cx('inner')}>
-                    {!keepSetup.current ? (
+                {!keepSetup.current ? (
+                    <div className={cx('inner')}>
                         <div className={cx('upload-container')}>
                             <div
                                 className={cx('file-container')}
@@ -80,17 +80,17 @@ function Upload() {
                                     Chọn tập tin
                                 </Button>
                             </div>
+                            <input ref={fileRef} type="file" accept="video/*" hidden onChange={handleSelectFile} />
                         </div>
-                    ) : (
-                        <SetupVideo
-                            file={file}
-                            setFile={setFile}
-                            handleSelectFile={handleSelectFile}
-                            handleDropFile={handleDropFile}
-                        />
-                    )}
-                </div>
-                <input ref={fileRef} type="file" accept="video/*" hidden onChange={handleSelectFile} />
+                    </div>
+                ) : (
+                    <SetupVideo
+                        file={file}
+                        setFile={setFile}
+                        handleSelectFile={handleSelectFile}
+                        handleDropFile={handleDropFile}
+                    />
+                )}
             </section>
         </div>
     );

@@ -1,4 +1,17 @@
-.wrapper {
+.inner {
+    width: 1100px;
+    // min-height: 1000px;
+    margin: 0 auto;
+    margin-bottom: 36px;
+    padding: 24px 40px;
+    background-color: var(--white-color-2);
+    border-radius: 8px;
+    box-shadow: rgb(0 0 0 / 6%) 0px 2px 8px;
+    overflow: hidden;
+}
+
+// SETUP CONTAINER
+.setup-container {
     font-weight: 500;
 }
 

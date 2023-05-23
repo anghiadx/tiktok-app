@@ -141,10 +141,15 @@ function VideoControl({ videoId, videoInfo, setThumbLoaded, onClick: handleOpenV
     const updateInViewArr = () => {
         videoArray[videoId].inView = isInView;
 
-        // when the inview status of this video changes -> update the next video
-        // (so that next video can play or stop respectively)
-        if (videoArray[videoId + 1]?.update) {
-            videoArray[videoId + 1].update((prev) => !prev);
+        for (let i = videoId + 1; i < videoArray.length; i++) {
+            // when the inview status of this video changes -> update the next video
+            // (so that next video can play or stop respectively)
+            const isDeleted = videoArray[i]?.data?.isDeleted;
+
+            if (videoArray[i]?.update && !isDeleted) {
+                videoArray[i].update((prev) => !prev);
+                break;
+            }
         }
     };
 

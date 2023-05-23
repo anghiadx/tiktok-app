@@ -115,8 +115,31 @@ function SuggestVideo({ data = [] }) {
         if (currentVideoId === -1) {
             return;
         }
-        const prevVideo = videoArrayRef.current[currentVideoId - 1];
-        const nextVideo = videoArrayRef.current[currentVideoId + 1];
+
+        let prevVideo;
+        let nextVideo;
+
+        // Get prevVideo
+        for (let i = currentVideoId - 1; i >= 0; i--) {
+            const currentVideo = videoArrayRef.current[i];
+            const isDeleted = Boolean(currentVideo?.data?.isDeleted);
+
+            if (!isDeleted) {
+                prevVideo = currentVideo;
+                break;
+            }
+        }
+
+        // Get nextVideo
+        for (let i = currentVideoId + 1; i < videoArrayRef.current.length; i++) {
+            const currentVideo = videoArrayRef.current[i];
+            const isDeleted = Boolean(currentVideo?.data?.isDeleted);
+
+            if (!isDeleted) {
+                nextVideo = currentVideo;
+                break;
+            }
+        }
 
         switch (type) {
             case 'up':
