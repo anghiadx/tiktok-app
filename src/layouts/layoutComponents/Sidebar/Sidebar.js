@@ -12,6 +12,7 @@ import { Scrollbars as CustomScrollbar } from 'react-custom-scrollbars';
 import LoginNotify from './LoginNotify';
 import Discover from './Discover';
 import BorderTopContainer from '~/components/BorderTopContainer';
+import Signature from '~/components/Signature/Signature';
 
 const cx = classNames.bind(styles);
 
@@ -113,8 +114,10 @@ function Sidebar({ suggestedAcc = true, followingAcc = true }) {
                             <p className={cx('link-list')}>
                                 <span className={cx('more')}>Thêm</span>
                             </p>
+                            <span className={cx('more')}>© 2023 TikTok - Clone by Nghiadx</span>
 
-                            <span className={cx('more')}>© 2023 TikTok - Clone by anghiadx</span>
+                            {/* Signature */}
+                            <Signature />
                         </BorderTopContainer>
                     </div>
                 </CustomScrollbar>

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { forwardRef, useState } from 'react';
+import { forwardRef, useLayoutEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Img.module.scss';
 import assetImages from '~/assets/images';
@@ -8,6 +8,10 @@ const cx = classNames.bind(styles);
 
 const Img = forwardRef(function ({ className, src, alt = '', fallback = assetImages.noImage, ...props }, REF) {
     const [error, setError] = useState(null);
+
+    useLayoutEffect(() => {
+        setError(null);
+    }, [src]);
 
     const handleImageError = () => {
         setError(fallback);

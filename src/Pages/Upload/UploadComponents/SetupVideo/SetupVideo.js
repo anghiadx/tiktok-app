@@ -196,6 +196,7 @@ function SetupVideo({ file, setFile, handleSelectFile, handleDropFile }) {
                                     videoDescription={noteValue}
                                     videoMusic={musicValue}
                                     currentUser={currentUser}
+                                    loading={loading}
                                 />
                             ) : (
                                 <VideoUpload
@@ -404,7 +405,12 @@ function SetupVideo({ file, setFile, handleSelectFile, handleDropFile }) {
 
                             {/* ĐĂNG */}
                             <div className={cx('submit-container')}>
-                                <Button className={cx('submit-btn')} primary onClick={confirmStopSetup}>
+                                <Button
+                                    className={cx('submit-btn')}
+                                    primary
+                                    disable={loading}
+                                    onClick={loading ? null : confirmStopSetup}
+                                >
                                     Hủy bỏ
                                 </Button>
                                 <Button

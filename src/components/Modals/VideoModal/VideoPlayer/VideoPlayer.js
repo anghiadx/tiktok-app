@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import classNames from 'classnames/bind';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -17,6 +17,7 @@ import {
 import TiktokLoading from '~/components/Loadings/TiktokLoading';
 import { timeToPercent, percentToTime, timeFormat } from '~/funcHandler';
 import VideoDeletedOverlay from '~/components/Videos/VideoDeletedOverlay';
+import Signature from '~/components/Signature/Signature';
 
 const cx = classNames.bind(styles);
 
@@ -42,18 +43,24 @@ function VideoPlayer({ index, data = {}, handleClose, handlePrevVideo, handleNex
     const volumeBarRef = useRef();
     const volumeDotRef = useRef();
 
-    useEffect(() => {
+    // When the video has been deleted
+    useLayoutEffect(() => {
         if (isDeleted) {
-            videoRef.current.pause();
+            setPlaying(false);
+            handleNextVideo();
             return;
         }
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isDeleted]);
+
+    useEffect(() => {
         playing
             ? videoRef.current.play().catch((err) => {
                   err.code !== 20 && console.error(err);
               })
             : videoRef.current.pause();
-    }, [playing, isDeleted]);
+    }, [playing]);
 
     useEffect(() => {
         videoRef.current.muted = muted;
@@ -297,13 +304,16 @@ function VideoPlayer({ index, data = {}, handleClose, handlePrevVideo, handleNex
                 </div>
             )}
 
-            {!playing && (
+            {!playing && !isDeleted && (
                 <span className={cx('play-icon')}>
                     <SvgIcon icon={iconPauseVideo} size={70} />
                 </span>
             )}
 
             {loading && <SvgIcon className={cx('loading')} icon={<TiktokLoading medium />} />}
+
+            {/* Signature */}
+            <Signature className={cx('signature')} />
         </div>
     );
 }

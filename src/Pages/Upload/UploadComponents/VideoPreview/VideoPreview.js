@@ -9,7 +9,7 @@ import { ModalContextKey } from '~/contexts/ModalContext';
 
 const cx = classNames.bind(styles);
 
-function VideoPreview({ file, setFile, videoDescription, videoMusic, currentUser }) {
+function VideoPreview({ file, setFile, videoDescription, videoMusic, currentUser, loading }) {
     // State
     const [videoUrl, setVideoUrl] = useState('');
     const [progressValue, setProgressValue] = useState(0);
@@ -244,7 +244,9 @@ function VideoPreview({ file, setFile, videoDescription, videoMusic, currentUser
                 <SvgIcon className={cx('icon')} icon={iconTickCircle} size={16} />
                 <p>{file.name}</p>
                 <span></span>
-                <strong onClick={confirmChangeVideo}>Thay đổi video</strong>
+                <strong className={cx({ disable: loading })} onClick={loading ? null : confirmChangeVideo}>
+                    Thay đổi video
+                </strong>
             </div>
         </div>
     );

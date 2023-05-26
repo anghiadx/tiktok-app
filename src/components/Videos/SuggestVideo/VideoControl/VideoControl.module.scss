@@ -1,4 +1,6 @@
 .player-space {
+    --size-data: 600px;
+
     margin-right: 20px;
     border-radius: 8px;
     overflow: hidden;
@@ -10,11 +12,11 @@
     }
 
     &.vertical {
-        height: 600px;
+        height: var(--size-data);
     }
 
     &.horizontal {
-        width: 600px;
+        width: var(--size-data);
     }
 }
 .video-loading {
@@ -36,12 +38,9 @@
         height: 100%;
         width: 100%;
         object-fit: cover;
-        z-index: 1;
-    }
 
-    .thumb {
-        min-height: 100%;
         position: relative;
+        z-index: 1;
     }
 
     .video {
@@ -179,11 +178,11 @@
 @media (max-width: 1919px) {
     .player-space {
         &.vertical {
-            height: calc(450px + (100vw - 768px) / 1152 * 200);
+            --size-data: calc(450px + (100vw - 768px) / 1152 * 200);
         }
 
         &.horizontal {
-            width: calc(450px + (100vw - 768px) / 1152 * 200);
+            --size-data: calc(450px + (100vw - 768px) / 1152 * 200);
         }
     }
 }
@@ -191,10 +190,10 @@
 @media (max-width: 767px) {
     .player-space {
         &.vertical {
-            height: calc(380px + (100vw - 480px) / 288 * 20);
+            --size-data: calc(380px + (100vw - 480px) / 288 * 20);
         }
         &.horizontal {
-            width: calc(380px + ((100vw - 480px) / 288) * 20);
+            --size-data: calc(380px + ((100vw - 480px) / 288) * 20);
         }
     }
 }
@@ -203,8 +202,14 @@
     .player-space {
         &.vertical,
         &.horizontal {
-            width: calc(100vw - 32px - 60px);
+            --size-data: calc(100vw - 32px - 60px);
+            width: var(--size-data);
             height: auto;
+        }
+
+        &.vertical .default-space {
+            width: 100% !important;
+            height: calc(var(--size-data) / 100 * var(--height-data));
         }
     }
 }

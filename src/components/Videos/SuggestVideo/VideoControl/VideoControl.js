@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useRef, useState, useContext, memo } from 'react';
+import { useEffect, useRef, useState, useContext, memo, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 import classNames from 'classnames/bind';
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,7 +26,33 @@ function VideoControl({ videoId, videoInfo, setThumbLoaded, onClick: handleOpenV
         },
     } = videoInfo;
 
-    const directionVideoClass = videoWidth - videoHeight < 0 ? 'vertical' : 'horizontal';
+    // Get video direction
+    const directionVideo = useMemo(() => {
+        const directionVideo = {
+            style: {},
+        };
+
+        directionVideo.class = videoWidth - videoHeight < 0 ? 'vertical' : 'horizontal';
+
+        // Get style
+        if (directionVideo.class === 'vertical') {
+            const percent = (videoWidth / videoHeight) * 100;
+
+            // When width screen <= 479px
+            // Calculate the height as a percentage of the width
+            const heightPercent = (100 / percent) * 100;
+            directionVideo.style['--height-data'] = heightPercent;
+
+            directionVideo.style.width = `calc(var(--size-data) / 100 * ${percent}`;
+        } else {
+            const percent = (videoHeight / videoWidth) * 100;
+            directionVideo.style.height = `calc(var(--size-data) / 100 * ${percent}`;
+        }
+
+        return directionVideo;
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [videoInfo]);
 
     // Get data from the context
     const { videoArray, priorityVideoState } = useContext(VideoContextKey);
@@ -217,18 +243,14 @@ function VideoControl({ videoId, videoInfo, setThumbLoaded, onClick: handleOpenV
     };
 
     return (
-        <div className={cx('player-space', directionVideoClass)}>
+        <div className={cx('player-space', directionVideo.class)}>
             {loading && playing && <SvgIcon className={cx('video-loading')} icon={<TiktokLoading medium />} />}
-            <div className={cx('default-space')} onClick={handleOpenVideoModal}>
+            <div className={cx('default-space')} style={directionVideo.style} onClick={handleOpenVideoModal}>
                 <Img
                     className={cx('thumb')}
                     src={thumbUrl}
                     ref={inViewRef}
-                    fallback={
-                        directionVideoClass === 'vertical'
-                            ? assetImages.imageTransparentVertical
-                            : assetImages.imageTransparentHorizontal
-                    }
+                    fallback={assetImages.imageTransparentHorizontal}
                     onLoad={() => setThumbLoaded(true)}
                 />
                 <video

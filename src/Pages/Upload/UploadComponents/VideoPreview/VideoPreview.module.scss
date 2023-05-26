@@ -392,6 +392,11 @@
         &:hover {
             text-decoration: underline;
         }
+
+        &.disable {
+            opacity: 0.5;
+            text-decoration: none;
+        }
     }
 }
 

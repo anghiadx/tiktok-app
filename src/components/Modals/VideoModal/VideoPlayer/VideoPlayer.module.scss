@@ -261,3 +261,12 @@
     font-size: 1.4rem;
     font-weight: 500;
 }
+
+// Signature
+.signature {
+    position: absolute;
+    z-index: 3;
+    top: 6px;
+    left: 60px;
+    color: white;
+}
