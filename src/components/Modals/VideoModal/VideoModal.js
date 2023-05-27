@@ -263,6 +263,7 @@ function VideoModal(props) {
                 <section className={cx('comment-container')}>
                     <CommentShow
                         videoId={videoId}
+                        videoInfo={data}
                         authorId={userId}
                         onCloseModal={handleClose}
                         commentState={[comments, setComments]}

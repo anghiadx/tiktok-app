@@ -12,13 +12,12 @@ import SvgIcon from '~/components/SvgIcon';
 import { iconMusic } from '~/components/SvgIcon/iconsRepo';
 import ShowTick from '~/components/ShowTick';
 import AccountPreview from '~/components/Items/AccountItem/AccountPreview';
-import VideoControl from '../VideoControl';
 import HashtagFilter from '~/components/Filters/HashtagFilter';
 
 import { VideoModalContextKey } from '~/contexts/VideoModalContext';
 import { VideoContextKey } from '~/contexts/VideoContext';
+import VideoControl from './VideoControl';
 import InteractiveVideo from './InteractiveVideo';
-
 import HandleFollow from '~/components/UserInteractive/HandleFollow';
 
 const cx = classNames.bind(styles);
@@ -138,10 +137,10 @@ function VideoItem({ videoId, videoInfo }) {
                     </p>
 
                     {/* Music info */}
-                    <a href="#" className={cx('music-info')}>
+                    <Link to={'/music'} className={cx('music-info')} target="_blank">
                         <SvgIcon className={cx('icon-music')} icon={iconMusic} />
                         {musicInfo || `Nhạc nền - ${firstName} ${lastName}`}
-                    </a>
+                    </Link>
                 </div>
 
                 <div className={cx('video-player')}>

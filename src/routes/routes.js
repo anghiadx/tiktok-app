@@ -1,5 +1,5 @@
 import { FullSpace, FollowingLayout, HeaderOnly } from '~/layouts';
-import { Home, Following, Upload, Profile, Live, SearchDetails, Video, Hashtag, PageNotFound } from '~/Pages';
+import { Home, Following, Upload, Profile, Live, SearchDetails, Video, Hashtag, PageNotFound, Music } from '~/Pages';
 import configs from '~/configs';
 
 const publicRoutes = [
@@ -10,6 +10,7 @@ const publicRoutes = [
     { path: configs.routes.search, component: SearchDetails },
     { path: configs.routes.video, component: Video },
     { path: configs.routes.hashtag, component: Hashtag, layout: FullSpace, options: { suggestedAccount: false } },
+    { path: configs.routes.music, component: Music, layout: FullSpace },
     { path: configs.routes.notFound, component: PageNotFound, layout: HeaderOnly },
 ];
 

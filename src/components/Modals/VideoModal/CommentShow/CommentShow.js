@@ -7,7 +7,7 @@ import { commentService } from '~/services';
 
 const cx = classNames.bind(styles);
 
-function CommentShow({ videoId, authorId, onCloseModal, commentState }) {
+function CommentShow({ videoId, videoInfo, authorId, onCloseModal, commentState }) {
     const [comments, setComments] = commentState;
     const [loading, setLoading] = useState(true);
 
@@ -47,6 +47,7 @@ function CommentShow({ videoId, authorId, onCloseModal, commentState }) {
                           index={index}
                           data={comment}
                           authorId={authorId}
+                          videoInfo={videoInfo}
                           onCloseModal={onCloseModal}
                           setComments={setComments}
                       />

@@ -72,48 +72,54 @@ function VideoProfile({ user, data }) {
 
     // Modal video function handler
     const handleNextVideo = () => {
-        let nextId;
+        setPlayId((currentId) => {
+            let nextId;
 
-        for (let i = playId + 1; i < currentList.length; i++) {
-            if (!currentList[i].isDeleted) {
-                nextId = i;
-                break;
+            for (let i = currentId + 1; i < currentList.length; i++) {
+                if (!currentList[i].isDeleted) {
+                    nextId = i;
+                    break;
+                }
             }
-        }
 
-        if (nextId === undefined) {
-            return;
-        }
+            if (nextId === undefined) {
+                return currentId;
+            }
 
-        const newProps = {
-            index: nextId,
-            data: currentList[nextId],
-        };
+            const newProps = {
+                index: nextId,
+                data: currentList[nextId],
+            };
 
-        setPropsVideoModal({ ...propsVideoModal, ...newProps });
-        setPlayId(nextId);
+            setTimeout(() => setPropsVideoModal({ ...propsVideoModal, ...newProps }));
+
+            return nextId;
+        });
     };
     const handlePrevVideo = () => {
-        let prevId;
+        setPlayId((currentId) => {
+            let prevId;
 
-        for (let i = playId - 1; i >= 0; i--) {
-            if (!currentList[i].isDeleted) {
-                prevId = i;
-                break;
+            for (let i = currentId - 1; i >= 0; i--) {
+                if (!currentList[i].isDeleted) {
+                    prevId = i;
+                    break;
+                }
             }
-        }
 
-        if (prevId === undefined) {
-            return;
-        }
+            if (prevId === undefined) {
+                return currentId;
+            }
 
-        const newProps = {
-            index: prevId,
-            data: currentList[prevId],
-        };
+            const newProps = {
+                index: prevId,
+                data: currentList[prevId],
+            };
 
-        setPropsVideoModal({ ...propsVideoModal, ...newProps });
-        setPlayId(prevId);
+            setTimeout(() => setPropsVideoModal({ ...propsVideoModal, ...newProps }));
+
+            return prevId;
+        });
     };
 
     const renderVideos = () => {

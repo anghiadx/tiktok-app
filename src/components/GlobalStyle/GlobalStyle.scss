@@ -96,6 +96,8 @@ body {
     &.video-modal {
         overflow: hidden;
     }
+
+    -webkit-tap-highlight-color: transparent;
 }
 
 button,

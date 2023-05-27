@@ -7,6 +7,7 @@ const routes = {
     search: '/search',
     video: '/video/:id',
     hashtag: '/hashtag/:tag',
+    music: '/music',
     notFound: '*',
 };
 

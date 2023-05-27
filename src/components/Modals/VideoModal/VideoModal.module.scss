@@ -234,3 +234,10 @@
     font-weight: 600;
     color: var(--primary-color);
 }
+
+// REPONSIVE
+@media (max-width: 768px) {
+    .video-container {
+        flex-basis: 100%;
+    }
+}

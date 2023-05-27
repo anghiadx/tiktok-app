@@ -21,7 +21,7 @@ import { likeService } from '~/services';
 
 const cx = classNames.bind(styles);
 
-function CommentShow({ index, data, authorId, onCloseModal, setComments }) {
+function CommentShow({ index, data, authorId, videoInfo, onCloseModal, setComments }) {
     // Context
     const { confirmModalShow } = useContext(ModalContextKey);
     const showNotify = useContext(NotifyContextKey);
@@ -43,6 +43,7 @@ function CommentShow({ index, data, authorId, onCloseModal, setComments }) {
 
     // State
     const [isLiked, setIsLiked] = useState(is_liked);
+    const [cancelAnimation, setCancelAnimation] = useState(false);
 
     // Ref
     const wrapperRef = useRef();
@@ -53,9 +54,24 @@ function CommentShow({ index, data, authorId, onCloseModal, setComments }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    useEffect(() => {
+        if (!cancelAnimation) {
+            return;
+        }
+
+        isLiked && heartIconRef.current.goToAndStop(35, true);
+        setCancelAnimation(false);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [cancelAnimation]);
+
     // Reset state if data is changed
     useEffect(() => {
-        setIsLiked(data.is_liked);
+        if (data.is_liked !== isLiked) {
+            setIsLiked(data.is_liked);
+            setCancelAnimation(true);
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
 
     const AccPreview = ({ children, customs = {} }) => {
@@ -105,6 +121,8 @@ function CommentShow({ index, data, authorId, onCloseModal, setComments }) {
 
                 return newComments;
             });
+
+            videoInfo.comments_count--;
         }
     };
 
