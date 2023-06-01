@@ -1,6 +1,5 @@
 .video-player {
     height: 100%;
-    padding: 0 80px;
     cursor: pointer;
     position: relative;
     overflow: hidden;
@@ -53,7 +52,7 @@
     position: absolute;
     z-index: 2;
     color: white;
-    background-color: rgba(255, 255, 255, 0.12);
+    background-color: rgba(84, 84, 84, 0.5);
     transition: opacity 0.3s ease 0s;
 
     &:hover {
@@ -92,6 +91,7 @@
     display: flex;
     align-items: center;
     position: absolute;
+    z-index: 2;
     right: 20px;
     bottom: 20px;
     transform-origin: calc(100% - 20px);
@@ -118,7 +118,7 @@
     padding: 0 12px;
     margin: 0 8px;
     border-radius: 32px;
-    background-color: rgba(255, 255, 255, 0.12);
+    background-color: rgba(84, 84, 84, 0.5);
 
     position: relative;
     animation: play-icon-effect 0.3s;

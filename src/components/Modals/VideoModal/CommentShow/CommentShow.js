@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { InView } from 'react-intersection-observer';
 import classNames from 'classnames/bind';
 import styles from './CommentShow.module.scss';
 import CommentLoading from '~/components/Loadings/CommentLoading';
@@ -9,7 +10,9 @@ const cx = classNames.bind(styles);
 
 function CommentShow({ videoId, videoInfo, authorId, onCloseModal, commentState }) {
     const [comments, setComments] = commentState;
+    const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
+    const [isEmpty, setIsEmpty] = useState(false);
 
     const loadingComment = Array(9).fill();
 
@@ -23,20 +26,20 @@ function CommentShow({ videoId, videoInfo, authorId, onCloseModal, commentState 
 
         const fetchAPI = async () => {
             setLoading(true);
+            const dataResponse = await commentService.get(videoId, page);
+            setLoading(false);
 
-            const dataResponse = await commentService.get(videoId);
             const dataOk = Array.isArray(dataResponse) ? dataResponse : [];
 
-            setComments(dataOk);
-            setLoading(false);
+            dataOk.length > 0 ? setComments(comments.concat(dataOk)) : setIsEmpty(true);
         };
         fetchAPI();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [videoId]);
+    }, [videoId, page]);
 
     const renderComment = () => {
-        return loading
+        return loading && comments.length === 0
             ? loadingComment.map((val, index) => {
                   return <CommentLoading key={index} />;
               })
@@ -61,6 +64,18 @@ function CommentShow({ videoId, videoInfo, authorId, onCloseModal, commentState 
                 <p className={cx('no-login')}>Hãy đăng nhập để bình luận và xem bình luận của người khác!</p>
             ) : (
                 renderComment()
+            )}
+
+            {/* Empty Comment */}
+            {!loading && comments.length === 0 && (
+                <p className={cx('empty-comment')}>Hãy là người đầu tiên bình luận!</p>
+            )}
+
+            {/* Loadmore element */}
+            {!isEmpty && comments.length >= 10 && (
+                <InView onChange={(inView) => inView && !loading && setPage(page + 1)}>
+                    <CommentLoading />
+                </InView>
             )}
         </div>
     );

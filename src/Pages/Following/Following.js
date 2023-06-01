@@ -55,7 +55,7 @@ function Following() {
             <SuggestVideo data={videoList} />
 
             {!fullList && (
-                <InView onChange={(inView) => inView && !loading && setPage(page + 1)}>
+                <InView rootMargin="0px 0px 80px 0px" onChange={(inView) => inView && !loading && setPage(page + 1)}>
                     {videoList.length === 0 ? (
                         <HomeAccountLoading />
                     ) : (

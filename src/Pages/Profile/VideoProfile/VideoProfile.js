@@ -65,6 +65,57 @@ function VideoProfile({ user, data }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isVideoModalShow]);
 
+    // Handle Keyboard Shortcut
+    useEffect(() => {
+        const handleKeyUp = (e) => {
+            // if there is an open modal then do nothing
+            const isModalShow = document.body.classList.contains('modal');
+            const isVideoModal = document.body.classList.contains('video-modal');
+
+            if (!isVideoModal || isModalShow) return;
+
+            e.preventDefault();
+            const keyCode = e.keyCode;
+
+            switch (keyCode) {
+                // Space & down arrow
+                case 32:
+                case 40:
+                    handleNextVideo();
+                    break;
+
+                // up arrow
+                case 38:
+                    handlePrevVideo();
+                    break;
+
+                default:
+                    break;
+            }
+        };
+        const handleKeyDown = (e) => {
+            // if there is an open modal then do nothing
+            const isModalShow = document.body.classList.contains('modal');
+            const isVideoModal = document.body.classList.contains('video-modal');
+
+            if (!isVideoModal || isModalShow) return;
+
+            const keyCode = e.keyCode;
+            const blackList = [40, 38, 32];
+            if (blackList.includes(keyCode)) {
+                e.preventDefault();
+            }
+        };
+
+        window.addEventListener('keyup', handleKeyUp);
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keyup', handleKeyUp);
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    });
+
     // Function handler
     const handleSelectTab = (type) => {
         setListType(type);

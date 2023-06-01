@@ -61,7 +61,7 @@ function Home() {
         <div className={cx('wrapper')}>
             <SuggestVideo data={videoList} />
 
-            <InView onChange={(inView) => inView && setPage(handleRandomPage(1, 10))}>
+            <InView rootMargin="0px 0px 80px 0px" onChange={(inView) => inView && setPage(handleRandomPage(1, 10))}>
                 {videoList.length === 0 ? (
                     <HomeAccountLoading />
                 ) : (

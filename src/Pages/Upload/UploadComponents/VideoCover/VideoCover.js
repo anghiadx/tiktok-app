@@ -5,19 +5,26 @@ import styles from './VideoCover.module.scss';
 
 const cx = classNames.bind(styles);
 
+// Số ảnh bìa sẽ render
+const coverItemsNum = 8;
+
+// Thời gian delay sau mỗi lần render (ms)
+const renderDelay = 100;
+
 function VideoCover({ file, timeCoverRef }) {
+    // State
     const [slideValue, setSlideValue] = useState(0);
     const [videoDuration, setVideoDuration] = useState();
+    const [coverItems, setCoverItems] = useState(Array(coverItemsNum).fill(''));
 
-    const [coverItems, setCoverItems] = useState(Array(8).fill(''));
-
+    // Ref
     const videoSlideRef = useRef();
 
     // Create video url from file or reset state
     useEffect(() => {
         if (!file) {
             // Reset state
-            setCoverItems(Array(8).fill(''));
+            setCoverItems(Array(coverItemsNum).fill(''));
             setSlideValue(0);
             return;
         }
@@ -47,22 +54,32 @@ function VideoCover({ file, timeCoverRef }) {
             return;
         }
         const videoSnapshot = new VideoSnapshot(file);
-        const aPart = videoDuration / 7;
+        const aPart = videoDuration / (coverItemsNum - 1);
 
-        const getCoverItems = async (part) => {
-            const previewUrl = await videoSnapshot.takeSnapshot(aPart * part);
+        const getCoverItems = async () => {
+            const tasks = [];
 
-            setCoverItems((prevItems) => {
-                const newItems = [...prevItems];
-                newItems[part] = previewUrl;
+            for (let i = 0; i < coverItemsNum; i++) {
+                tasks.push(videoSnapshot.takeSnapshot(aPart * i));
+            }
 
-                return newItems;
+            const previewUrls = await Promise.all(tasks);
+
+            previewUrls.forEach((url, index) => {
+                setTimeout(
+                    () =>
+                        setCoverItems((prevItems) => {
+                            const newItems = [...prevItems];
+                            newItems[index] = url;
+
+                            return newItems;
+                        }),
+                    renderDelay * index,
+                );
             });
-
-            part + 1 < 8 && getCoverItems(part + 1);
         };
 
-        getCoverItems(0);
+        getCoverItems();
     }, [videoDuration, file]);
 
     return (

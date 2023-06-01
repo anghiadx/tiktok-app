@@ -14,8 +14,8 @@ const options = {
     },
 };
 
-export const get = async (videoId) => {
-    const dataResponse = await httpRequest.get(commentPath(videoId), options);
+export const get = async (videoId, page = 1) => {
+    const dataResponse = await httpRequest.get(commentPath(videoId) + `?page=${page}`, options);
     return dataResponse.data;
 };
 

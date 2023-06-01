@@ -28,4 +28,12 @@
 .heart-icon {
     margin-top: 2px;
     height: 246%;
+    pointer-events: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+
+    svg {
+        width: auto !important;
+    }
 }

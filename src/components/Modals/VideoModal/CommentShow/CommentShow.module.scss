@@ -1,6 +1,8 @@
 // WRAPPER CONTAINER
 .comment-list {
+    min-height: 100%;
     padding: 24px 32px;
+    position: relative;
 }
 .comment-item {
     display: flex;
@@ -10,6 +12,19 @@
     &:hover .more-icon {
         display: block;
     }
+}
+
+// Empty comment style
+.empty-comment {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-gray-color2);
+    font-size: 1.4rem;
+    font-weight: 500;
+
+    position: absolute;
+    inset: 0;
 }
 
 //  MORE CONTAINER
@@ -142,6 +157,10 @@
     .heart-icon {
         height: 45px;
         pointer-events: none;
+
+        svg {
+            width: auto !important;
+        }
     }
 }
 .like-count {

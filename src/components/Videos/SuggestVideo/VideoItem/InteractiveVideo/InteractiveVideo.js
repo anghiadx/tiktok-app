@@ -36,7 +36,7 @@ function InteractiveVideo({ isAuth, handleOpenVideoModal, videoInfo }) {
     }, [videoInfo.is_liked === isLiked]);
 
     useEffect(() => {
-        isLiked && heartIconRef.current.setSpeed(1.5);
+        isLiked && heartIconRef.current.setSpeed(1.3);
     }, [isLiked]);
 
     const handleLikeVideo = async () => {

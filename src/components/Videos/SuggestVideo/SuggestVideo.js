@@ -59,13 +59,11 @@ function SuggestVideo({ data = [] }) {
                 // Space & down arrow
                 case 32:
                 case 40:
-                    e.preventDefault();
                     handleScroll('down');
                     break;
 
                 // up arrow
                 case 38:
-                    e.preventDefault();
                     handleScroll('up');
                     break;
 
@@ -116,33 +114,21 @@ function SuggestVideo({ data = [] }) {
             return;
         }
 
-        let prevVideo;
-        let nextVideo;
-
-        // Get prevVideo
-        for (let i = currentVideoId - 1; i >= 0; i--) {
-            const currentVideo = videoArrayRef.current[i];
-            const isDeleted = Boolean(currentVideo?.data?.isDeleted);
-
-            if (!isDeleted) {
-                prevVideo = currentVideo;
-                break;
-            }
-        }
-
-        // Get nextVideo
-        for (let i = currentVideoId + 1; i < videoArrayRef.current.length; i++) {
-            const currentVideo = videoArrayRef.current[i];
-            const isDeleted = Boolean(currentVideo?.data?.isDeleted);
-
-            if (!isDeleted) {
-                nextVideo = currentVideo;
-                break;
-            }
-        }
-
         switch (type) {
             case 'up':
+                let prevVideo;
+
+                // Get prevVideo
+                for (let i = currentVideoId - 1; i >= 0; i--) {
+                    const currentVideo = videoArrayRef.current[i];
+                    const isDeleted = Boolean(currentVideo?.data?.isDeleted);
+
+                    if (!isDeleted) {
+                        prevVideo = currentVideo;
+                        break;
+                    }
+                }
+
                 if (prevVideo) {
                     prevVideo.wrapperIntoView();
                     if (isVideoModalShow) {
@@ -156,6 +142,19 @@ function SuggestVideo({ data = [] }) {
                 break;
 
             default:
+                let nextVideo;
+
+                // Get nextVideo
+                for (let i = currentVideoId + 1; i < videoArrayRef.current.length; i++) {
+                    const currentVideo = videoArrayRef.current[i];
+                    const isDeleted = Boolean(currentVideo?.data?.isDeleted);
+
+                    if (!isDeleted) {
+                        nextVideo = currentVideo;
+                        break;
+                    }
+                }
+
                 if (nextVideo) {
                     nextVideo.wrapperIntoView();
                     if (isVideoModalShow) {

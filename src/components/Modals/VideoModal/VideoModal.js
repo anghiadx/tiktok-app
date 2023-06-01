@@ -70,6 +70,25 @@ function VideoModal(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // Handle key event
+    useEffect(() => {
+        const handleKeyUp = (e) => {
+            if (e.keyCode === 27) {
+                // if there is an open modal then do nothing
+                const isModalShow = document.body.classList.contains('modal');
+                if (!isModalShow) {
+                    handleClose();
+                }
+            }
+        };
+
+        window.addEventListener('keyup', handleKeyUp);
+
+        return () => {
+            window.removeEventListener('keyup', handleKeyUp);
+        };
+    }, [handleClose]);
+
     const confirmDeleteVideo = () => {
         // Create data modal
         const dataConfirmModal = {
@@ -182,10 +201,10 @@ function VideoModal(props) {
                     <p className={cx('description')}>
                         <HashtagFilter onCloseModal={handleClose}>{description}</HashtagFilter>
                     </p>
-                    <p className={cx('music')}>
+                    <Link to={'/music'} className={cx('music')} target="_blank">
                         <SvgIcon style={{ marginRight: 6 }} icon={iconMusic} />
                         {musicInfo || `Nhạc nền - ${firstName} ${lastName}`}
-                    </p>
+                    </Link>
 
                     <div className={cx('info__interactive')}>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>

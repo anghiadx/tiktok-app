@@ -1,12 +1,14 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames/bind';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare } from '@fortawesome/free-regular-svg-icons';
+
 import Button from '~/components/Button/Button';
 import VideoCover from '../VideoCover';
 import Popper from '~/components/Popper';
 import SvgIcon from '~/components/SvgIcon';
-import { iconHashtag, iconMusic, iconSmallArrow, iconTextWarning, iconTickBox } from '~/components/SvgIcon/iconsRepo';
-
+import { iconMusic, iconSmallArrow, iconTextWarning, iconTickBox } from '~/components/SvgIcon/iconsRepo';
 import styles from './SetupVideo.module.scss';
 import Switch from '~/components/Switch';
 import VideoPreview from '../VideoPreview';
@@ -51,7 +53,7 @@ function SetupVideo({ file, setFile, handleSelectFile, handleDropFile }) {
     const [musicValue, setMusicValue] = useState(`Nhạc nền - ${currentUser.first_name} ${currentUser.last_name}`); // Âm nhạc trong video
     const [showMusicInput, setShowMusicInput] = useState(false);
     const [viewId, setViewId] = useState(0); // Chế độ hiển thị
-    const [viewableShow, setViewableShow] = useState(false);
+    const [viewableShow, setViewableShow] = useState(false); // Trạng thái hiển thị của popup "chế độ hiển thị"
     const [allowuser, setAllowuser] = useState(allowuserData); // Cho phép người dùng comment, duet hoặc stitch
     const [runcopyright, setRuncopyright] = useState(false); // Chạy kiểm tra bản quyền
 
@@ -158,6 +160,10 @@ function SetupVideo({ file, setFile, handleSelectFile, handleDropFile }) {
         dataUpload.append('thumbnail_time', Math.floor(timeCoverRef.current));
         // Viewable
         dataUpload.append('viewable', viewableData[viewId].value);
+        // Allow user
+        Object.keys(allowuser).forEach((key) => {
+            allowuser[key] && dataUpload.append('allows[]', key.toLowerCase());
+        });
 
         const fetchAPI = async () => {
             setLoading(true);
@@ -247,7 +253,7 @@ function SetupVideo({ file, setFile, handleSelectFile, handleDropFile }) {
                                                 className={cx('control')}
                                                 onClick={() => setShowMusicInput(!showMusicInput)}
                                             >
-                                                <SvgIcon icon={iconMusic} size={20} />
+                                                <SvgIcon icon={iconMusic} size={22} />
                                             </span>
                                         </div>
                                     </div>
@@ -283,7 +289,7 @@ function SetupVideo({ file, setFile, handleSelectFile, handleDropFile }) {
                                                 className={cx('control')}
                                                 onClick={() => setShowMusicInput(!showMusicInput)}
                                             >
-                                                <SvgIcon icon={iconHashtag} size={20} />
+                                                <FontAwesomeIcon icon={faPenToSquare} />
                                             </span>
                                         </div>
                                     </div>

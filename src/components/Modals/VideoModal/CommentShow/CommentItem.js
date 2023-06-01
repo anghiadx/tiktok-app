@@ -23,11 +23,11 @@ const cx = classNames.bind(styles);
 
 function CommentShow({ index, data, authorId, videoInfo, onCloseModal, setComments }) {
     // Context
-    const { confirmModalShow } = useContext(ModalContextKey);
+    const { confirmModalShow, loginModalShow } = useContext(ModalContextKey);
     const showNotify = useContext(NotifyContextKey);
 
     // Redux
-    const { currentUser } = useSelector((state) => state.auth);
+    const { isAuth, currentUser } = useSelector((state) => state.auth);
 
     // Destructuring data
     const {
@@ -169,7 +169,7 @@ function CommentShow({ index, data, authorId, videoInfo, onCloseModal, setCommen
 
             {/* Interactive */}
             <div className={cx('like-comment')}>
-                <span className={cx('like-icon')} onClick={handleToggleLike}>
+                <span className={cx('like-icon')} onClick={isAuth ? handleToggleLike : loginModalShow}>
                     {isLiked ? (
                         <LottieIcon
                             ref={heartIconRef}

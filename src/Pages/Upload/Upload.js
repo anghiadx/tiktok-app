@@ -4,6 +4,8 @@ import styles from './Upload.module.scss';
 import Button from '~/components/Button';
 import SetupVideo from './UploadComponents/SetupVideo';
 import { NotifyContextKey } from '~/contexts/NotifyContext';
+import SvgIcon from '~/components/SvgIcon/SvgIcon';
+import { iconUpload } from '~/components/SvgIcon/iconsRepo';
 
 const cx = classNames.bind(styles);
 
@@ -63,10 +65,9 @@ function Upload() {
                                     fileRef.current.click();
                                 }}
                             >
-                                <img
-                                    src="https://lf16-tiktok-common.ttwstatic.com/obj/tiktok-web-common-sg/ies/creator_center/svgs/cloud-icon1.ecf0bf2b.svg"
-                                    alt=""
-                                />
+                                {/* Icon upload */}
+                                <SvgIcon icon={iconUpload} />
+
                                 <h3 className={cx('title')}>Chọn video để tải lên</h3>
                                 <p className={cx('descript')}>Hoặc kéo và thả tập tin</p>
                                 <p className={cx('descript')} style={{ marginBottom: 24 }}>
