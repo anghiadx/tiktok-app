@@ -50,7 +50,11 @@ function SetupVideo({ file, setFile, handleSelectFile, handleDropFile }) {
 
     // State
     const [noteValue, setNoteValue] = useState(''); // Mô tả video
-    const [musicValue, setMusicValue] = useState(`Nhạc nền - ${currentUser.first_name} ${currentUser.last_name}`); // Âm nhạc trong video
+    const [musicValue, setMusicValue] = useState(
+        currentUser.first_name
+            ? `Nhạc nền - ${currentUser.first_name} ${currentUser.last_name}!`
+            : 'Âm thanh trong video!',
+    ); // Âm nhạc trong video
     const [showMusicInput, setShowMusicInput] = useState(false);
     const [viewId, setViewId] = useState(0); // Chế độ hiển thị
     const [viewableShow, setViewableShow] = useState(false); // Trạng thái hiển thị của popup "chế độ hiển thị"

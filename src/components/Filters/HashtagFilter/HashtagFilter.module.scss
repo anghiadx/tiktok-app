@@ -2,6 +2,7 @@
     display: inline-flex;
     font-weight: 600;
     line-height: var(--primary-line-height);
+    color: var(--text-blue-color);
 
     &:hover {
         text-decoration: underline;

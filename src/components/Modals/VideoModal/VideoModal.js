@@ -295,7 +295,7 @@ function VideoModal(props) {
                             <CommentCreator setComments={setComments} videoInfo={data} isDeleted={isDeleted} />
                         ) : (
                             <p className={cx('notify-btn')} onClick={!isAuth ? loginModalShow : null}>
-                                Please log in to comment
+                                Đăng nhập để bình luận
                             </p>
                         )}
                     </div>

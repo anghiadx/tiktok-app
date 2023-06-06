@@ -155,7 +155,7 @@ function CommentShow({ index, data, authorId, videoInfo, onCloseModal, setCommen
             <div className={cx('body')}>
                 <AccPreview>
                     <Link to={'/@' + userName} className={cx('fullname')} onClick={onCloseModal}>
-                        <strong>{`${firstName} ${lastName}`}</strong> <ShowTick tick={tick} />
+                        <strong>{firstName ? `${firstName} ${lastName}` : userName}</strong> <ShowTick tick={tick} />
                         {/* Show author or not */}
                         {userId === authorId && <span className={cx('author')}>Tác giả</span>}
                     </Link>
