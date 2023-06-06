@@ -23,8 +23,4 @@ root.render(
 reportWebVitals();
 
 // Hello world
-console.log(
-    '%cHế lô 🙋!! Nếu có bất kì thắc mắc hay đóng góp nào, hãy liên hệ với mình bằng cách quét mã QR trong mục "Đăng nhập bằng mã QR" nhé!! %cLove you 3000 <3',
-    'font-weight: bold; font-size: 14px; margin-top: 8px',
-    'font-weight: bold; font-size: 14px; color: #fe2c55; margin: 8px 0',
-);
+console.log('%c<TikTok Clone />', 'font-weight: bold; font-size: 14px; color: #fe2c55; margin: 8px 0');

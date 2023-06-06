@@ -11,6 +11,7 @@
     --text-primary-color: rgb(22, 24, 35);
     --text-gray-color: rgba(22, 24, 35, 0.75);
     --text-gray-color2: rgba(22, 24, 35, 0.5);
+    --text-blue-color: rgb(43, 93, 185);
     --black-color: black;
     --white-color: white;
     --white-color-2: white;
@@ -54,6 +55,7 @@
     --text-primary-color: #ffffffe6;
     --text-gray-color: #ffffffbf;
     --text-gray-color2: #ffffff80;
+    --text-blue-color: rgba(143, 190, 233, 1);
 
     --black-color: white;
     --white-color: #121212;
@@ -105,6 +107,11 @@ input,
 [tabindex] {
     outline: none;
     border: none;
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
 }
 
 button {

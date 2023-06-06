@@ -82,22 +82,20 @@
 }
 
 .music-info {
-    display: inline-flex;
+    display: inline-block;
+    margin-left: 0;
+    margin-top: 3px;
     font-weight: 600;
     line-height: var(--primary-line-height);
 
     &:hover {
         text-decoration: underline;
     }
-}
-
-.music-info {
-    align-items: center;
-    margin-left: 0;
-    margin-top: 2px;
 
     .icon-music {
+        display: inline-block;
         margin-right: 4px;
+        transform: translateY(2px);
     }
 }
 
@@ -105,7 +103,7 @@
 .video-player {
     display: flex;
     align-items: flex-end;
-    margin-top: 8px;
+    margin-top: 10px;
 }
 
 // Reponsive

@@ -84,7 +84,7 @@ function RegisterWithEmail() {
         const invalidValue = value.includes(' ');
         invalidValue || setPassword(e.target.value);
 
-        const invalidCharacter = value.includes('"') || value.includes("'");
+        const invalidCharacter = value.includes('"') || value.includes("'") || value.includes('`');
         if (invalidCharacter) {
             setPassErrorMessage('Ký tự đặc biệt không hợp lệ');
         } else {

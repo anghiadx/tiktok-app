@@ -117,7 +117,7 @@ function VideoItem({ videoId, videoInfo }) {
                     {userId !== currentUser.id && (
                         <HandleFollow
                             followElement={
-                                <Button outline className={cx('follow-btn')}>
+                                <Button outline medium className={cx('follow-btn')}>
                                     Follow
                                 </Button>
                             }
@@ -139,7 +139,7 @@ function VideoItem({ videoId, videoInfo }) {
                     {/* Music info */}
                     <Link to={'/music'} className={cx('music-info')} target="_blank">
                         <SvgIcon className={cx('icon-music')} icon={iconMusic} />
-                        {musicInfo || `Nhạc nền - ${firstName} ${lastName}`}
+                        <span>{musicInfo || `Âm thanh trong video!`}</span>
                     </Link>
                 </div>
 
