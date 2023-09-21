@@ -53,8 +53,11 @@ const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(getCurrentUser.fulfilled, (state, action) => {
-                state.isAuth = true;
-                state.currentUser = action.payload;
+                // Get user failed
+                if (action?.payload?.nickname) {
+                    state.isAuth = true;
+                    state.currentUser = action.payload;
+                }
             })
             .addCase(register.fulfilled, (state, action) => {
                 const userData = action.payload.data;
