@@ -117,7 +117,7 @@ function VideoItem({ videoId, videoInfo }) {
                     {userId !== currentUser.id && (
                         <HandleFollow
                             followElement={
-                                <Button outline className={cx('follow-btn')}>
+                                <Button outline medium className={cx('follow-btn')}>
                                     Follow
                                 </Button>
                             }
